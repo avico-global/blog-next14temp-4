@@ -9,7 +9,7 @@ export default function LatestBlogs({ articles, project_id }) {
   return (
     <FullContainer className="py-10">
       <Container>
-        <div className="grid grid-cols-4 grid-rows-2 gap-x-12 gap-y-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 grid-rows-2 gap-x-12 gap-y-6">
           {articles?.map((item, index) => (
             <Link
               href={
@@ -21,9 +21,9 @@ export default function LatestBlogs({ articles, project_id }) {
               }
               key={index}
               title={item.imageTitle}
-              className="first:col-span-3 first:row-span-3 flex flex-col text-lg first:text-xl"
+              className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col text-lg first:text-xl"
             >
-              <div className="overflow-hidden relative min-h-32 w-full bg-black flex-1 rounded-md ">
+              <div className="overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-black flex-1 rounded-md ">
                 <Image
                   title={item.imageTitle}
                   src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}

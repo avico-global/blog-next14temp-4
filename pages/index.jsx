@@ -1,6 +1,6 @@
 import React from "react";
 import Head from "next/head";
-import { Montserrat } from "next/font/google";
+import { Roboto } from "next/font/google";
 import Banner from "@/components/containers/Banner";
 import NavMenu from "@/components/containers/NavMenu";
 import MustRead from "@/components/containers/MustRead";
@@ -15,7 +15,10 @@ import {
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
 
-const myFont = Montserrat({ subsets: ["cyrillic"] });
+const myFont = Roboto({
+  subsets: ["cyrillic"],
+  weight: ["400", "700"], // Add the weights you need
+});
 
 export default function Home({
   logo,
@@ -32,8 +35,8 @@ export default function Home({
     <div className={myFont.className}>
       <Head>
         <meta charSet="UTF-8" />
-        <title>{meta.title}</title>
-        <meta name="description" content={meta.description} />
+        <title>{meta?.title}</title>
+        <meta name="description" content={meta?.description} />
         <link rel="author" href={`http://${domain}`} />
         <link rel="publisher" href={`http://${domain}`} />
         <link rel="canonical" href={`http://${domain}`} />
@@ -65,25 +68,14 @@ export default function Home({
           href={`https://api15.ecommcube.com/${domain}/favicon-16x16.png`}
         />
       </Head>
-      {/* <Banner
-        image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner.file_name}`}
-        badge={banner.value.badge}
-        title={banner.value.title}
-        tagline={banner.value.tagline}
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
-      /> */}
       <NavMenu
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
-      {/* <MustRead articles={blog_list} project_id={project_id} />
-      <LatestBlogs
-        blogs={blog_list}
-        project_id={project_id}
-        imagePath={imagePath}
-      />
+      <LatestBlogs articles={blog_list} project_id={project_id} />
+      <MustRead articles={blog_list} project_id={project_id} />
       <Footer
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
-      /> */}
+      />
 
       <JsonLd
         data={{
@@ -93,11 +85,11 @@ export default function Home({
               "@type": "WebPage",
               "@id": `http://${domain}/`,
               url: `http://${domain}/`,
-              name: meta.title,
+              name: meta?.title,
               isPartOf: {
                 "@id": `http://${domain}`,
               },
-              description: meta.description,
+              description: meta?.description,
               inLanguage: "en-US",
             },
             {
@@ -123,7 +115,7 @@ export default function Home({
                 url: `http://${domain}/${blog?.title
                   ?.toLowerCase()
                   .replaceAll(" ", "-")}`,
-                name: blog.title,
+                name: blog?.title,
               })),
             },
           ],
@@ -158,9 +150,9 @@ export async function getServerSideProps({ req, query }) {
     props: {
       logo_black: logo_black?.data[0] || null,
       logo: logo.data[0],
-      banner: banner.data[0],
+      banner: banner.data[0] || null,
       blog_list: blog_list.data[0].value,
-      meta: meta.data[0].value,
+      meta: meta?.data[0]?.value || null,
       imagePath,
       project_id,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,

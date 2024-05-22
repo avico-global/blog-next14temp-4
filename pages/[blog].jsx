@@ -70,37 +70,35 @@ export default function Blog({
           href={`https://api15.ecommcube.com/${domain}/favicon-16x16.png`}
         />
       </Head>
-      <NavMenu
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
-      />
-      <Banner
-        title={myblog?.value.title}
-        tagline={myblog?.value.tagline}
-        image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`}
-        author={myblog?.value.author}
-        published_at={myblog?.value.published_at}
-      />
-      <Breadcrumbs breadcrumbs={breadcrumbs} />
       <FullContainer>
-        <Container className="py-16">
-          <div className="grid grid-cols-1 md:grid-cols-home gap-14 w-full">
+        <NavMenu
+          logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+        />
+        <Container>
+          <Breadcrumbs breadcrumbs={breadcrumbs} className="py-4" />
+          <div className="grid grid-cols-article w-full">
             <div>
+              <Banner
+                title={myblog?.value.title}
+                tagline={myblog?.value.tagline}
+                image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`}
+                author={myblog?.value.author}
+                published_at={myblog?.value.published_at}
+              />
               <div
-                className="markdown-content"
+                className="markdown-content mt-5"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
             </div>
-            <div className="bg-gray-300 flex flex-col items-center justify-center text-white text-2xl font-bold">
-              <h1>Google Ad</h1>
-            </div>
+            <div></div>
           </div>
+          <LatestBlogs
+            blogs={blog_list}
+            project_id={project_id}
+            imagePath={imagePath}
+          />
         </Container>
       </FullContainer>
-      <LatestBlogs
-        blogs={blog_list}
-        project_id={project_id}
-        imagePath={imagePath}
-      />
       <Footer
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
@@ -197,10 +195,10 @@ export async function getServerSideProps({ params, req, query }) {
 
   return {
     props: {
-      logo: logo.data[0],
-      myblog: blog.data[0],
-      blog_list: blog_list.data[0].value,
-      meta: meta.data[0].value,
+      logo: logo?.data[0] || null,
+      myblog: blog?.data[0] || null,
+      blog_list: blog_list?.data[0]?.value || nul,
+      meta: meta?.data[0]?.value || null,
       imagePath,
       project_id,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,

@@ -1,56 +1,55 @@
 import React from "react";
-import FullContainer from "../common/FullContainer";
-import Container from "../common/Container";
-import Image from "next/image";
 import Link from "next/link";
-import SectionHeading from "../common/SectionHeading";
+import Image from "next/image";
+import Container from "../common/Container";
+import FullContainer from "../common/FullContainer";
+import dayjs from "dayjs";
 
-export default function LatestBlogs({ blogs, project_id, imagePath }) {
+export default function LatestBlogs({ articles, project_id }) {
   return (
-    <FullContainer className="py-16 text-center">
+    <FullContainer className="py-10">
       <Container>
-        <SectionHeading title="latest news" tagline="This just in.." />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-8 w-full mt-11 mb-3">
-          {blogs?.map((item, index) => (
-            <BlogCard
+        <div className="grid grid-cols-4 grid-rows-2 gap-x-12 gap-y-6">
+          {articles?.map((item, index) => (
+            <Link
+              href={
+                project_id
+                  ? `/${item.title
+                      ?.toLowerCase()
+                      .replaceAll(" ", "-")}?${project_id}`
+                  : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
+              }
               key={index}
-              title={item.title}
-              author={item.author}
-              date={item.published_at}
-              tagline={item.tagline}
-              project_id={project_id}
-              description={item.articleContent}
-              image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`}
-            />
+              title={item.imageTitle}
+              className="first:col-span-3 first:row-span-3 flex flex-col text-lg first:text-xl"
+            >
+              <div className="overflow-hidden relative min-h-32 w-full bg-black flex-1 rounded-md ">
+                <Image
+                  title={item.imageTitle}
+                  src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
+                  fill={true}
+                  loading="lazy"
+                  alt="blog"
+                  className="w-full h-full object-cover absolute top-0 scale-125"
+                />
+              </div>
+              <p className="mt-2 lg:mt-3 font-bold text-center text-inherit leading-tight">
+                {item.title}
+              </p>
+              <div className="flex items-center justify-center gap-2 mt-1">
+                <p className="text-xs">
+                  <span className="text-gray-400 text-xs">By</span>:{" "}
+                  {item.author}
+                </p>
+                <span className="text-gray-400">--</span>
+                <p className="text-xs text-gray-400">
+                  {dayjs(item?.published_at)?.format("MMM D, YYYY")}
+                </p>
+              </div>
+            </Link>
           ))}
         </div>
       </Container>
     </FullContainer>
-  );
-}
-
-function BlogCard({ title, image, description, project_id }) {
-  return (
-    <Link
-      href={
-        project_id
-          ? `/${title?.toLowerCase().replaceAll(" ", "-")}?${project_id}`
-          : `/${title?.toLowerCase().replaceAll(" ", "-")}`
-      }
-    >
-      <div className="relative overflow-hidden w-full h-96 hover:opacity-80 transition-all">
-        <Image
-          src={image}
-          alt="Background Image"
-          priority={true}
-          fill={true}
-          loading="eager"
-          sizes="400px, 300px"
-          className="-z-10 w-full h-full object-cover absolute top-0"
-        />
-      </div>
-      <h3 className="font-semibold text-lg mt-4 leading-5">{title}</h3>
-      <p className="text-gray-500 mt-3 text-sm">{description}</p>
-    </Link>
   );
 }

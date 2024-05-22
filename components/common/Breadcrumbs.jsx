@@ -1,9 +1,10 @@
+import { cn } from "@/lib/utils";
 import { ChevronsRight } from "lucide-react";
 import React from "react";
 
-export default function Breadcrumbs({ breadcrumbs }) {
+export default function Breadcrumbs({ breadcrumbs, className }) {
   return (
-    <div className="w-full flex items-center justify-center py-2">
+    <div className={cn("w-full flex items-center py-2", className)}>
       {breadcrumbs.map((breadcrumb, index) => (
         <span key={index} className="flex items-center">
           {index > 0 && <ChevronsRight className="w-4" />}

@@ -18,7 +18,7 @@ export default function Banner({
   logo,
 }) {
   return (
-    <div className="lg:min-h-[calc(100vh-150px)] 2xl:min-h-[calc(100vh-230px)] overflow-hidden relative w-full flex flex-col justify-between p-10">
+    <div className="h-[55vh] overflow-hidden relative w-full flex flex-col justify-between p-10">
       <Image
         src={image}
         alt="Background Image"

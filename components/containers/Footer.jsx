@@ -103,7 +103,7 @@ export default function Footer({
             <p className="text-sm">Privacy Policy</p>
             <p className="text-sm">Contact Us</p>
           </div>
-          <p className="text-sm mt-5">{copyright}</p>
+          <p className="text-sm mt-5 text-center">{copyright}</p>
         </Container>
       </FullContainer>
     </div>

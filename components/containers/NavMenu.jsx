@@ -5,20 +5,7 @@ import Image from "next/image";
 import FullContainer from "../common/FullContainer";
 import Container from "../common/Container";
 
-const menuList = [
-  "Home",
-  "Business",
-  "Education",
-  "Food",
-  "Health",
-  "News",
-  "Jobs",
-  "Law",
-  "Travel",
-  "Technology",
-];
-
-export default function NavMenu({ logo }) {
+export default function NavMenu({ logo, blog_categories }) {
   return (
     <FullContainer className="py-2 sticky -top-1 z-50 shadow-sm bg-white">
       <Container className="md:flex-row md:justify-between">
@@ -27,10 +14,14 @@ export default function NavMenu({ logo }) {
             <Image height={70} width={80} src={logo} alt="logo" />
           </Link>
           <div className="text-lg font-bold hidden lg:flex items-center gap-5">
-            {menuList.map((item, index) => (
-              <div className="font-bold capitalize" key={index}>
+            {blog_categories?.map((item, index) => (
+              <Link
+                key={index}
+                href={`/${item}`}
+                className="font-bold capitalize"
+              >
                 {item}
-              </div>
+              </Link>
             ))}
           </div>
           <Search className="w-6" />

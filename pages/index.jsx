@@ -29,6 +29,7 @@ export default function Home({
   meta,
   domain,
   copyright,
+  blog_categories,
 }) {
   console.log("Domain", domain);
 
@@ -70,6 +71,7 @@ export default function Home({
         />
       </Head>
       <NavMenu
+        blog_categories={blog_categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
       <LatestBlogs articles={blog_list} project_id={project_id} />
@@ -159,6 +161,11 @@ export async function getServerSideProps({ req, query }) {
     type: "copyright",
   });
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
+  const blog_categories = await callBackendApi({
+    domain,
+    query,
+    type: "blog_categories",
+  });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
 
   return {
@@ -167,6 +174,7 @@ export async function getServerSideProps({ req, query }) {
       logo: logo.data[0],
       banner: banner.data[0] || null,
       blog_list: blog_list.data[0].value,
+      blog_categories: blog_categories?.data[0]?.value || null,
       footer_text: footer_text?.data[0]?.value || null,
       copyright: copyright?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,

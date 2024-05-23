@@ -15,7 +15,13 @@ import {
   Youtube,
 } from "lucide-react";
 
-export default function Footer({ logo, footer_text, blog_list, project_id }) {
+export default function Footer({
+  logo,
+  footer_text,
+  blog_list,
+  project_id,
+  copyright,
+}) {
   return (
     <div className="flex items-center flex-col">
       <FullContainer className="bg-purple-950 text-white py-16">
@@ -91,15 +97,13 @@ export default function Footer({ logo, footer_text, blog_list, project_id }) {
       </FullContainer>
       <FullContainer className="py-10 bg-purple-800">
         <Container className="text-white">
-          <div className="flex items-center flex-col justify-between gap-5 uppercase font-semibold">
+          <div className="flex items-center flex-col md:flex-row justify-between gap-2 md:gap-5 uppercase font-semibold">
             <p className="text-sm">Disclaimer</p>
             <p className="text-sm">Write For Us</p>
             <p className="text-sm">Privacy Policy</p>
             <p className="text-sm">Contact Us</p>
           </div>
-          <p className="text-sm mt-5">
-            Urdufeed.net © Copyright 2024, All Rights Reserved
-          </p>
+          <p className="text-sm mt-5">{copyright}</p>
         </Container>
       </FullContainer>
     </div>

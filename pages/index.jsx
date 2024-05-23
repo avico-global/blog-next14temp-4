@@ -28,6 +28,7 @@ export default function Home({
   imagePath,
   meta,
   domain,
+  copyright,
 }) {
   console.log("Domain", domain);
 
@@ -77,6 +78,7 @@ export default function Home({
         project_id={project_id}
         footer_text={footer_text}
         blog_list={blog_list}
+        copyright={copyright}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
 
@@ -151,6 +153,11 @@ export async function getServerSideProps({ req, query }) {
     query,
     type: "footer_text",
   });
+  const copyright = await callBackendApi({
+    domain,
+    query,
+    type: "copyright",
+  });
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
 
@@ -161,6 +168,7 @@ export async function getServerSideProps({ req, query }) {
       banner: banner.data[0] || null,
       blog_list: blog_list.data[0].value,
       footer_text: footer_text?.data[0]?.value || null,
+      copyright: copyright?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,
       imagePath,
       project_id,

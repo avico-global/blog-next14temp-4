@@ -19,8 +19,8 @@ export default function LatestBlogs({ articles, project_id }) {
                       .replaceAll(" ", "-")}?${project_id}`
                   : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
               }
-              key={index}
               title={item.imageTitle}
+              key={index}
               className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col text-lg first:text-xl"
             >
               <div className="overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-black flex-1 rounded-md ">

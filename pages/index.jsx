@@ -22,7 +22,7 @@ const myFont = Roboto({
 
 export default function Home({
   logo,
-  banner,
+  footer_text,
   blog_list,
   project_id,
   imagePath,
@@ -74,6 +74,9 @@ export default function Home({
       <LatestBlogs articles={blog_list} project_id={project_id} />
       <MustRead articles={blog_list} project_id={project_id} />
       <Footer
+        project_id={project_id}
+        footer_text={footer_text}
+        blog_list={blog_list}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
 
@@ -143,6 +146,11 @@ export async function getServerSideProps({ req, query }) {
   });
 
   const banner = await callBackendApi({ domain, query, type: "banner" });
+  const footer_text = await callBackendApi({
+    domain,
+    query,
+    type: "footer_text",
+  });
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
 
@@ -152,6 +160,7 @@ export async function getServerSideProps({ req, query }) {
       logo: logo.data[0],
       banner: banner.data[0] || null,
       blog_list: blog_list.data[0].value,
+      footer_text: footer_text?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,
       imagePath,
       project_id,

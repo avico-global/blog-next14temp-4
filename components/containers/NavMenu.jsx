@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Menu, Search, X } from "lucide-react";
+import React from "react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import FullContainer from "../common/FullContainer";

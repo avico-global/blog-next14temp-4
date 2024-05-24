@@ -76,12 +76,13 @@ export default function Categories({
         />
       </Head>
       <NavMenu
+        category={category}
         blog_categories={blog_categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
       <FullContainer>
         <Container>
-          <div className="w-full grid grid-cols-2 gap-5">
+          <div className="w-full grid grid-cols-2 gap-7 mt-7">
             {blog_list.map(
               (item, index) =>
                 item?.article_category?.name === category && (

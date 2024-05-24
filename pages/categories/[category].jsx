@@ -14,23 +14,30 @@ import {
 } from "@/lib/myFun";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
+import Image from "next/image";
+import FullContainer from "@/components/common/FullContainer";
+import Container from "@/components/common/Container";
+import { useRouter } from "next/router";
+import dayjs from "dayjs";
+import Link from "next/link";
 
 const myFont = Roboto({
   subsets: ["cyrillic"],
-  weight: ["400", "700"], // Add the weights you need
+  weight: ["400", "700"],
 });
 
-export default function Home({
+export default function Categories({
   logo,
-  footer_text,
   blog_list,
-  project_id,
   imagePath,
   meta,
   domain,
-  copyright,
   blog_categories,
+  project_id,
 }) {
+  const router = useRouter();
+  const { category } = router.query;
+
   return (
     <div className={myFont.className}>
       <Head>
@@ -72,15 +79,56 @@ export default function Home({
         blog_categories={blog_categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
-      <LatestBlogs articles={blog_list} project_id={project_id} />
-      <MustRead articles={blog_list} project_id={project_id} />
-      <Footer
-        project_id={project_id}
-        footer_text={footer_text}
-        blog_list={blog_list}
-        copyright={copyright}
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
-      />
+      <FullContainer>
+        <Container>
+          <div className="w-full grid grid-cols-2 gap-5">
+            {blog_list.map(
+              (item, index) =>
+                item?.article_category?.name === category && (
+                  <div key={index}>
+                    <Link
+                      href={
+                        project_id
+                          ? `/${item.title
+                              ?.toLowerCase()
+                              .replaceAll(" ", "-")}?${project_id}`
+                          : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
+                      }
+                    >
+                      <div className="overflow-hidden relative min-h-40 lg:min-h-72 w-full bg-black flex-1">
+                        <Image
+                          title={item.imageTitle}
+                          src={
+                            item.image
+                              ? `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`
+                              : "/no-image.png"
+                          }
+                          fill={true}
+                          loading="lazy"
+                          alt="blog"
+                          className="w-full h-full object-cover absolute top-0 scale-125"
+                        />
+                      </div>
+                    </Link>
+                    <p className="mt-2 lg:mt-3 font-bold text-center text-inherit leading-tight">
+                      {item.title}
+                    </p>
+                    <div className="flex items-center justify-center gap-2 mt-1">
+                      <p className="text-xs">
+                        <span className="text-gray-400 text-xs">By</span>:{" "}
+                        {item.author}
+                      </p>
+                      <span className="text-gray-400">--</span>
+                      <p className="text-xs text-gray-400">
+                        {dayjs(item?.published_at)?.format("MMM D, YYYY")}
+                      </p>
+                    </div>
+                  </div>
+                )
+            )}
+          </div>
+        </Container>
+      </FullContainer>
     </div>
   );
 }

@@ -73,11 +73,12 @@ module.exports = {
       },
       gridTemplateColumns: {
         home: "1fr 0.3fr",
-        article: "1fr 0.3fr",
+        article: "1fr 0.4fr",
         contact: "1fr 0.5fr",
         about: "1fr 0.4fr",
+        widget: "0.5fr 1fr",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };

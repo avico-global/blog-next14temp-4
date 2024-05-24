@@ -20,7 +20,7 @@ const myFont = Roboto({
   weight: ["400", "700"], // Add the weights you need
 });
 
-export default function Home({
+export default function Categories({
   logo,
   footer_text,
   blog_list,
@@ -80,6 +80,51 @@ export default function Home({
         blog_list={blog_list}
         copyright={copyright}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+      />
+
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `http://${domain}/`,
+              url: `http://${domain}/`,
+              name: meta?.title,
+              isPartOf: {
+                "@id": `http://${domain}`,
+              },
+              description: meta?.description,
+              inLanguage: "en-US",
+            },
+            {
+              "@type": "Organization",
+              "@id": `http://${domain}`,
+              name: domain,
+              url: `http://${domain}/`,
+              logo: {
+                "@type": "ImageObject",
+                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+              },
+              sameAs: [
+                "http://www.facebook.com",
+                "http://www.twitter.com",
+                "http://instagram.com",
+              ],
+            },
+            {
+              "@type": "ItemList",
+              itemListElement: blog_list.map((blog, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                url: `http://${domain}/${blog?.title
+                  ?.toLowerCase()
+                  .replaceAll(" ", "-")}`,
+                name: blog?.title,
+              })),
+            },
+          ],
+        }}
       />
     </div>
   );

@@ -17,7 +17,7 @@ export default function NavMenu({ logo, blog_categories }) {
             {blog_categories?.map((item, index) => (
               <Link
                 key={index}
-                href={`/${item}`}
+                href={`/categories/${item}`}
                 className="font-bold capitalize"
               >
                 {item}

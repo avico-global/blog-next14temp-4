@@ -1,7 +1,6 @@
 import React from "react";
 import Head from "next/head";
 import { Roboto } from "next/font/google";
-import Banner from "@/components/containers/Banner";
 import NavMenu from "@/components/containers/NavMenu";
 import MustRead from "@/components/containers/MustRead";
 import Footer from "@/components/containers/Footer";
@@ -82,6 +81,56 @@ export default function Home({
         blog_list={blog_list}
         copyright={copyright}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+      />
+
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `http://${domain}/`,
+              url: `http://${domain}/`,
+              name: meta.title,
+              isPartOf: {
+                "@id": `http://${domain}`,
+              },
+              description: meta.description,
+              inLanguage: "en-US",
+            },
+            {
+              "@type": "Organization",
+              "@id": `http://${domain}`,
+              name: domain,
+              url: `http://${domain}/`,
+              logo: {
+                "@type": "ImageObject",
+                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+              },
+              sameAs: [
+                "http://www.facebook.com",
+                "http://www.twitter.com",
+                "http://instagram.com",
+              ],
+            },
+            {
+              "@type": "ItemList",
+              url: `http://${domain}`,
+              name: "blog",
+              itemListElement: blog_list?.map((blog, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: {
+                  "@type": "Article",
+                  url: `http://${domain}/${blog.title
+                    ?.toLowerCase()
+                    .replaceAll(" ", "-")}`,
+                  name: blog.title,
+                },
+              })),
+            },
+          ],
+        }}
       />
     </div>
   );

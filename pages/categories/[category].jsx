@@ -34,6 +34,8 @@ export default function Categories({
   domain,
   blog_categories,
   project_id,
+  footer_text,
+  copyright,
 }) {
   const router = useRouter();
   const { category } = router.query;
@@ -80,7 +82,7 @@ export default function Categories({
         blog_categories={blog_categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
-      <FullContainer>
+      <FullContainer className="mb-12">
         <Container>
           <div className="w-full grid grid-cols-2 gap-7 mt-7">
             {blog_list.map(
@@ -130,6 +132,13 @@ export default function Categories({
           </div>
         </Container>
       </FullContainer>
+      <Footer
+        project_id={project_id}
+        footer_text={footer_text}
+        blog_list={blog_list}
+        copyright={copyright}
+        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+      />
     </div>
   );
 }

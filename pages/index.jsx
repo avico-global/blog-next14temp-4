@@ -69,6 +69,8 @@ export default function Home({
         />
       </Head>
       <NavMenu
+        project_id={project_id}
+        blog_list={blog_list}
         blog_categories={blog_categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
@@ -103,6 +105,8 @@ export async function getServerSideProps({ req, query }) {
   });
 
   const banner = await callBackendApi({ domain, query, type: "banner" });
+
+  // Footer
   const footer_text = await callBackendApi({
     domain,
     query,

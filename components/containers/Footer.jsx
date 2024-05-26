@@ -74,23 +74,26 @@ export default function Footer({
             </div>
             <div>
               <p className="text-lg font-semibold mb-1">Editor Picks</p>
-              {blog_list?.slice(0, 4).map((item, index) => (
-                <Link
-                  href={
-                    project_id
-                      ? `/${item.title
-                          ?.toLowerCase()
-                          .replaceAll(" ", "-")}?${project_id}`
-                      : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
-                  }
-                  title={item.imageTitle}
-                  key={index}
-                >
-                  <p className="text-sm py-3 hover:text-purple-300 transition-all cursor-pointer border-b border-white/30 text-white/80">
-                    {item.title}
-                  </p>
-                </Link>
-              ))}
+              {blog_list
+                ?.slice(-4)
+                .reverse()
+                .map((item, index) => (
+                  <Link
+                    href={
+                      project_id
+                        ? `/${item.title
+                            ?.toLowerCase()
+                            .replaceAll(" ", "-")}?${project_id}`
+                        : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
+                    }
+                    title={item.imageTitle}
+                    key={index}
+                  >
+                    <p className="text-sm py-3 hover:text-purple-300 transition-all cursor-pointer border-b border-white/30 text-white/80">
+                      {item.title}
+                    </p>
+                  </Link>
+                ))}
             </div>
           </div>
         </Container>

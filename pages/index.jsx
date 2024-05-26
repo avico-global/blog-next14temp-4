@@ -52,19 +52,19 @@ export default function Home({
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`https://api15.ecommcube.com/${domain}/apple-touch-icon.png`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`https://api15.ecommcube.com/${domain}/favicon-32x32.png`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`https://api15.ecommcube.com/${domain}/favicon-16x16.png`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
       </Head>
       <NavMenu
@@ -141,19 +141,19 @@ export async function getServerSideProps({ req, query }) {
   const project_id = getProjectId(query);
   const imagePath = await getImagePath({ domain, query });
 
-  const logo_black = await callBackendApi({
-    domain,
-    query,
-    type: "logo_black",
-  });
-
   const logo = await callBackendApi({
     domain,
     query,
     type: "logo",
   });
 
-  const banner = await callBackendApi({ domain, query, type: "banner" });
+  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
+  const blog_categories = await callBackendApi({
+    domain,
+    query,
+    type: "blog_categories",
+  });
+  const meta = await callBackendApi({ domain, query, type: "meta_home" });
 
   // Footer
   const footer_text = await callBackendApi({
@@ -166,27 +166,18 @@ export async function getServerSideProps({ req, query }) {
     query,
     type: "copyright",
   });
-  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const blog_categories = await callBackendApi({
-    domain,
-    query,
-    type: "blog_categories",
-  });
-  const meta = await callBackendApi({ domain, query, type: "meta_home" });
 
   return {
     props: {
-      logo_black: logo_black?.data[0] || null,
-      logo: logo.data[0],
-      banner: banner.data[0] || null,
-      blog_list: blog_list.data[0].value,
-      blog_categories: blog_categories?.data[0]?.value || null,
-      footer_text: footer_text?.data[0]?.value || null,
-      copyright: copyright?.data[0]?.value || null,
-      meta: meta?.data[0]?.value || null,
-      imagePath,
       project_id,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
+      meta: meta?.data[0]?.value || null,
+      logo: logo.data[0],
+      blog_list: blog_list.data[0].value,
+      blog_categories: blog_categories?.data[0]?.value || null,
+      imagePath,
+      footer_text: footer_text?.data[0]?.value || null,
+      copyright: copyright?.data[0]?.value || null,
     },
   };
 }

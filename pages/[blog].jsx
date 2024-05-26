@@ -32,10 +32,21 @@ export default function Blog({
   imagePath,
   domain,
   blog_categories,
+  footer_text,
+  copyright,
+  tag_list,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt.render(myblog?.value.articleContent);
   const breadcrumbs = useBreadcrumbs();
+
+  const filteredBlogs = blog_list.filter(
+    (item) =>
+      item?.article_category?.name === myblog?.value?.article_category?.name
+  );
+
+  // Get the last 5 items from the filtered list
+  const lastFiveBlogs = filteredBlogs.slice(-5);
 
   return (
     <div className={myFont.className}>
@@ -59,28 +70,30 @@ export default function Blog({
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`https://api15.ecommcube.com/${domain}/apple-touch-icon.png`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`https://api15.ecommcube.com/${domain}/favicon-32x32.png`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`https://api15.ecommcube.com/${domain}/favicon-16x16.png`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
       </Head>
       <FullContainer>
         <NavMenu
+          project_id={project_id}
+          blog_list={blog_list}
           blog_categories={blog_categories}
           logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
         <Container>
-          <Breadcrumbs breadcrumbs={breadcrumbs} className="py-4" />
+          <Breadcrumbs breadcrumbs={breadcrumbs} className="py-5" />
           <div className="grid grid-cols-article gap-12 w-full">
             <div>
               <Banner
@@ -93,72 +106,84 @@ export default function Blog({
               </div>
               <div className="py-2 bg-gray-50 text-sm mt-5 border-y justify-between flex items-center w-full capitalize">
                 <p className="text-sm">
-                  By: {myblog?.value.author} On{" "}
-                  {dayjs(myblog?.value?.published_at)?.format("MMM D, YYYY")}
+                  By:{" "}
+                  <span className="font-semibold">{myblog?.value.author}</span>{" "}
+                  On{" "}
+                  <span className="font-semibold text-gray-500">
+                    {dayjs(myblog?.value?.published_at)?.format("MMM D, YYYY")}
+                  </span>
                 </p>
                 <p className="text-sm font-semibold">
                   {myblog?.value?.article_category?.name}
                 </p>
               </div>
               <div
-                className="prose mt-5 max-w-full"
+                className="prose mt-6 max-w-full"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
             </div>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col">
               <div className="bg-black text-white py-2 px-4 font-semibold capitalize">
                 Recent {myblog?.value?.article_category?.name} Posts
               </div>
-              {blog_list.map(
-                (item, index) =>
-                  item?.article_category?.name ===
-                    myblog?.value?.article_category?.name && (
-                    <div
-                      key={index}
-                      className="grid grid-cols-widget gap-3 border-b pb-6"
-                    >
-                      <Link
-                        href={
-                          project_id
-                            ? `/${item.title
-                                ?.toLowerCase()
-                                .replaceAll(" ", "-")}?${project_id}`
-                            : `/${item.title
-                                ?.toLowerCase()
-                                .replaceAll(" ", "-")}`
+              {lastFiveBlogs.reverse().map((item, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-widget gap-3 border-b py-6"
+                >
+                  <Link
+                    href={
+                      project_id
+                        ? `/${item.title
+                            ?.toLowerCase()
+                            .replaceAll(" ", "-")}?${project_id}`
+                        : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
+                    }
+                  >
+                    <div className="overflow-hidden relative min-h-24 w-full bg-black flex-1">
+                      <Image
+                        title={item.imageTitle}
+                        src={
+                          item.image
+                            ? `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`
+                            : "/no-image.png"
                         }
-                      >
-                        <div className="overflow-hidden relative min-h-24 w-full bg-black flex-1">
-                          <Image
-                            title={item.imageTitle}
-                            src={
-                              item.image
-                                ? `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`
-                                : "/no-image.png"
-                            }
-                            fill={true}
-                            loading="lazy"
-                            alt="blog"
-                            className="w-full h-full object-cover absolute top-0 hover:scale-125 transition-all"
-                          />
-                        </div>
-                      </Link>
-                      <div>
-                        <p className="font-bold leading-tight">{item.title}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <p className="text-xs">
-                            <span className="text-gray-400 text-xs">By</span>:{" "}
-                            {item.author}
-                          </p>
-                          <span className="text-gray-400">-</span>
-                          <p className="text-xs text-gray-400 font-semibold">
-                            {dayjs(item?.published_at)?.format("MMM D, YYYY")}
-                          </p>
-                        </div>
-                      </div>
+                        fill={true}
+                        loading="lazy"
+                        alt="blog"
+                        className="w-full h-full object-cover absolute top-0 hover:scale-125 transition-all"
+                      />
                     </div>
-                  )
-              )}
+                  </Link>
+                  <div>
+                    <p className="font-bold leading-tight">{item.title}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-xs">
+                        <span className="text-gray-400 text-xs">By</span>:{" "}
+                        {item.author}
+                      </p>
+                      <span className="text-gray-400">-</span>
+                      <p className="text-xs text-gray-400 font-semibold">
+                        {dayjs(item?.published_at)?.format("MMM D, YYYY")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <div className="bg-black text-white py-2 px-4 font-semibold capitalize mt-7">
+                Tags
+              </div>
+              <div className="flex items-center gap-2 flex-wrap mt-4">
+                {tag_list.map((item, index) => (
+                  <p
+                    key={index}
+                    className="bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer rounded py-1 px-3"
+                  >
+                    {item}
+                  </p>
+                ))}
+              </div>
             </div>
           </div>
           <LatestBlogs
@@ -169,6 +194,10 @@ export default function Blog({
         </Container>
       </FullContainer>
       <Footer
+        project_id={project_id}
+        footer_text={footer_text}
+        blog_list={blog_list}
+        copyright={copyright}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
     </div>
@@ -203,16 +232,33 @@ export async function getServerSideProps({ params, req, query }) {
     type: "blog_categories",
   });
 
+  const tag_list = await callBackendApi({ domain, query, type: "tag_list" });
+
+  // Footer
+  const footer_text = await callBackendApi({
+    domain,
+    query,
+    type: "footer_text",
+  });
+  const copyright = await callBackendApi({
+    domain,
+    query,
+    type: "copyright",
+  });
+
   return {
     props: {
       logo: logo?.data[0] || null,
       myblog: blog?.data[0] || null,
-      blog_list: blog_list?.data[0]?.value || nul,
+      blog_list: blog_list?.data[0]?.value || null,
+      tag_list: tag_list?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,
       imagePath,
       project_id,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
       blog_categories: blog_categories?.data[0]?.value || null,
+      footer_text: footer_text?.data[0]?.value || null,
+      copyright: copyright?.data[0]?.value || null,
     },
   };
 }

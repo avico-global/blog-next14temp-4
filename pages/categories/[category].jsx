@@ -20,6 +20,9 @@ import Container from "@/components/common/Container";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
+import useBreadcrumbs from "@/utils/useBreadcrumbs";
 
 const myFont = Roboto({
   subsets: ["cyrillic"],
@@ -39,9 +42,15 @@ export default function Categories({
 }) {
   const router = useRouter();
   const { category } = router.query;
+  const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div className={myFont.className}>
+    <div
+      className={cn(
+        myFont.className,
+        "flex flex-col min-h-screen justify-between"
+      )}
+    >
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>
@@ -86,7 +95,14 @@ export default function Categories({
       />
       <FullContainer className="mb-12">
         <Container>
-          <div className="w-full grid grid-cols-2 gap-7 mt-7">
+          <div className="w-full">
+            {" "}
+            <Breadcrumbs breadcrumbs={breadcrumbs} className="py-7" />
+            <p className="text-2xl font-semibold border-l-4 border-purple-400 capitalize px-4 py-1 mb-7">
+              Browsing: {category}
+            </p>
+          </div>
+          <div className="w-full grid grid-cols-2 gap-10">
             {blog_list.map(
               (item, index) =>
                 item?.article_category?.name === category && (
@@ -100,7 +116,7 @@ export default function Categories({
                           : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
                       }
                     >
-                      <div className="overflow-hidden relative min-h-40 lg:min-h-72 w-full bg-black flex-1">
+                      <div className="overflow-hidden relative min-h-40 rounded lg:min-h-72 w-full bg-black flex-1">
                         <Image
                           title={item.imageTitle}
                           src={
@@ -115,19 +131,22 @@ export default function Categories({
                         />
                       </div>
                     </Link>
-                    <p className="mt-2 lg:mt-3 font-bold text-center text-inherit leading-tight">
+                    <p className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight">
                       {item.title}
                     </p>
-                    <div className="flex items-center justify-center gap-2 mt-1">
-                      <p className="text-xs">
-                        <span className="text-gray-400 text-xs">By</span>:{" "}
+                    <div className="flex items-center gap-2 mt-1">
+                      <p className="text-sm font-semibold">
+                        <span className="text-gray-400 text-sm">By</span>:{" "}
                         {item.author}
                       </p>
                       <span className="text-gray-400">--</span>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-sm text-gray-400 font-semibold">
                         {dayjs(item?.published_at)?.format("MMM D, YYYY")}
                       </p>
                     </div>
+                    <p className="text-sm mt-1">
+                      {item?.articleContent.slice(0, 200)}
+                    </p>
                   </div>
                 )
             )}
@@ -140,6 +159,65 @@ export default function Categories({
         blog_list={blog_list}
         copyright={copyright}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+      />
+
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `http://${domain}/${category}`,
+              url: `http://${domain}/${category}`,
+              name: meta.title,
+              isPartOf: {
+                "@id": `http://${domain}`,
+              },
+              description: meta.description,
+              inLanguage: "en-US",
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                name: breadcrumb.label,
+                item: `http://${domain}${breadcrumb.url}`,
+              })),
+            },
+            {
+              "@type": "Organization",
+              "@id": `http://${domain}`,
+              name: domain,
+              url: `http://${domain}/`,
+              logo: {
+                "@type": "ImageObject",
+                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+              },
+              sameAs: [
+                "http://www.facebook.com",
+                "http://www.twitter.com",
+                "http://instagram.com",
+              ],
+            },
+            {
+              "@type": "ItemList",
+              url: `http://${domain}`,
+              name: "blog",
+              itemListElement: blog_list?.map((blog, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: {
+                  "@type": "Article",
+                  url: `http://${domain}/${blog.title
+                    ?.toLowerCase()
+                    .replaceAll(" ", "-")}`,
+                  name: blog.title,
+                },
+              })),
+            },
+          ],
+        }}
       />
     </div>
   );

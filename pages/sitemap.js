@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { callBackendApi, getDomain, getProjectId } from "@/lib/myFun";
+import FullContainer from "@/components/common/FullContainer";
+import Container from "@/components/common/Container";
 
-const SitemapLinks = ({ blog_list, domain, project_id }) => {
+const SitemapLinks = ({ blog_list, domain, project_id, blog_categories }) => {
   const [links, setLinks] = useState([]);
   const [error, setError] = useState(null);
 
@@ -20,7 +22,7 @@ const SitemapLinks = ({ blog_list, domain, project_id }) => {
           (urlElement) => urlElement.getElementsByTagName("loc")[0].textContent
         );
 
-        if (blog_list && domain) {
+        if (blog_list && blog_categories && domain) {
           const blogLinks = blog_list.map((blog) =>
             project_id
               ? `${domain}/${blog.title
@@ -28,8 +30,13 @@ const SitemapLinks = ({ blog_list, domain, project_id }) => {
                   .replaceAll(" ", "-")}?${project_id}`
               : `${domain}/${blog.title.toLowerCase().replaceAll(" ", "-")}`
           );
+          const blogCategories = blog_categories.map((item) =>
+            project_id
+              ? `${domain}/categories/${item}?${project_id}`
+              : `${domain}/categories/${item}`
+          );
 
-          setLinks([...sitemapUrls, ...blogLinks]);
+          setLinks([...sitemapUrls, ...blogCategories, ...blogLinks]);
         } else {
           setLinks(sitemapUrls);
         }
@@ -39,28 +46,41 @@ const SitemapLinks = ({ blog_list, domain, project_id }) => {
     };
 
     fetchSitemapAndUpdateLinks();
-  }, [blog_list, domain, project_id]);
+  }, [blog_list, domain, project_id, blog_categories]);
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-4">Sitemap Links</h1>
-      {error ? (
-        <p className="text-red-500">Error: {error}</p>
-      ) : (
-        <ul className="list-disc pl-5 space-y-2">
-          {links.map((link, index) => (
-            <li key={index}>
-              <a
-                href={link.replace("https://www.yourdomain.com", domain)}
-                className="text-blue-600 hover:underline"
+    <FullContainer>
+      <Container className="md:max-w-screen-md">
+        <h1 className="text-3xl font-bold mb-2 w-full mt-5">XML Sitemap</h1>
+        <p className="text-sm w-full">
+          This is an XML Sitemap, meant for consumption by search engines.
+        </p>
+        <p className="mb-5 w-full pb-5 border-b">
+          Find more information about XML sitemaps at sitemaps.org.
+        </p>
+        {error ? (
+          <p className="text-red-500">Error: {error}</p>
+        ) : (
+          <ul className="space-y-1 w-full">
+            {links.map((link, index) => (
+              <li
+                className={`text-sm py-1 px-3 ${
+                  index % 2 === 0 ? "bg-gray-100" : ""
+                }`}
+                key={index}
               >
-                {link.replace("https://www.yourdomain.com", domain)}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+                <a
+                  href={link.replace("https://www.yourdomain.com", domain)}
+                  className="hover:underline"
+                >
+                  {link.replace("https://www.yourdomain.com", domain)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Container>
+    </FullContainer>
   );
 };
 
@@ -69,11 +89,17 @@ export async function getServerSideProps({ req, query }) {
   const project_id = getProjectId(query);
 
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
+  const blog_categories = await callBackendApi({
+    domain,
+    query,
+    type: "blog_categories",
+  });
 
   return {
     props: {
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
-      blog_list: blog_list.data[0].value,
+      blog_list: blog_list?.data[0]?.value || null,
+      blog_categories: blog_categories?.data[0]?.value || null,
       project_id,
     },
   };

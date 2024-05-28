@@ -1,26 +1,26 @@
 import React from "react";
-import FullContainer from "@/components/common/FullContainer";
-import Container from "@/components/common/Container";
-import Banner from "@/components/containers/Banner";
-import Footer from "@/components/containers/Footer";
-import { Montserrat } from "next/font/google";
-import MarkdownIt from "markdown-it";
-import Head from "next/head";
-import LatestBlogs from "@/components/containers/LatestBlogs";
-import NavMenu from "@/components/containers/NavMenu";
 import {
   callBackendApi,
   getDomain,
   getImagePath,
   getProjectId,
 } from "@/lib/myFun";
-import GoogleTagManager from "@/lib/GoogleTagManager";
-import JsonLd from "@/components/json/JsonLd";
-import useBreadcrumbs from "@/utils/useBreadcrumbs";
+import FullContainer from "@/components/common/FullContainer";
+import LatestBlogs from "@/components/containers/LatestBlogs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
-import dayjs from "dayjs";
+import GoogleTagManager from "@/lib/GoogleTagManager";
+import Container from "@/components/common/Container";
+import NavMenu from "@/components/containers/NavMenu";
+import Banner from "@/components/containers/Banner";
+import useBreadcrumbs from "@/utils/useBreadcrumbs";
+import Footer from "@/components/containers/Footer";
+import JsonLd from "@/components/json/JsonLd";
+import { Montserrat } from "next/font/google";
+import MarkdownIt from "markdown-it";
 import Image from "next/image";
 import Link from "next/link";
+import Head from "next/head";
+import dayjs from "dayjs";
 
 const myFont = Montserrat({ subsets: ["cyrillic"] });
 

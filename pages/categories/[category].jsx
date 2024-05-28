@@ -1,11 +1,8 @@
 import React from "react";
 import Head from "next/head";
 import { Roboto } from "next/font/google";
-import Banner from "@/components/containers/Banner";
 import NavMenu from "@/components/containers/NavMenu";
-import MustRead from "@/components/containers/MustRead";
 import Footer from "@/components/containers/Footer";
-import LatestBlogs from "@/components/containers/LatestBlogs";
 import {
   callBackendApi,
   getDomain,

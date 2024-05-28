@@ -61,16 +61,19 @@ const SitemapLinks = ({ blog_list, domain, project_id, blog_categories }) => {
         {error ? (
           <p className="text-red-500">Error: {error}</p>
         ) : (
-          <ul className="space-y-1 w-full">
+          <ul className="space-y-1 w-full mb-6">
             {links.map((link, index) => (
               <li
-                className={`text-sm py-1 px-3 ${
+                className={`text-xs py-1 px-3 ${
                   index % 2 === 0 ? "bg-gray-100" : ""
                 }`}
                 key={index}
               >
                 <a
-                  href={link.replace("https://www.yourdomain.com", domain)}
+                  href={`http://${link.replace(
+                    "https://www.yourdomain.com",
+                    domain
+                  )}`}
                   className="hover:underline"
                 >
                   {link.replace("https://www.yourdomain.com", domain)}

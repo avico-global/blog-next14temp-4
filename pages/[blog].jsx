@@ -200,6 +200,78 @@ export default function Blog({
         copyright={copyright}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
+
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "BlogPosting",
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": myblog
+                  ? `http://${domain}/${myblog?.value.title
+                      ?.toLowerCase()
+                      .replaceAll(" ", "-")}`
+                  : "",
+              },
+              headline: myblog?.value.title,
+              description: myblog?.value.articleContent,
+              datePublished: myblog?.value.published_at,
+              author: myblog?.value.author,
+              image: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`,
+              publisher: "Site Manager",
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                name: breadcrumb.label,
+                item: `http://${domain}${breadcrumb.url}`,
+              })),
+            },
+            {
+              "@type": "ItemList",
+              url: `http://${domain}/blogs`,
+              name: "blog",
+              itemListElement: blog_list?.map((blog, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: {
+                  "@type": "Article",
+                  url: `http://${domain}/${blog.title
+                    ?.toLowerCase()
+                    .replaceAll(" ", "-")}`,
+                  name: blog.title,
+                },
+              })),
+            },
+            {
+              "@type": "WebPage",
+              "@id": `http://${domain}/${myblog?.value.title
+                ?.toLowerCase()
+                .replaceAll(" ", "-")}`,
+              url: `http://${domain}/${myblog?.value.title
+                ?.toLowerCase()
+                .replaceAll(" ", "-")}`,
+              name: myblog?.value?.meta_title,
+              description: myblog?.value?.meta_description,
+              publisher: {
+                "@id": `http://${domain}`,
+              },
+              inLanguage: "en-US",
+              isPartOf: { "@id": `http://${domain}` },
+              primaryImageOfPage: {
+                "@type": "ImageObject",
+                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`,
+              },
+              datePublished: myblog?.value.published_at,
+              dateModified: myblog?.value.published_at,
+            },
+          ],
+        }}
+      />
     </div>
   );
 }

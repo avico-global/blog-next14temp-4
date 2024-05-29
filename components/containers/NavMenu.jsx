@@ -46,7 +46,7 @@ export default function NavMenu({
                     : `/categories/${item}`
                 }
                 className={cn(
-                  "font-bold capitalize px-4 py-1",
+                  "font-bold capitalize px-3 py-1",
                   category === item && "border-b-2 mt-[2px] border-purple-500"
                 )}
               >

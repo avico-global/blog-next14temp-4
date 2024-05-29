@@ -20,7 +20,6 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
-
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],

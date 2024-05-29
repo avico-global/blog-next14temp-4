@@ -94,6 +94,7 @@ export default function Blog({
       </Head>
       <FullContainer>
         <NavMenu
+          category={myblog?.value?.article_category?.name}
           project_id={project_id}
           blog_list={blog_list}
           blog_categories={blog_categories}
@@ -129,7 +130,7 @@ export default function Blog({
                 dangerouslySetInnerHTML={{ __html: content }}
               />
 
-              <div className="mt-6">
+              <div className="mt-12">
                 <h3 className="text-lg font-semibold">Share this article:</h3>
                 <SocialShare url={articleUrl} title={articleTitle} />
               </div>

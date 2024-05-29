@@ -2,9 +2,7 @@ import React from "react";
 import Head from "next/head";
 import { Roboto } from "next/font/google";
 import NavMenu from "@/components/containers/NavMenu";
-import MustRead from "@/components/containers/MustRead";
 import Footer from "@/components/containers/Footer";
-import LatestBlogs from "@/components/containers/LatestBlogs";
 import {
   callBackendApi,
   getDomain,
@@ -12,9 +10,9 @@ import {
   getProjectId,
 } from "@/lib/myFun";
 import GoogleTagManager from "@/lib/GoogleTagManager";
-import JsonLd from "@/components/json/JsonLd";
 import FullContainer from "@/components/common/FullContainer";
 import Container from "@/components/common/Container";
+import { cn } from "@/lib/utils";
 
 const myFont = Roboto({
   subsets: ["cyrillic"],
@@ -33,7 +31,12 @@ export default function Home({
   blog_categories,
 }) {
   return (
-    <div className={myFont.className}>
+    <div
+      className={cn(
+        myFont.className,
+        "flex flex-col min-h-screen justify-between"
+      )}
+    >
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>

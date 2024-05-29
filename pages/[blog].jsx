@@ -1,3 +1,4 @@
+// pages/blog/[blog].js
 import React from "react";
 import {
   callBackendApi,
@@ -21,6 +22,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Head from "next/head";
 import dayjs from "dayjs";
+import SocialShare from "@/components/common/SocialShare";
 
 const myFont = Montserrat({ subsets: ["cyrillic"] });
 
@@ -47,6 +49,11 @@ export default function Blog({
 
   // Get the last 5 items from the filtered list
   const lastFiveBlogs = filteredBlogs.slice(-5);
+
+  const articleUrl = `http://${domain}/${myblog?.value.title
+    ?.toLowerCase()
+    .replaceAll(" ", "-")}`;
+  const articleTitle = myblog?.value.title;
 
   return (
     <div className={myFont.className}>
@@ -121,8 +128,13 @@ export default function Blog({
                 className="prose mt-6 max-w-full"
                 dangerouslySetInnerHTML={{ __html: content }}
               />
+
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold">Share this article:</h3>
+                <SocialShare url={articleUrl} title={articleTitle} />
+              </div>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col sticky top-40 h-fit">
               <div className="bg-black text-white py-2 px-4 font-semibold capitalize">
                 Recent {myblog?.value?.article_category?.name} Posts
               </div>

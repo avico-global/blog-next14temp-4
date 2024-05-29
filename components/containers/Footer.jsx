@@ -107,7 +107,7 @@ export default function Footer({
             <Link href="/contact-us" className="text-sm">
               Contact Us
             </Link>
-            <Link href="/sitemap.xml" className="text-sm">
+            <Link href="/sitemap" className="text-sm">
               Sitemap
             </Link>
           </div>

@@ -92,7 +92,6 @@ export default function Categories({
       <FullContainer className="mb-12">
         <Container>
           <div className="w-full">
-            {" "}
             <Breadcrumbs breadcrumbs={breadcrumbs} className="py-7" />
             <p className="text-2xl font-semibold border-l-4 border-purple-400 capitalize px-4 py-1 mb-7">
               Browsing: {category}

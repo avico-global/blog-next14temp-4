@@ -104,7 +104,9 @@ export default function Footer({
             <p className="text-sm">Disclaimer</p>
             <p className="text-sm">Write For Us</p>
             <p className="text-sm">Privacy Policy</p>
-            <p className="text-sm">Contact Us</p>
+            <Link href="/contact-us" className="text-sm">
+              Contact Us
+            </Link>
             <Link href="/sitemap.xml" className="text-sm">
               Sitemap
             </Link>

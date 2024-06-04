@@ -11,12 +11,9 @@ export default function Breadcrumbs({ breadcrumbs, className }) {
       )}
     >
       {breadcrumbs.map((breadcrumb, index) => (
-        <span key={index} className="flex items-center">
+        <span key={index} className="flex items-center gap-2">
           {index > 0 && <ChevronsRight className="w-4" />}
-          <a
-            href={breadcrumb.url}
-            className="ml-2 hover:underline transition-all"
-          >
+          <a href={breadcrumb.url} className="hover:underline transition-all">
             {breadcrumb.label}
           </a>
         </span>

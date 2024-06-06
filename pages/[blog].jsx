@@ -33,7 +33,7 @@ export default function Blog({
   project_id,
   imagePath,
   domain,
-  blog_categories,
+  categories,
   footer_text,
   copyright,
   tag_list,
@@ -97,7 +97,7 @@ export default function Blog({
           category={myblog?.value?.article_category?.name}
           project_id={project_id}
           blog_list={blog_list}
-          blog_categories={blog_categories}
+          categories={categories}
           logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
         <Container>
@@ -311,10 +311,10 @@ export async function getServerSideProps({ params, req, query }) {
   }
   const logo = await callBackendApi({ domain, query, type: "logo" });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
-  const blog_categories = await callBackendApi({
+  const categories = await callBackendApi({
     domain,
     query,
-    type: "blog_categories",
+    type: "categories",
   });
 
   const tag_list = await callBackendApi({ domain, query, type: "tag_list" });
@@ -341,7 +341,7 @@ export async function getServerSideProps({ params, req, query }) {
       imagePath,
       project_id,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
-      blog_categories: blog_categories?.data[0]?.value || null,
+      categories: categories?.data[0]?.value || null,
       footer_text: footer_text?.data[0]?.value || null,
       copyright: copyright?.data[0]?.value || null,
     },

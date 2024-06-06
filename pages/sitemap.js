@@ -3,7 +3,7 @@ import { callBackendApi, getDomain, getProjectId } from "@/lib/myFun";
 import FullContainer from "@/components/common/FullContainer";
 import Container from "@/components/common/Container";
 
-const SitemapLinks = ({ blog_list, domain, project_id, blog_categories }) => {
+const SitemapLinks = ({ blog_list, domain, project_id, categories }) => {
   const [links, setLinks] = useState([]);
   const [error, setError] = useState(null);
 
@@ -22,7 +22,7 @@ const SitemapLinks = ({ blog_list, domain, project_id, blog_categories }) => {
           (urlElement) => urlElement.getElementsByTagName("loc")[0].textContent
         );
 
-        if (blog_list && blog_categories && domain) {
+        if (blog_list && categories && domain) {
           const blogLinks = blog_list.map((blog) =>
             project_id
               ? `${domain}/${blog.title
@@ -30,7 +30,7 @@ const SitemapLinks = ({ blog_list, domain, project_id, blog_categories }) => {
                   .replaceAll(" ", "-")}?${project_id}`
               : `${domain}/${blog.title.toLowerCase().replaceAll(" ", "-")}`
           );
-          const blogCategories = blog_categories.map((item) =>
+          const blogCategories = categories.map((item) =>
             project_id
               ? `${domain}/categories/${item}?${project_id}`
               : `${domain}/categories/${item}`
@@ -46,7 +46,7 @@ const SitemapLinks = ({ blog_list, domain, project_id, blog_categories }) => {
     };
 
     fetchSitemapAndUpdateLinks();
-  }, [blog_list, domain, project_id, blog_categories]);
+  }, [blog_list, domain, project_id, categories]);
 
   return (
     <FullContainer>
@@ -92,17 +92,17 @@ export async function getServerSideProps({ req, query }) {
   const project_id = getProjectId(query);
 
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const blog_categories = await callBackendApi({
+  const categories = await callBackendApi({
     domain,
     query,
-    type: "blog_categories",
+    type: "categories",
   });
 
   return {
     props: {
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
       blog_list: blog_list?.data[0]?.value || null,
-      blog_categories: blog_categories?.data[0]?.value || null,
+      categories: categories?.data[0]?.value || null,
       project_id,
     },
   };

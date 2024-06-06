@@ -28,7 +28,7 @@ export default function Home({
   meta,
   domain,
   copyright,
-  blog_categories,
+  categories,
 }) {
   return (
     <div
@@ -75,7 +75,7 @@ export default function Home({
       <NavMenu
         project_id={project_id}
         blog_list={blog_list}
-        blog_categories={blog_categories}
+        categories={categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
       <FullContainer>
@@ -115,10 +115,10 @@ export async function getServerSideProps({ req, query }) {
   });
 
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const blog_categories = await callBackendApi({
+  const categories = await callBackendApi({
     domain,
     query,
-    type: "blog_categories",
+    type: "categories",
   });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
 
@@ -141,7 +141,7 @@ export async function getServerSideProps({ req, query }) {
       meta: meta?.data[0]?.value || null,
       logo: logo.data[0],
       blog_list: blog_list.data[0].value,
-      blog_categories: blog_categories?.data[0]?.value || null,
+      categories: categories?.data[0]?.value || null,
       imagePath,
       footer_text: footer_text?.data[0]?.value || null,
       copyright: copyright?.data[0]?.value || null,

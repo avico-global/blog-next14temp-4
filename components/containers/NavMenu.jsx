@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export default function NavMenu({
   logo,
-  blog_categories,
+  categories,
   category,
   blog_list,
   project_id,
@@ -37,7 +37,7 @@ export default function NavMenu({
             />
           </Link>
           <div className="text-lg font-bold hidden lg:flex items-center">
-            {blog_categories?.map((item, index) => (
+            {categories?.map((item, index) => (
               <Link
                 key={index}
                 href={

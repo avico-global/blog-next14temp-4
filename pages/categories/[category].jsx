@@ -31,7 +31,7 @@ export default function Categories({
   imagePath,
   meta,
   domain,
-  blog_categories,
+  categories,
   project_id,
   footer_text,
   copyright,
@@ -86,7 +86,7 @@ export default function Categories({
         category={category}
         project_id={project_id}
         blog_list={blog_list}
-        blog_categories={blog_categories}
+        categories={categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
       <FullContainer className="mb-12">
@@ -247,10 +247,10 @@ export async function getServerSideProps({ req, query }) {
     type: "copyright",
   });
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const blog_categories = await callBackendApi({
+  const categories = await callBackendApi({
     domain,
     query,
-    type: "blog_categories",
+    type: "categories",
   });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
 
@@ -260,7 +260,7 @@ export async function getServerSideProps({ req, query }) {
       logo: logo.data[0],
       banner: banner.data[0] || null,
       blog_list: blog_list.data[0].value,
-      blog_categories: blog_categories?.data[0]?.value || null,
+      categories: categories?.data[0]?.value || null,
       footer_text: footer_text?.data[0]?.value || null,
       copyright: copyright?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,

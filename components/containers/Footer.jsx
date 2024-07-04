@@ -23,7 +23,7 @@ export default function Footer({
   copyright,
 }) {
   return (
-    <div className="flex items-center flex-col">
+    <div className="flex items-center flex-col mt-16">
       <FullContainer className="bg-purple-950 text-white py-16">
         <Container>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">

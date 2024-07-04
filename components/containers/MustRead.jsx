@@ -8,7 +8,7 @@ import SectionHeading from "../common/SectionHeading";
 
 export default function MustRead({ articles, project_id }) {
   return (
-    <FullContainer className="py-10">
+    <FullContainer className="mt-16">
       <Container>
         <SectionHeading title="MUST READ" className="mb-7" />
         <div className="grid grid-cols-1 lg:grid-cols-4 grid-rows-2 gap-x-12 gap-y-4">

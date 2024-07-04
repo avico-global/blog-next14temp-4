@@ -13,10 +13,11 @@ import {
 } from "@/lib/myFun";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
+import Banner from "@/components/containers/Banner";
 
 const myFont = Roboto({
   subsets: ["cyrillic"],
-  weight: ["400", "700"], // Add the weights you need
+  weight: ["400", "700"],
 });
 
 export default function Home({
@@ -29,6 +30,7 @@ export default function Home({
   domain,
   copyright,
   categories,
+  banner,
 }) {
   return (
     <div className={myFont.className}>
@@ -73,6 +75,12 @@ export default function Home({
         categories={categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
+      <Banner
+        title={banner.value.title}
+        tagline={banner.value.tagline}
+        image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner?.file_name}`}
+      />
+
       <LatestBlogs articles={blog_list} project_id={project_id} />
       <MustRead articles={blog_list} project_id={project_id} />
       <Footer
@@ -166,6 +174,7 @@ export async function getServerSideProps({ req, query }) {
     query,
     type: "copyright",
   });
+  const banner = await callBackendApi({ domain, query, type: "banner" });
 
   return {
     props: {
@@ -173,6 +182,7 @@ export async function getServerSideProps({ req, query }) {
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
       meta: meta?.data[0]?.value || null,
       logo: logo.data[0],
+      banner: banner.data[0],
       blog_list: blog_list.data[0].value,
       categories: categories?.data[0]?.value || null,
       imagePath,

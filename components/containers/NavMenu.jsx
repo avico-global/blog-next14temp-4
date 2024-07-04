@@ -24,7 +24,7 @@ export default function NavMenu({
   );
 
   return (
-    <FullContainer className="py-2 sticky top-0 z-50 shadow-sm bg-white">
+    <FullContainer className="py-3 sticky top-0 z-50 shadow-sm bg-white">
       <Container className="md:flex-row md:justify-between">
         <div className="flex items-center justify-between w-full gap-6">
           <Link href="/">
@@ -32,7 +32,7 @@ export default function NavMenu({
               height={70}
               width={80}
               src={logo}
-              className="w-16 md:w-auto"
+              className="w-16 md:w-20"
               alt="logo"
             />
           </Link>

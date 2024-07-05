@@ -101,22 +101,22 @@ export default function Home({
                   (item, index) =>
                     item.article_category.name === category && (
                       <Link
+                        title={item.imageTitle}
                         href={
                           project_id
                             ? `/${item.article_category.name}/${item.key}?${project_id}`
                             : `/${item.article_category.name}/${item.key}`
                         }
-                        title={item.imageTitle}
                         key={index}
                         className="flex flex-col gap-2 text-lg"
                       >
                         <div className="overflow-hidden relative h-52 w-full bg-gray-200 rounded-md ">
                           <Image
                             title={item.imageTitle}
+                            alt={`blog ${item.imageTitle}`}
                             src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
                             fill={true}
                             loading="lazy"
-                            alt="blog"
                             className="w-full h-full object-cover absolute top-0 scale-125"
                           />
                         </div>

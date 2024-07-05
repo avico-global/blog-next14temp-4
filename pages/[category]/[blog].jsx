@@ -99,10 +99,11 @@ export default function Blog({
       <FullContainer>
         <Container className="h-[62vh] bg-gradient-to-t from-black/50 overflow-hidden rounded-lg relative p-10 text-white md:justify-end">
           <Image
+            title={myblog?.value?.imageTitle}
+            alt={`blog ${myblog?.value?.imageTitle}`}
             src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`}
-            alt="Background Image"
-            priority={true}
             fill={true}
+            priority={true}
             loading="eager"
             className="-z-10 w-full h-full object-cover absolute top-0"
           />

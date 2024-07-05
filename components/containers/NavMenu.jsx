@@ -40,11 +40,7 @@ export default function NavMenu({
             {categories?.map((item, index) => (
               <Link
                 key={index}
-                href={
-                  project_id
-                    ? `/categories/${item}?${project_id}`
-                    : `/categories/${item}`
-                }
+                href={project_id ? `${item}?${project_id}` : `${item}`}
                 className={cn(
                   "font-bold capitalize px-3 py-1",
                   category === item && "border-b-2 mt-[2px] border-purple-500"

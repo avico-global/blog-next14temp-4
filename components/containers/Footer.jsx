@@ -81,10 +81,8 @@ export default function Footer({
                   <Link
                     href={
                       project_id
-                        ? `/${item.title
-                            ?.toLowerCase()
-                            .replaceAll(" ", "-")}?${project_id}`
-                        : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
+                        ? `/${item.article_category.name}/${item.key}?${project_id}`
+                        : `/${item.article_category.name}/${item.key}`
                     }
                     title={item.imageTitle}
                     key={index}

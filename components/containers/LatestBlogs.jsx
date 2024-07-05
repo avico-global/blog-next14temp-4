@@ -3,8 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import Container from "../common/Container";
 import FullContainer from "../common/FullContainer";
-import dayjs from "dayjs";
 import SectionHeading from "../common/SectionHeading";
+import dayjs from "dayjs";
 
 export default function LatestBlogs({ articles, project_id }) {
   return (
@@ -19,16 +19,18 @@ export default function LatestBlogs({ articles, project_id }) {
               <Link
                 href={
                   project_id
-                    ? `/${item.title
-                        ?.toLowerCase()
-                        .replaceAll(" ", "-")}?${project_id}`
-                    : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
+                    ? `/${item?.article_category?.name}/${item.key}?${project_id}`
+                    : `/${item?.article_category?.name}/${item.key}`
                 }
                 title={item.imageTitle}
                 key={index}
                 className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col gap-2 first:gap-4 text-lg first:text-xl first:mb-5"
               >
-                <div className="overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-black flex-1 rounded-lg flex items-center flex-col">
+                <div
+                  className={`overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-black rounded-lg flex items-center flex-col ${
+                    index === 0 && "flex-1"
+                  }`}
+                >
                   <Image
                     title={item.imageTitle}
                     src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}

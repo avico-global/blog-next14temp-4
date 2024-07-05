@@ -1,7 +1,5 @@
 import React from "react";
 import Head from "next/head";
-import { Roboto } from "next/font/google";
-import NavMenu from "@/components/containers/NavMenu";
 import Footer from "@/components/containers/Footer";
 import {
   callBackendApi,
@@ -20,6 +18,10 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
+import MarkdownIt from "markdown-it";
+
+import { Roboto } from "next/font/google";
+import NavMenu from "@/components/containers/NavMenu";
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],
@@ -33,12 +35,26 @@ export default function Categories({
   domain,
   categories,
   project_id,
-  footer_text,
+  about_me,
+  contact_details,
   copyright,
 }) {
   const router = useRouter();
   const { category } = router.query;
   const breadcrumbs = useBreadcrumbs();
+  const markdownIt = new MarkdownIt();
+
+  const convertMarkdown = (markdownText) => markdownIt?.render(markdownText);
+
+  const filteredBlogList = blog_list.filter((item) => {
+    const searchContent = category?.replace("-", " ");
+    return (
+      item.title.toLowerCase().includes(searchContent) ||
+      item.article_category.name.toLowerCase().includes(searchContent) ||
+      item.tags?.some((tag) => tag.toLowerCase().includes(searchContent)) ||
+      item.articleContent.toLowerCase().includes(searchContent)
+    );
+  });
 
   return (
     <div
@@ -82,78 +98,86 @@ export default function Categories({
           href={`https://api15.ecommcube.com/${domain}/favicon-16x16.png`}
         />
       </Head>
+
       <NavMenu
         category={category}
         project_id={project_id}
         blog_list={blog_list}
         categories={categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+        contact_details={contact_details}
       />
-      <FullContainer className="mb-12">
+      <FullContainer className="w-full py-8 bg-gray-100">
+        <p className="text-2xl font-semibold capitalize px-4 py-1">
+          {category?.replace("-", " ")}
+        </p>
+        <div className="w-24 mt-2 h-1 bg-gray-500"></div>
+        <Breadcrumbs
+          breadcrumbs={breadcrumbs}
+          className="mt-1 justify-center"
+        />
+      </FullContainer>
+      <FullContainer className="py-16">
         <Container>
-          <div className="w-full">
-            <Breadcrumbs breadcrumbs={breadcrumbs} className="py-7" />
-            <p className="text-2xl font-semibold border-l-4 border-purple-400 capitalize px-4 py-1 mb-7">
-              Browsing: {category}
-            </p>
-          </div>
-          <div className="w-full grid grid-cols-2 gap-10">
-            {blog_list.map(
-              (item, index) =>
-                item?.article_category?.name === category && (
-                  <div key={index}>
-                    <Link
-                      href={
-                        project_id
-                          ? `/${item.title
-                              ?.toLowerCase()
-                              .replaceAll(" ", "-")}?${project_id}`
-                          : `/${item.title?.toLowerCase().replaceAll(" ", "-")}`
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
+            {filteredBlogList.map((item, index) => (
+              <div key={index}>
+                <Link
+                  href={
+                    project_id
+                      ? `/${category}/${item.key}?${project_id}`
+                      : `/${category}/${item.key}`
+                  }
+                >
+                  <div className="overflow-hidden relative min-h-40 rounded lg:min-h-72 w-full bg-black flex-1">
+                    <Image
+                      title={item.imageTitle}
+                      src={
+                        item.image
+                          ? `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`
+                          : "/no-image.png"
                       }
-                    >
-                      <div className="overflow-hidden relative min-h-40 rounded lg:min-h-72 w-full bg-black flex-1">
-                        <Image
-                          title={item.imageTitle}
-                          src={
-                            item.image
-                              ? `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`
-                              : "/no-image.png"
-                          }
-                          fill={true}
-                          loading="lazy"
-                          alt="blog"
-                          className="w-full h-full object-cover absolute top-0 scale-125"
-                        />
-                      </div>
-                    </Link>
-                    <p className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight">
-                      {item.title}
-                    </p>
-                    <div className="flex items-center gap-2 mt-1">
-                      <p className="text-sm font-semibold">
-                        <span className="text-gray-400 text-sm">By</span>:{" "}
-                        {item.author}
-                      </p>
-                      <span className="text-gray-400">--</span>
-                      <p className="text-sm text-gray-400 font-semibold">
-                        {dayjs(item?.published_at)?.format("MMM D, YYYY")}
-                      </p>
-                    </div>
-                    <p className="text-sm mt-1">
-                      {item?.articleContent.slice(0, 200)}
-                    </p>
+                      fill={true}
+                      loading="lazy"
+                      alt="blog"
+                      className="w-full h-full object-cover absolute top-0 scale-125"
+                    />
                   </div>
-                )
-            )}
+                </Link>
+                <p className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight">
+                  {item.title}
+                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  <p className="text-sm font-semibold">
+                    <span className="text-gray-400 text-sm">By</span>:{" "}
+                    {item.author}
+                  </p>
+                  <span className="text-gray-400">--</span>
+                  <p className="text-sm text-gray-400 font-semibold">
+                    {dayjs(item?.published_at)?.format("MMM D, YYYY")}
+                  </p>
+                </div>
+                <div
+                  className="mt-1 markdown-content"
+                  style={{ fontSize: 12 }}
+                  dangerouslySetInnerHTML={{
+                    __html: convertMarkdown(item?.articleContent).slice(0, 200),
+                  }}
+                />
+              </div>
+            ))}
           </div>
         </Container>
       </FullContainer>
       <Footer
-        project_id={project_id}
-        footer_text={footer_text}
         blog_list={blog_list}
+        categories={categories}
+        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+        project_id={project_id}
+        imagePath={imagePath}
+        about_me={about_me}
+        contact_details={contact_details}
         copyright={copyright}
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
       />
 
       <JsonLd
@@ -164,11 +188,11 @@ export default function Categories({
               "@type": "WebPage",
               "@id": `http://${domain}/${category}`,
               url: `http://${domain}/${category}`,
-              name: meta.title,
+              name: meta?.title,
               isPartOf: {
                 "@id": `http://${domain}`,
               },
-              description: meta.description,
+              description: meta?.description,
               inLanguage: "en-US",
             },
             {
@@ -204,9 +228,7 @@ export default function Categories({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog.title
-                    ?.toLowerCase()
-                    .replaceAll(" ", "-")}`,
+                  url: `http://${domain}/${blog?.article_category?.name}/${blog.key}`,
                   name: blog.title,
                 },
               })),
@@ -241,6 +263,11 @@ export async function getServerSideProps({ req, query }) {
     query,
     type: "footer_text",
   });
+  const contact_details = await callBackendApi({
+    domain,
+    query,
+    type: "contact_details",
+  });
   const copyright = await callBackendApi({
     domain,
     query,
@@ -253,6 +280,7 @@ export async function getServerSideProps({ req, query }) {
     type: "categories",
   });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
+  const about_me = await callBackendApi({ domain, query, type: "about_me" });
 
   return {
     props: {
@@ -267,6 +295,8 @@ export async function getServerSideProps({ req, query }) {
       imagePath,
       project_id,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
+      about_me: about_me.data[0] || null,
+      contact_details: contact_details.data[0].value,
     },
   };
 }

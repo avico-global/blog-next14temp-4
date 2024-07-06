@@ -1,7 +1,6 @@
 import Container from "@/components/common/Container";
 import FullContainer from "@/components/common/FullContainer";
 import Footer from "@/components/containers/Footer";
-import Navbar from "@/components/containers/Navbar";
 import Head from "next/head";
 import React from "react";
 import Map from "@/components/containers/Map";
@@ -13,6 +12,7 @@ import {
 } from "@/lib/myFun";
 
 import { Roboto } from "next/font/google";
+import NavMenu from "@/components/containers/NavMenu";
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],
@@ -33,7 +33,7 @@ export default function Contact({
       <Head>
         <title>Next 14 Template</title>
       </Head>
-      <Navbar
+      <NavMenu
         blog_list={blog_list}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         project_id={project_id}

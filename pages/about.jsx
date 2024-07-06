@@ -2,7 +2,6 @@ import Container from "@/components/common/Container";
 import FullContainer from "@/components/common/FullContainer";
 import AboutBanner from "@/components/containers/AboutBanner";
 import Footer from "@/components/containers/Footer";
-import Navbar from "@/components/containers/Navbar";
 import React from "react";
 import { Cormorant } from "next/font/google";
 import { cn } from "@/lib/utils";
@@ -19,6 +18,7 @@ import {
 import { Roboto } from "next/font/google";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
+import NavMenu from "@/components/containers/NavMenu";
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],
@@ -77,7 +77,7 @@ export default function About({
           href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
       </Head>
-      <Navbar
+      <NavMenu
         blog_list={blog_list}
         categories={categories}
         logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}

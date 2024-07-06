@@ -38,6 +38,7 @@ export default function Home({
   copyright,
   categories,
   banner,
+  contact_details,
 }) {
   return (
     <div className={myFont.className}>
@@ -144,11 +145,14 @@ export default function Home({
         </Container>
       </FullContainer>
       <Footer
-        project_id={project_id}
-        footer_text={footer_text}
         blog_list={blog_list}
+        categories={categories}
+        contact_details={contact_details}
+        project_id={project_id}
+        imagePath={imagePath}
         copyright={copyright}
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+        footer_text={footer_text}
+        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
       />
 
       <JsonLd
@@ -234,6 +238,11 @@ export async function getServerSideProps({ req, query }) {
     query,
     type: "copyright",
   });
+  const contact_details = await callBackendApi({
+    domain,
+    query,
+    type: "contact_details",
+  });
   const banner = await callBackendApi({ domain, query, type: "banner" });
 
   return {
@@ -248,6 +257,7 @@ export async function getServerSideProps({ req, query }) {
       imagePath,
       footer_text: footer_text?.data[0]?.value || null,
       copyright: copyright?.data[0]?.value || null,
+      contact_details: contact_details.data[0].value,
     },
   };
 }

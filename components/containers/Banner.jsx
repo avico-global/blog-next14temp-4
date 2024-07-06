@@ -15,7 +15,7 @@ export default function Banner({ title, image, tagline }) {
           loading="eager"
           className="-z-10 w-full h-full object-cover absolute top-0"
         />
-        <FullContainer className="gap-6 h-[55vh] bg-black/50 p-10 text-center">
+        <FullContainer className="gap-6 h-[55vh] bg-black/20 p-10 text-center">
           <h1 className="font-extrabold text-5xl md:text-7xl capitalize leading-10">
             {title}
           </h1>

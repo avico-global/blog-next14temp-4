@@ -16,24 +16,26 @@ import {
 } from "lucide-react";
 
 export default function Footer({
-  logo,
-  footer_text,
   blog_list,
+  categories,
+  contact_details,
   project_id,
   copyright,
+  footer_text,
+  logo,
 }) {
   return (
     <div className="flex items-center flex-col mt-16">
-      <FullContainer className="bg-purple-950 text-white py-16">
+      <FullContainer className="bg-purple-50 py-16">
         <Container>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <div>
               <Image height={70} width={100} src={logo} alt="logo" />
-              <p className="mt-6 text-white/80 text-sm">{footer_text}</p>
+              <p className="mt-6 text-sm">{footer_text}</p>
             </div>
             <div>
               <p className="text-lg font-semibold">Follow Us</p>
-              <div className="grid gird-cols-1 md:grid-cols-2 gap-2 mt-5">
+              <div className="grid gird-cols-1 md:grid-cols-2 gap-2 mt-5 text-white">
                 <Social
                   Icon={Facebook}
                   title="Facebook"
@@ -87,7 +89,7 @@ export default function Footer({
                     title={item.imageTitle}
                     key={index}
                   >
-                    <p className="text-sm py-3 hover:text-purple-300 transition-all cursor-pointer border-b border-white/30 text-white/80">
+                    <p className="text-sm py-3 hover:text-purple-600 hover:border-purple-500 transition-all cursor-pointer border-b border-purple-200">
                       {item.title}
                     </p>
                   </Link>
@@ -96,13 +98,22 @@ export default function Footer({
           </div>
         </Container>
       </FullContainer>
-      <FullContainer className="py-10 bg-purple-800">
-        <Container className="text-white">
+      <FullContainer className="py-10 bg-purple-200">
+        <Container>
           <div className="flex items-center flex-col md:flex-row justify-between gap-2 md:gap-5 uppercase font-semibold">
-            <p className="text-sm">Disclaimer</p>
-            <p className="text-sm">Write For Us</p>
-            <p className="text-sm">Privacy Policy</p>
-            <Link href="/contact-us" className="text-sm">
+            {categories?.map((item, index) => (
+              <Link
+                key={index}
+                href={project_id ? `${item}?${project_id}` : `${item}`}
+                className="text-sm"
+              >
+                {item}
+              </Link>
+            ))}
+            <Link href="/about" className="text-sm">
+              About Us
+            </Link>
+            <Link href="/contact" className="text-sm">
               Contact Us
             </Link>
             <Link href="/sitemap" className="text-sm">
@@ -116,9 +127,10 @@ export default function Footer({
   );
 }
 
-function Social({ title, className, Icon }) {
+function Social({ title, className, Icon, href }) {
   return (
-    <div
+    <Link
+      href={href || ""}
       className={cn(
         "py-2 px-4 text-sm font-semibold rounded-sm flex items-center gap-2",
         className
@@ -126,6 +138,6 @@ function Social({ title, className, Icon }) {
     >
       {Icon && <Icon className="w-4" />}
       {title}
-    </div>
+    </Link>
   );
 }

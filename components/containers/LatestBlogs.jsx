@@ -27,7 +27,7 @@ export default function LatestBlogs({ articles, project_id }) {
                 className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col gap-2 first:gap-4 text-lg first:text-xl first:mb-5"
               >
                 <div
-                  className={`overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-black rounded-lg flex items-center flex-col ${
+                  className={`overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-gray-300 rounded-lg flex items-center flex-col ${
                     index === 0 && "flex-1"
                   }`}
                 >

@@ -6,7 +6,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "apisitem.ecommcube.com",
+        hostname: "api.sitebuilderz.com",
       },
     ],
   },

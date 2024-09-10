@@ -1,4 +1,4 @@
-import React ,  { useState,useEffect }from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import FullContainer from "../common/FullContainer";
 import Container from "../common/Container";
@@ -93,12 +93,12 @@ export default function Footer({
                 .reverse()
                 .map((item, index) => (
                   <Link
-                    href={
-                      project_id
-                        ? `/${item.article_category.name}/${item.key}?${project_id}`
-                        : `/${item.article_category.name}/${item.key}`
-                    }
-                    title={item.imageTitle || "Title" }
+                    href={`/${item?.article_category?.name
+                      ?.toLowerCase()
+                      ?.replaceAll(" ", "-")}/${item.title
+                      ?.replaceAll(" ", "-")
+                      ?.toLowerCase()}`}
+                    title={item.imageTitle || "Title"}
                     key={index}
                   >
                     <p className="text-sm py-3 hover:text-purple-600 hover:border-purple-500 transition-all cursor-pointer border-b border-purple-200">
@@ -115,7 +115,7 @@ export default function Footer({
           <div className="flex items-center flex-col md:flex-row justify-between gap-2 md:gap-5 uppercase font-semibold">
             {categories?.map((item, index) => (
               <Link
-              title="Categories"
+                title="Categories"
                 key={index}
                 href={project_id ? `${item}?${project_id}` : `${item}`}
                 className="text-sm"
@@ -123,22 +123,13 @@ export default function Footer({
                 {item}
               </Link>
             ))}
-            <Link
-            title="About"
-
-            href="/about" className="text-sm">
+            <Link title="About" href="/about" className="text-sm">
               About Us
             </Link>
-            <Link
-            title="Contact Us"
-            
-            href="/contact" className="text-sm">
+            <Link title="Contact Us" href="/contact" className="text-sm">
               Contact Us
             </Link>
-            <Link
-            title="Sitemap"
-            
-            href="/sitemap" className="text-sm">
+            <Link title="Sitemap" href="/sitemap" className="text-sm">
               Sitemap
             </Link>
           </div>
@@ -152,7 +143,7 @@ export default function Footer({
 function Social({ title, className, Icon, href }) {
   return (
     <Link
-    title="Social"
+      title="Social"
       href={href || ""}
       className={cn(
         "py-2 px-4 text-sm font-semibold rounded-sm flex items-center gap-2",

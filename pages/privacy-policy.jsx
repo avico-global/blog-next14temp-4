@@ -1,4 +1,8 @@
 import React, { useEffect } from "react";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
+import useBreadcrumbs from "@/lib/useBreadcrumbs";
+import JsonLd from "@/components/json/JsonLd";
+import { useRouter } from "next/router";
 
 // Components
 import Container from "@/components/common/Container";
@@ -213,19 +217,8 @@ export default function PriavcyPolicy({
   );
 }
 
-import fs from "fs";
-import path from "path";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
-import useBreadcrumbs from "@/lib/useBreadcrumbs";
-import JsonLd from "@/components/json/JsonLd";
-import { useRouter } from "next/router";
 export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
-
-  const robotxt = await callBackendApi({ domain, query, type: "robotxt" });
-  const filePath = path.join(process.cwd(), "public", "robots.txt");
-  fs.writeFileSync(filePath, robotxt.data[0].value, "utf8");
-
   const meta = await callBackendApi({ domain, query, type: "meta_privacy" });
   const logo = await callBackendApi({ domain, query, type: "logo" });
   const favicon = await callBackendApi({ domain, query, type: "favicon" });

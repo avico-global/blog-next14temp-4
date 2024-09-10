@@ -58,8 +58,19 @@ export default function Categories({
     >
       <Head>
         <meta charSet="UTF-8" />
-        <title>{meta?.title}</title>
-        <meta name="description" content={meta?.description} />
+        <title>
+          {meta?.title?.replaceAll(
+            "##category##",
+            category?.replaceAll("-", " ")
+          )}
+        </title>
+        <meta
+          name="description"
+          content={meta?.description.replaceAll(
+            "##category##",
+            category?.replaceAll("-", " ")
+          )}
+        />
         <link rel="author" href={`http://${domain}`} />
         <link rel="publisher" href={`http://${domain}`} />
         <link rel="canonical" href={`http://${domain}`} />

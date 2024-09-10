@@ -1,8 +1,13 @@
+import { cn } from "@/lib/utils";
+
 export default function Container({ children, className, style }) {
   return (
     <div
       style={style}
-      className={`w-11/12 max-w-screen-xl 3xl:max-w-screen-2xl flex items-center justify-center flex-col bg-cover bg-center ${className}`}
+      className={cn(
+        "w-11/12 max-w-screen-xl 3xl:max-w-screen-2xl flex items-center justify-center flex-col bg-cover bg-center",
+        className
+      )}
     >
       {children}
     </div>

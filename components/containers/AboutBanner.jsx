@@ -11,6 +11,7 @@ export default function AboutBanner({ image }) {
   return (
     <FullContainer className="h-80 overflow-hidden p-10 bg-black/20 text-white text-center">
       <Image
+      title="About"
         src={image}
         alt="Background Image"
         priority={true}

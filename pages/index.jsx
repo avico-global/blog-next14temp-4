@@ -1,55 +1,90 @@
-import React from "react";
+import React,{useEffect} from "react";
+
+// Components
 import Head from "next/head";
-import { Roboto } from "next/font/google";
-import NavMenu from "@/components/containers/NavMenu";
-import MustRead from "@/components/containers/MustRead";
+import Banner from "@/components/containers/Banner";
+import Container from "@/components/common/Container";
+import FullContainer from "@/components/common/FullContainer";
+import GoogleTagManager from "@/lib/GoogleTagManager";
+import MostPopular from "@/components/containers/MostPopular";
+import Rightbar from "@/components/containers/Rightbar";
 import Footer from "@/components/containers/Footer";
-import LatestBlogs from "@/components/containers/LatestBlogs";
+import JsonLd from "@/components/json/JsonLd";
+import { useRouter } from "next/router";
+
+
 import {
   callBackendApi,
   getDomain,
   getImagePath,
-  getProjectId,
+  robotsTxt,
 } from "@/lib/myFun";
-import GoogleTagManager from "@/lib/GoogleTagManager";
-import JsonLd from "@/components/json/JsonLd";
-import Banner from "@/components/containers/Banner";
-import MostPopular from "@/components/containers/MostPopular";
-import FullContainer from "@/components/common/FullContainer";
-import Container from "@/components/common/Container";
-import Link from "next/link";
-import Image from "next/image";
-import dayjs from "dayjs";
-import SectionHeading from "@/components/common/SectionHeading";
 
-const myFont = Roboto({
-  subsets: ["cyrillic"],
-  weight: ["400", "700"],
+// Font
+import { Raleway } from "next/font/google";
+import LatestBlogs from "@/components/containers/LatestBlogs";
+import MustRead from "@/components/containers/MustRead";
+import SectionHeading from "@/components/common/SectionHeading";
+import Link from "next/link";
+import dayjs from "dayjs";
+import Image from "next/image";
+import Navbar from "@/components/containers/Navbar";
+const myFont = Raleway({
+  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
 });
 
 export default function Home({
   logo,
-  footer_text,
   blog_list,
-  project_id,
   imagePath,
-  meta,
-  domain,
-  copyright,
   categories,
-  banner,
+  domain,
+  meta,
+  about_me,
   contact_details,
+  banner,
+  favicon,
+  layout,
+  tag_list,
 }) {
+
+
+  const router = useRouter();
+  const { category } = router.query;
+
+  const filteredBlogList = blog_list.filter((item) => {
+    const searchContent = category?.replaceAll("-", " ")?.toLowerCase();
+    return item.article_category.name.toLowerCase().includes(searchContent);
+  });
+
+  useEffect(() => {
+    const currentPath = router.asPath;
+
+    if (category && (category.includes("%20") || category.includes(" "))) {
+      const newCategory = category.replace(/%20/g, "-").replace(/ /g, "-");
+      router.replace(`/${newCategory}`);
+    }
+
+    if (currentPath.includes("contact-us")) {
+      router.replace("/contact");
+    }
+    if (currentPath.includes("about-us")) {
+      router.replace("/about");
+    }
+  }, [category, router]);
+
+  const page = layout?.find((page) => page.page === "home");
+
+
   return (
-    <div className={myFont.className}>
+    <div className={`min-h-screen ${myFont.className}`}>
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>
         <meta name="description" content={meta?.description} />
-        <link rel="author" href={`http://${domain}`} />
-        <link rel="publisher" href={`http://${domain}`} />
-        <link rel="canonical" href={`http://${domain}`} />
-        <meta name="robots" content="noindex" />
+        <link rel="author" href={`https://www.${domain}`} />
+        <link rel="publisher" href={`https://www.${domain}`} />
+        <link rel="canonical" href={`http://www.${domain}`} />
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -60,115 +95,221 @@ export default function Home({
           content="zbriSQArMtpCR3s5simGqO5aZTDqEZZi9qwinSrsRPk"
         />
         <link
+        
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
       </Head>
-      <NavMenu
-        project_id={project_id}
-        blog_list={blog_list}
-        categories={categories}
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
-      />
-      <Banner
-        title={banner.value.title}
-        tagline={banner.value.tagline}
-        image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner?.file_name}`}
-      />
 
-      <LatestBlogs articles={blog_list} project_id={project_id} />
-      <MostPopular articles={blog_list} project_id={project_id} />
-      <MustRead articles={blog_list} project_id={project_id} />
-      <FullContainer className="mt-16">
-        <Container>
-          {categories?.map((category, index) => (
-            <div key={index} className="w-full mb-12">
-              <SectionHeading title={category} className="mb-7" />
-              <div className="grid grid-cols-3 gap-8">
-                {blog_list?.map(
-                  (item, index) =>
-                    item.article_category.name === category && (
-                      <Link
-                        title={item.imageTitle}
-                        href={
-                          project_id
-                            ? `/${item.article_category.name}/${item.key}?${project_id}`
-                            : `/${item.article_category.name}/${item.key}`
-                        }
-                        key={index}
-                        className="flex flex-col gap-2 text-lg"
-                      >
-                        <div className="overflow-hidden relative h-52 w-full bg-gray-200 rounded-md ">
-                          <Image
-                            title={item.imageTitle}
-                            alt={`blog ${item.imageTitle}`}
-                            src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
-                            fill={true}
-                            loading="lazy"
-                            className="w-full h-full object-cover absolute top-0 scale-125"
-                          />
+      {page?.enable
+        ? page?.sections?.map((item, index) => {
+            if (!item.enable) return null;
+
+            switch (item.section?.toLowerCase()) {
+              case "navbar":
+                return (
+                  <Navbar
+                    key={index}
+                    blog_list={blog_list}
+                    categories={categories}
+                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+                  />
+                );
+
+              case "banner":
+                return (
+                  <Banner
+                    key={index}
+                    data={banner.value}
+                    image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner?.file_name}`}
+                  />
+                );
+
+              case "articles":
+                return (
+                  <FullContainer key={index}>
+                    <Container>
+                      <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full">
+                        <div className="flex flex-col gap-12">
+                          {page?.sections?.map((item, index) => {
+                            switch (item.section?.toLowerCase()) {
+                              case "latest posts":
+                                return <LatestBlogs articles={blog_list} />;
+                              case "most popular":
+                                return (
+                                  <MostPopular
+                                    articles={blog_list}
+                                  />
+                                );
+                              case "must read":
+                                return (
+                                  <MustRead
+                                    articles={blog_list}
+                                  />
+                                );
+                              case "articles with categories":
+                                return (
+                                  <div>
+                                    {categories?.map((category, index) => (
+                                      <div key={index} className="w-full mb-12">
+                                        <SectionHeading
+                                          title={category}
+                                          className="mb-7"
+                                        />
+                                        <div className="grid grid-cols-3 gap-8">
+                                          {blog_list?.map(
+                                            (item, index) =>
+                                              item.article_category.name ===
+                                                category && (
+                                                <Link
+                                                  title={item.imageTitle}
+                                                  href={`/${item.article_category.name
+                                                    ?.toLowerCase()
+                                                    ?.replaceAll(
+                                                      " ",
+                                                      "-"
+                                                    )}/${item.title
+                                                    ?.toLowerCase()
+                                                    ?.replaceAll(" ", "-")}`}
+                                                  key={index}
+                                                  className="flex flex-col gap-2 text-lg"
+                                                >
+                                                  <div className="overflow-hidden relative h-52 w-full bg-gray-200 rounded-md ">
+                                                    <Image
+                                                      title={item.imageTitle|| "Article Thumbnail "}
+                                                      alt={`blog ${item.imageTitle}`}
+                                                      src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
+                                                      fill={true}
+                                                      loading="lazy"
+                                                      className="w-full h-full object-cover absolute top-0 scale-125"
+                                                    />
+                                                  </div>
+                                                  <div>
+                                                    <p className="font-bold text-center text-inherit leading-tight">
+                                                      {item.title}
+                                                    </p>
+                                                    <div className="flex items-center justify-center gap-2 mt-1">
+                                                      <p className="text-xs">
+                                                        <span className="text-gray-400 text-xs">
+                                                          By
+                                                        </span>
+                                                        : {item.author}
+                                                      </p>
+                                                      <span className="text-gray-400">
+                                                        --
+                                                      </span>
+                                                      <p className="text-xs text-gray-400">
+                                                        {dayjs(
+                                                          item?.published_at
+                                                        )?.format(
+                                                          "MMM D, YYYY"
+                                                        )}
+                                                      </p>
+                                                    </div>
+                                                  </div>
+                                                </Link>
+                                              )
+                                          )}
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                );
+
+                              default:
+                                return null;
+                            }
+                          })}
                         </div>
-                        <div>
-                          <p className="font-bold text-center text-inherit leading-tight">
-                            {item.title}
-                          </p>
-                          <div className="flex items-center justify-center gap-2 mt-1">
-                            <p className="text-xs">
-                              <span className="text-gray-400 text-xs">By</span>:{" "}
-                              {item.author}
-                            </p>
-                            <span className="text-gray-400">--</span>
-                            <p className="text-xs text-gray-400">
-                              {dayjs(item?.published_at)?.format("MMM D, YYYY")}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    )
-                )}
-              </div>
-            </div>
-          ))}
-        </Container>
-      </FullContainer>
-      <Footer
-        blog_list={blog_list}
-        categories={categories}
-        contact_details={contact_details}
-        project_id={project_id}
-        imagePath={imagePath}
-        copyright={copyright}
-        footer_text={footer_text}
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
-      />
+                        <Rightbar
+                          about_me={about_me}
+                          imagePath={imagePath}
+                          categories={categories}
+                          contact_details={contact_details}
+                          tag_list={tag_list}
+                          widgets={page?.widgets}
+                          blog_list={blog_list}
+                        />
+                      </div>
+                    </Container>
+                  </FullContainer>
+                );
+
+              case "footer":
+                return (
+                  <Footer
+                    blog_list={blog_list}
+                    categories={categories}
+                    contact_details={contact_details}
+                    imagePath={imagePath}
+                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+                  />
+                );
+              default:
+                return null;
+            }
+          })
+        : "Page Disabled, under maintenance"}
 
       <JsonLd
         data={{
-          "@context": "https://schema.org",
+          "@context": "https://www.schema.org",
           "@graph": [
             {
               "@type": "WebPage",
               "@id": `http://${domain}/`,
               url: `http://${domain}/`,
-              name: meta.title,
+              name: meta?.title,
               isPartOf: {
                 "@id": `http://${domain}`,
               },
-              description: meta.description,
+              description: meta?.description,
               inLanguage: "en-US",
+              primaryImageOfPage: {
+                "@type": "ImageObject",
+                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner?.file_name}`,
+                width: 1920,
+                height: 1080,
+              },
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `http://${domain}/`,
+              },
+              // potentialAction: {
+              //   "@type": "SearchAction",
+              //   target: `http://${domain}/search?q={search_term_string}`,
+              //   "query-input": "required name=search_term_string",
+              // },
+            },
+            {
+              "@type": "WebSite",
+              "@id": `http://${domain}/#website`,
+              url: `http://${domain}/`,
+              name: domain,
+              description: meta?.description,
+              inLanguage: "en-US",
+              // potentialAction: {
+              //   "@type": "SearchAction",
+              //   target: `http://${domain}/search?q={search_term_string}`,
+              //   "query-input": "required name=search_term_string",
+              // },
+              publisher: {
+                "@type": "Organization",
+                "@id": `http://${domain}`,
+              },
             },
             {
               "@type": "Organization",
@@ -178,6 +319,8 @@ export default function Home({
               logo: {
                 "@type": "ImageObject",
                 url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+                width: logo.width,
+                height: logo.height,
               },
               sameAs: [
                 "http://www.facebook.com",
@@ -194,10 +337,30 @@ export default function Home({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog.title
-                    ?.toLowerCase()
-                    .replaceAll(" ", "-")}`,
+                  url: `http://${domain}/${blog?.article_category?.name}/${blog.key}`,
                   name: blog.title,
+                  author: {
+                    "@type": "Person",
+                    name: blog.author,
+                  },
+                  datePublished: blog.datePublished,
+                  dateModified: blog.dateModified,
+                  image: {
+                    "@type": "ImageObject",
+                    url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${blog.imagePath}/${blog.imageFileName}`,
+                    width: blog.imageWidth,
+                    height: blog.imageHeight,
+                  },
+                  headline: blog.title,
+                  description: blog.description,
+                  mainEntityOfPage: {
+                    "@type": "WebPage",
+                    "@id": `http://${domain}/${blog?.article_category?.name
+                      ?.replaceAll(" ", "-")
+                      ?.toLowerCase()}/${blog.title
+                      ?.replaceAll(" ", "-")
+                      ?.toLowerCase()}`,
+                  },
                 },
               })),
             },
@@ -208,56 +371,47 @@ export default function Home({
   );
 }
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req }) {
   const domain = getDomain(req?.headers?.host);
-  const project_id = getProjectId(query);
-  const imagePath = await getImagePath({ domain, query });
-
-  const logo = await callBackendApi({
-    domain,
-    query,
-    type: "logo",
-  });
-
-  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const categories = await callBackendApi({
-    domain,
-    query,
-    type: "categories",
-  });
-  const meta = await callBackendApi({ domain, query, type: "meta_home" });
-
-  // Footer
-  const footer_text = await callBackendApi({
-    domain,
-    query,
-    type: "footer_text",
-  });
-  const copyright = await callBackendApi({
-    domain,
-    query,
-    type: "copyright",
-  });
+  const meta = await callBackendApi({ domain, type: "meta_home" });
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
+  const categories = await callBackendApi({ domain, type: "categories" });
   const contact_details = await callBackendApi({
     domain,
-    query,
     type: "contact_details",
   });
-  const banner = await callBackendApi({ domain, query, type: "banner" });
+  let project_id = logo?.data[0]?.project_id || null;
+  // const testData=await downloadImages({domain, project_id});
+  // console.log("👊 ~ getServerSideProps ~ testData:", testData)
+  const about_me = await callBackendApi({ domain, type: "about_me" });
+  const copyright = await callBackendApi({ domain, type: "copyright" });
+  const banner = await callBackendApi({ domain, type: "banner" });
+  const layout = await callBackendApi({ domain, type: "layout" });
+  const tag_list = await callBackendApi({ domain, type: "tag_list" });
+  const nav_type = await callBackendApi({ domain, type: "nav_type" });
+  let imagePath = null;
+  imagePath = await getImagePath(project_id, domain);
+
+  robotsTxt({ domain });
 
   return {
     props: {
-      project_id,
-      domain: domain === "hellospace.us" ? req?.headers?.host : domain,
-      meta: meta?.data[0]?.value || null,
-      logo: logo.data[0],
-      banner: banner.data[0],
-      blog_list: blog_list.data[0].value,
-      categories: categories?.data[0]?.value || null,
+      domain,
       imagePath,
-      footer_text: footer_text?.data[0]?.value || null,
-      copyright: copyright?.data[0]?.value || null,
-      contact_details: contact_details.data[0].value,
+      meta: meta?.data[0]?.value || null,
+      favicon: favicon?.data[0]?.file_name || null,
+      logo: logo?.data[0] || null,
+      layout: layout?.data[0]?.value || null,
+      blog_list: blog_list?.data[0]?.value || [],
+      categories: categories?.data[0]?.value || null,
+      copyright: copyright?.data[0].value || null,
+      about_me: about_me?.data[0] || null,
+      banner: banner?.data[0],
+      contact_details: contact_details?.data[0]?.value,
+      nav_type: nav_type?.data[0]?.value || {},
+      tag_list: tag_list?.data[0]?.value || null,
     },
   };
 }

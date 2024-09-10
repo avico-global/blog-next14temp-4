@@ -1,18 +1,27 @@
-import FullContainer from "@/components/common/FullContainer";
-import { Button } from "@/components/ui/button";
+// File: pages/404.js
+
+import React from "react";
 import Link from "next/link";
 
 const Custom404 = () => {
   return (
-    <FullContainer className="h-screen flex flex-col gap-10">
-      <h1 className="text-6xl font-bold text-gray-400">
-        🚀404 - Page Not Found
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="text-9xl font-bold text-red-500 mb-4">404</div>
+      <h1 className="text-3xl font-semibold text-gray-800 mb-4">
+        {"Oops! The page you are looking for doesn't exist."}
       </h1>
-      <p className="text-2xl">The page you are looking for does not exist.</p>
-      <Link href="/">
-        <Button className="text-xl">👩‍🚀 Go back to home</Button>
+      <p className="text-lg text-gray-600 mb-8">
+        {
+          "It seems you've hit a broken link or entered a URL that doesn't exist on this site."
+        }
+      </p>
+      <Link
+        href="/"
+        className="inline-block px-6 py-3 bg-red-500 text-white rounded-full font-bold text-lg hover:bg-red-600 transition duration-300"
+      >
+        Go back to Home
       </Link>
-    </FullContainer>
+    </div>
   );
 };
 

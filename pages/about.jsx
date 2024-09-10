@@ -12,13 +12,13 @@ import {
   callBackendApi,
   getDomain,
   getImagePath,
-  getProjectId,
+  // getProjectId,
 } from "@/lib/myFun";
 
 import { Roboto } from "next/font/google";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
-import NavMenu from "@/components/containers/NavMenu";
+import Navbar from "@/components/containers/Navbar";
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],
@@ -29,10 +29,10 @@ export default function About({
   logo,
   about_me,
   imagePath,
-  project_id,
   categories,
   blog_list,
   domain,
+  layout,
   meta,
   contact_details,
   copyright,
@@ -40,6 +40,7 @@ export default function About({
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me.value || "");
 
+  const page = layout?.find((page) => page.page === "about");
   return (
     <div className={myFont.className}>
       <Head>
@@ -77,47 +78,71 @@ export default function About({
           href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
         />
       </Head>
-      <NavMenu
-        blog_list={blog_list}
-        categories={categories}
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
-        project_id={project_id}
-        contact_details={contact_details}
-      />
-      <AboutBanner
-        image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${about_me.file_name}`}
-      />
-      <FullContainer>
-        <Container className="py-16">
-          <div className="grid grid-cols-about gap-16 w-full">
-            <div className={font2.className}>
-              <p
-                className={cn(
-                  "text-xs uppercase text-yellow-600",
-                  myFont.className
-                )}
-              >
-                LIFESTYLE BLOGGER
-              </p>
-              <div
-                className="prose-xl"
-                dangerouslySetInnerHTML={{ __html: content }}
-              />
-            </div>
-            <Rightbar page="about" contact_details={contact_details} />
-          </div>
-        </Container>
-      </FullContainer>
-      <Footer
-        blog_list={blog_list}
-        categories={categories}
-        logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
-        project_id={project_id}
-        imagePath={imagePath}
-        contact_details={contact_details}
-        copyright={copyright}
-        about_me={about_me}
-      />
+
+      {page?.enable
+        ? page?.sections?.map((item, index) => {
+            if (!item.enable) return null;
+
+            switch (item.section?.toLowerCase()) {
+              case "navbar":
+                return (
+                  <Navbar
+                    key={index}
+                    blog_list={blog_list}
+                    categories={categories}
+                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+                    contact_details={contact_details}
+                  />
+                );
+              case "banner":
+                return (
+                  <AboutBanner
+                    image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${about_me.file_name}`}
+                  />
+                );
+
+              case "text":
+                return (
+                  <FullContainer>
+                    <Container className="py-16">
+                      <div className="grid grid-cols-about gap-16 w-full">
+                        <div className={font2.className}>
+                          <p
+                            className={cn(
+                              "text-xs uppercase text-yellow-600",
+                              myFont.className
+                            )}
+                          >
+                            LIFESTYLE BLOGGER
+                          </p>
+                          <div
+                            className="prose-xl"
+                            dangerouslySetInnerHTML={{ __html: content }}
+                          />
+                        </div>
+                        <Rightbar
+                          page="about"
+                          contact_details={contact_details}
+                        />
+                      </div>
+                    </Container>
+                  </FullContainer>
+                );
+              case "footer":
+                return (
+                  <Footer
+                    blog_list={blog_list}
+                    categories={categories}
+                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+                    imagePath={imagePath}
+                    contact_details={contact_details}
+                    copyright={copyright}
+                    about_me={about_me}
+                  />
+                );
+            }
+          })
+        : "Page Disabled,under maintenance"}
 
       <JsonLd
         data={{
@@ -172,15 +197,19 @@ export default function About({
 
 export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
-  const imagePath = await getImagePath({ domain, query });
-  const project_id = getProjectId(query);
-  const logo = await callBackendApi({ domain, query, type: "logo" });
+  const logo = await callBackendApi({ domain, type: "logo" });
+
+  let project_id = logo?.data[0]?.project_id || null;
+  let imagePath = await getImagePath(project_id, domain);
   const about_me = await callBackendApi({ domain, query, type: "about_me" });
+  const layout = await callBackendApi({ domain, type: "layout" });
+
   const categories = await callBackendApi({
     domain,
     query,
     type: "categories",
   });
+
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
   const contact_details = await callBackendApi({
@@ -199,8 +228,8 @@ export async function getServerSideProps({ req, query }) {
       logo: logo.data[0] || null,
       about_me: about_me.data[0] || null,
       imagePath,
+      layout: layout?.data[0]?.value || null,
       blog_list: blog_list.data[0].value,
-      project_id,
       categories: categories?.data[0]?.value || null,
       domain,
       meta: meta?.data[0]?.value || null,

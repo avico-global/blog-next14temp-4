@@ -73,19 +73,19 @@ export default function Terms({
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
       </Head>
 
@@ -97,7 +97,7 @@ export default function Terms({
                 return (
                   <Navbar
                     key={index}
-                    logo={logo}
+                    logo={`${imagePath}/${logo.file_name}`}
                     nav_type={nav_type}
                     imagePath={imagePath}
                     blog_list={blog_list}
@@ -127,6 +127,7 @@ export default function Terms({
               case "footer":
                 return (
                   <Footer
+                  logo={`${imagePath}/${logo.file_name}`}
                     key={index}
                     imagePath={imagePath}
                     blog_list={blog_list}

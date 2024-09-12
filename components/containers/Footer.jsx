@@ -129,7 +129,7 @@ export default function Footer({
             <Link title="Contact Us" href="/contact" className="text-sm">
               Contact Us
             </Link>
-            <Link title="Sitemap" href="/sitemap" className="text-sm">
+            <Link title="Sitemap" href="/sitemap.xml" className="text-sm">
               Sitemap
             </Link>
           </div>

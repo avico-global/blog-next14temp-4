@@ -114,7 +114,7 @@ export default function Categories({
                     category={category}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+                    logo={`${imagePath}/${logo.file_name}`}
                     contact_details={contact_details}
                   />
                 );
@@ -154,7 +154,7 @@ export default function Categories({
                                     title={item?.title || item.imageTitle}
                                     src={
                                       item.image
-                                        ? `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`
+                                        ? `${imagePath}/${item.image}`
                                         : "/no-image.png"
                                     }
                                     fill={true}
@@ -222,7 +222,7 @@ export default function Categories({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+                    logo={`${imagePath}/${logo?.file_name}`}
                     imagePath={imagePath}
                     about_me={about_me}
                     contact_details={contact_details}

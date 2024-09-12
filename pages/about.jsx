@@ -90,14 +90,14 @@ export default function About({
                     key={index}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+                    logo={`${imagePath}/${logo.file_name}`}
                     contact_details={contact_details}
                   />
                 );
               case "banner":
                 return (
                   <AboutBanner
-                    image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${about_me.file_name}`}
+                    image={`${imagePath}/${about_me.file_name}`}
                   />
                 );
 
@@ -133,7 +133,7 @@ export default function About({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+                    logo={`${imagePath}/${logo?.file_name}`}
                     imagePath={imagePath}
                     contact_details={contact_details}
                     copyright={copyright}

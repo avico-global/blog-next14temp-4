@@ -25,10 +25,11 @@ export const getServerSideProps = async ({ req, res, query }) => {
 
   const sitemapindex = `<?xml version="1.0" encoding="UTF-8"?>
   
-  <?xml-stylesheet type="text/xsl" href="data:text/xml;charset=utf-8;base64,${Buffer.from(
+<?xml-stylesheet type="text/xsl" href="data:text/xml;charset=utf-8;base64,${Buffer.from(
     modifiedXslContent
   ).toString("base64")}" ?>
-  
+
+
   <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${sitemaps
     .map(

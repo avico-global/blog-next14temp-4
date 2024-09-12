@@ -52,19 +52,19 @@ export default function Contact({
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
       </Head>
 
@@ -77,7 +77,7 @@ export default function Contact({
                 return (
                   <Navbar
                     blog_list={blog_list}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+                    logo={`${imagePath}/${logo.file_name}`}
                     categories={categories}
                     contact_details={contact_details}
                   />
@@ -112,7 +112,7 @@ export default function Contact({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+                    logo={`${imagePath}/${logo?.file_name}`}
                     imagePath={imagePath}
                     about_me={about_me}
                     copyright={copyright}

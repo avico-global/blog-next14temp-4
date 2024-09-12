@@ -35,7 +35,7 @@ export default function Rightbar({
       <div className="p-4 flex flex-col">
         <div className="relative overflow-hidden rounded w-full h-[150px]">
           <Image
-            src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${about_me.file_name}`}
+            src={`${imagePath}/${about_me.file_name}`}
             title="About Thumbnail"
             alt="Thumbnail Not Found"
             priority
@@ -136,7 +136,7 @@ export default function Rightbar({
                 title={item?.imageTitle || "Article Thumbnail " }
                 src={
                   item?.image
-                    ? `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`
+                    ? `${imagePath}/${item.image}`
                     : "/no-image.png"
                 }
                 fill={true}

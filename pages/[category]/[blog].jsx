@@ -95,7 +95,7 @@ export default function Blog({
                     blog_list={blog_list}
                     category={category}
                     categories={categories}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+                    logo={`${imagePath}/${logo?.file_name}`}
                     contact_details={contact_details}
                   />
                 );
@@ -106,7 +106,7 @@ export default function Blog({
                       <Image
                         title={myblog?.value?.imageTitle}
                         alt={`blog ${myblog?.value?.imageTitle}`}
-                        src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`}
+                        src={`${imagePath}/${myblog?.file_name}`}
                         fill={true}
                         priority={true}
                         loading="eager"
@@ -205,7 +205,7 @@ export default function Blog({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+                    logo={`${imagePath}/${logo?.file_name}`}
                     imagePath={imagePath}
                     about_me={about_me}
                     contact_details={contact_details}

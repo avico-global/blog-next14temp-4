@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 
 // Components
 import Head from "next/head";
@@ -11,7 +11,6 @@ import Rightbar from "@/components/containers/Rightbar";
 import Footer from "@/components/containers/Footer";
 import JsonLd from "@/components/json/JsonLd";
 import { useRouter } from "next/router";
-
 
 import {
   callBackendApi,
@@ -47,15 +46,8 @@ export default function Home({
   layout,
   tag_list,
 }) {
-
-
   const router = useRouter();
   const { category } = router.query;
-
-  const filteredBlogList = blog_list.filter((item) => {
-    const searchContent = category?.replaceAll("-", " ")?.toLowerCase();
-    return item.article_category.name.toLowerCase().includes(searchContent);
-  });
 
   useEffect(() => {
     const currentPath = router.asPath;
@@ -75,7 +67,6 @@ export default function Home({
 
   const page = layout?.find((page) => page.page === "home");
 
-
   return (
     <div className={`min-h-screen ${myFont.className}`}>
       <Head>
@@ -84,7 +75,7 @@ export default function Home({
         <meta name="description" content={meta?.description} />
         <link rel="author" href={`https://www.${domain}`} />
         <link rel="publisher" href={`https://www.${domain}`} />
-        <link rel="canonical" href={`http://www.${domain}`} />
+        <link rel="canonical" href={`https://www.${domain}`} />
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -95,22 +86,21 @@ export default function Home({
           content="zbriSQArMtpCR3s5simGqO5aZTDqEZZi9qwinSrsRPk"
         />
         <link
-        
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={`${imagePath}/${favicon}`}
         />
       </Head>
 
@@ -125,7 +115,7 @@ export default function Home({
                     key={index}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+                    logo={`${imagePath}/${logo.file_name}`}
                   />
                 );
 
@@ -134,7 +124,7 @@ export default function Home({
                   <Banner
                     key={index}
                     data={banner.value}
-                    image={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner?.file_name}`}
+                    image={`${imagePath}/${banner?.file_name}`}
                   />
                 );
 
@@ -149,17 +139,9 @@ export default function Home({
                               case "latest posts":
                                 return <LatestBlogs articles={blog_list} />;
                               case "most popular":
-                                return (
-                                  <MostPopular
-                                    articles={blog_list}
-                                  />
-                                );
+                                return <MostPopular articles={blog_list} />;
                               case "must read":
-                                return (
-                                  <MustRead
-                                    articles={blog_list}
-                                  />
-                                );
+                                return <MustRead articles={blog_list} />;
                               case "articles with categories":
                                 return (
                                   <div>
@@ -189,7 +171,10 @@ export default function Home({
                                                 >
                                                   <div className="overflow-hidden relative h-52 w-full bg-gray-200 rounded-md ">
                                                     <Image
-                                                      title={item.imageTitle|| "Article Thumbnail "}
+                                                      title={
+                                                        item.imageTitle ||
+                                                        "Article Thumbnail "
+                                                      }
                                                       alt={`blog ${item.imageTitle}`}
                                                       src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
                                                       fill={true}
@@ -255,7 +240,7 @@ export default function Home({
                     categories={categories}
                     contact_details={contact_details}
                     imagePath={imagePath}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo?.file_name}`}
+                    logo={`${imagePath}/${logo?.file_name}`}
                   />
                 );
               default:

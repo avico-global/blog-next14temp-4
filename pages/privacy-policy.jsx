@@ -99,7 +99,7 @@ export default function PriavcyPolicy({
                     imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={logo}
+                    logo={`${imagePath}/${logo.file_name}`}
                     contact_details={contact_details}
                     nav_type={nav_type}
                   />
@@ -126,6 +126,7 @@ export default function PriavcyPolicy({
               case "footer":
                 return (
                   <Footer
+                  logo={`${imagePath}/${logo.file_name}`}
                     key={index}
                     imagePath={imagePath}
                     blog_list={blog_list}

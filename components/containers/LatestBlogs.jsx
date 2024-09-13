@@ -31,7 +31,7 @@ export default function LatestBlogs({ articles, imagePath }) {
                 <Image
                   title={item.imageTitle || item.title || "Article Thumbnail"}
                   alt={item.altImage || item.tagline || "No Thumbnail Found"}
-                  src={`${imagePath}}/${item.image}`}
+                  src={`${imagePath}/${item.image}`}
                   fill={true}
                   loading="lazy"
                   className="w-full h-full object-cover absolute top-0 scale-105"

@@ -19,7 +19,7 @@ export default function LatestBlogs({ articles }) {
                 ?.replaceAll(" ", "-")}/${item.title
                 ?.replaceAll(" ", "-")
                 ?.toLowerCase()}`}
-              title={item.imageTitle || "IMAGE" }
+              title={item.imageTitle || "IMAGE"}
               key={index}
               className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col gap-2 first:gap-4 text-lg first:text-xl first:mb-5"
             >
@@ -29,11 +29,11 @@ export default function LatestBlogs({ articles }) {
                 }`}
               >
                 <Image
-                  title={item.imageTitle || "Article Thumbnail "}
+                  title={item.imageTitle || item.title || "Article Thumbnail"}
+                  alt={item.altImage || item.tagline || "No Thumbnail Found"}
                   src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
                   fill={true}
                   loading="lazy"
-                  alt="blog"
                   className="w-full h-full object-cover absolute top-0 scale-105"
                 />
                 <p className="bg-purple-500/80 backdrop-blur-sm uppercase text-xs font-semibold text-white pt-1 pb-[1px] px-4 rounded-t-md absolute bottom-0 mx-auto">

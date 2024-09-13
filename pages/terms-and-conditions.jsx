@@ -97,7 +97,7 @@ export default function Terms({
                 return (
                   <Navbar
                     key={index}
-                    logo={`${imagePath}/${logo.file_name}`}
+                    logo={logo}
                     nav_type={nav_type}
                     imagePath={imagePath}
                     blog_list={blog_list}
@@ -127,7 +127,7 @@ export default function Terms({
               case "footer":
                 return (
                   <Footer
-                  logo={`${imagePath}/${logo.file_name}`}
+                    logo={logo}
                     key={index}
                     imagePath={imagePath}
                     blog_list={blog_list}
@@ -162,7 +162,7 @@ export default function Terms({
               url: `http://${domain}/`,
               logo: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+                url: `${imagePath}/${logo.file_name}`,
               },
               sameAs: [
                 "http://www.facebook.com",

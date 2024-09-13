@@ -15,8 +15,16 @@ export default function Banner({ image, data }) {
       >
         <Image
           src={image}
-          title={data.imageTitle || "Banner"}
-          alt={data.altImage || "No Banner Found"}
+          title={
+            data.imageTitle ||
+            data.title ||
+            "Article Thumbnail"
+          }
+          alt={
+            data.altImage ||
+            data.tagline ||
+            "No Thumbnail Found"
+          }
           priority={true}
           layout="fill"
           objectFit="cover"

@@ -62,7 +62,7 @@ export default function Rightbar({
       <div className="flex flex-col w-full text-left px-3 pb-5">
         {categories?.map((item, index) => (
           <Link
-          title="Title"
+            title="Title"
             key={index}
             href={`/${item?.toLowerCase()?.replace(/ /g, "-")}`}
             className={cn(
@@ -86,21 +86,21 @@ export default function Rightbar({
       </div>
       <div className="p-4">
         <div className="flex items-center gap-1 mb-4 flex-wrap">
-        {tag_list?.slice(0, 10)?.map((item, index) => (
-          <Link
-            key={index}
-            title={item.tag  }
-            href={`/tags/${item.tag?.replaceAll(" ", "-").toLowerCase()}`}
-            className="bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer rounded py-1 text-sm px-2"
-          >
-            {item.tag}
-            {item.article_ids?.length > 1 && (
-              <span className="bg-black text-white px-1 ml-1 text-sm rounded-full">
-                {item.article_ids.length}
-              </span>
-            )}
-          </Link>
-        ))}
+          {tag_list?.slice(0, 10)?.map((item, index) => (
+            <Link
+              key={index}
+              title={item.tag}
+              href={`/tags/${item.tag?.replaceAll(" ", "-").toLowerCase()}`}
+              className="bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer rounded py-1 text-sm px-2"
+            >
+              {item.tag}
+              {item.article_ids?.length > 1 && (
+                <span className="bg-black text-white px-1 ml-1 text-sm rounded-full">
+                  {item.article_ids.length}
+                </span>
+              )}
+            </Link>
+          ))}
         </div>
         <Link
           title="Click to see all tags"
@@ -121,7 +121,6 @@ export default function Rightbar({
       <div className="p-2">
         {lastFiveBlogs?.reverse().map((item, index) => (
           <Link
-
             title={item.article_category.name}
             href={`/${item.article_category.name
               ?.toLowerCase()
@@ -133,11 +132,9 @@ export default function Rightbar({
           >
             <div className="overflow-hidden relative min-h-20 rounded-md w-full bg-black flex-1">
               <Image
-                title={item?.imageTitle || "Article Thumbnail " }
+                title={item?.imageTitle || "Article Thumbnail "}
                 src={
-                  item?.image
-                    ? `${imagePath}/${item.image}`
-                    : "/no-image.png"
+                  item?.image ? `${imagePath}/${item.image}` : "/no-image.png"
                 }
                 fill={true}
                 loading="lazy"
@@ -163,7 +160,7 @@ export default function Rightbar({
   );
 
   return (
-    <div className="h-fit sticky top-0 flex flex-col gap-10 mt-16">
+    <div className="h-fit sticky top-0 flex flex-col gap-10">
       {widgets.map((item, index) => {
         if (!item.enable) return null;
 

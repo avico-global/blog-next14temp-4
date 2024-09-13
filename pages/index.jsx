@@ -113,9 +113,10 @@ export default function Home({
                 return (
                   <Navbar
                     key={index}
+                    logo={logo}
+                    imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${imagePath}/${logo.file_name}`}
                   />
                 );
 
@@ -132,7 +133,7 @@ export default function Home({
                 return (
                   <FullContainer key={index}>
                     <Container>
-                      <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full">
+                      <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full mt-14">
                         <div className="flex flex-col gap-12">
                           {page?.sections?.map((item, index) => {
                             switch (item.section?.toLowerCase()) {
@@ -173,10 +174,15 @@ export default function Home({
                                                     <Image
                                                       title={
                                                         item.imageTitle ||
-                                                        "Article Thumbnail "
+                                                        item.title ||
+                                                        "Article Thumbnail"
                                                       }
-                                                      alt={`blog ${item.imageTitle}`}
-                                                      src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
+                                                      alt={
+                                                        item.altImage ||
+                                                        item.tagline ||
+                                                        "No Thumbnail Found"
+                                                      }
+                                                      src={`${imagePath}/${item.image}`}
                                                       fill={true}
                                                       loading="lazy"
                                                       className="w-full h-full object-cover absolute top-0 scale-125"
@@ -239,8 +245,8 @@ export default function Home({
                     blog_list={blog_list}
                     categories={categories}
                     contact_details={contact_details}
+                    logo={logo}
                     imagePath={imagePath}
-                    logo={`${imagePath}/${logo?.file_name}`}
                   />
                 );
               default:
@@ -255,23 +261,23 @@ export default function Home({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": `http://${domain}/`,
-              url: `http://${domain}/`,
+              "@id": `https://${domain}/`,
+              url: `https://${domain}/`,
               name: meta?.title,
               isPartOf: {
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
               description: meta?.description,
               inLanguage: "en-US",
               primaryImageOfPage: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner?.file_name}`,
+                url: `${imagePath}/${banner?.file_name}`,
                 width: 1920,
                 height: 1080,
               },
               mainEntityOfPage: {
                 "@type": "WebPage",
-                "@id": `http://${domain}/`,
+                "@id": `https://${domain}/`,
               },
               // potentialAction: {
               //   "@type": "SearchAction",
@@ -281,8 +287,8 @@ export default function Home({
             },
             {
               "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
+              "@id": `https://${domain}/#website`,
+              url: `https://${domain}/`,
               name: domain,
               description: meta?.description,
               inLanguage: "en-US",
@@ -303,7 +309,7 @@ export default function Home({
               url: `http://${domain}/`,
               logo: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+                url: `${imagePath}/${logo.file_name}`,
                 width: logo.width,
                 height: logo.height,
               },
@@ -322,7 +328,11 @@ export default function Home({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category?.name}/${blog.key}`,
+                  url: `http://${domain}/${blog?.article_category?.name
+                    ?.replaceAll(" ", "-")
+                    ?.toLowerCase()}/${blog.title
+                    .replaceAll(" ", "-")
+                    ?.toLowerCase()}`,
                   name: blog.title,
                   author: {
                     "@type": "Person",
@@ -332,7 +342,7 @@ export default function Home({
                   dateModified: blog.dateModified,
                   image: {
                     "@type": "ImageObject",
-                    url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${blog.imagePath}/${blog.imageFileName}`,
+                    url: `${imagePath}/${blog.imageFileName}`,
                     width: blog.imageWidth,
                     height: blog.imageHeight,
                   },
@@ -340,7 +350,7 @@ export default function Home({
                   description: blog.description,
                   mainEntityOfPage: {
                     "@type": "WebPage",
-                    "@id": `http://${domain}/${blog?.article_category?.name
+                    "@id": `https://${domain}/${blog?.article_category?.name
                       ?.replaceAll(" ", "-")
                       ?.toLowerCase()}/${blog.title
                       ?.replaceAll(" ", "-")

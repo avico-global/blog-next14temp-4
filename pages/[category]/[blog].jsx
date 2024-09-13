@@ -52,10 +52,9 @@ export default function Blog({
         <meta charSet="UTF-8" />
         <title>{myblog?.value?.meta_title}</title>
         <meta name="description" content={myblog?.value?.meta_description} />
-        <link rel="author" href={`http://${domain}`} />
-        <link rel="publisher" href={`http://${domain}`} />
-        <link rel="canonical" href={`http://${domain}`} />
-        <meta name="robots" content="noindex" />
+        <link rel="author" href={`https://${domain}`} />
+        <link rel="publisher" href={`https://${domain}`} />
+        <link rel="canonical" href={`https://${domain}`} />
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -68,19 +67,19 @@ export default function Blog({
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${imagePath}/${logo.file_name}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${imagePath}/${logo.file_name}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${imagePath}/${logo.file_name}`}
         />
       </Head>
 
@@ -95,7 +94,8 @@ export default function Blog({
                     blog_list={blog_list}
                     category={category}
                     categories={categories}
-                    logo={`${imagePath}/${logo?.file_name}`}
+                    logo={logo}
+                    imagePath={imagePath}
                     contact_details={contact_details}
                   />
                 );
@@ -104,8 +104,12 @@ export default function Blog({
                   <FullContainer key={index}>
                     <Container className="h-[62vh] bg-gradient-to-t from-black/50 overflow-hidden rounded-lg relative p-10 text-white md:justify-end">
                       <Image
-                        title={myblog?.value?.imageTitle}
-                        alt={`blog ${myblog?.value?.imageTitle}`}
+                        title={
+                          item.imageTitle || item.title || "Article Thumbnail"
+                        }
+                        alt={
+                          item.altImage || item.tagline || "No Thumbnail Found"
+                        }
                         src={`${imagePath}/${myblog?.file_name}`}
                         fill={true}
                         priority={true}
@@ -161,13 +165,14 @@ export default function Blog({
                           </div>
                         </div>
                         <Rightbar
-                          lastFiveBlogs={lastFiveBlogs}
-                          imagePath={imagePath}
-                          tag_list={tag_list}
                           about_me={about_me}
+                          imagePath={imagePath}
                           categories={categories}
-                          category={category}
                           contact_details={contact_details}
+                          tag_list={tag_list}
+                          widgets={page?.widgets}
+                          blog_list={blog_list}
+                          category={category}
                         />
                       </div>
                     </Container>
@@ -205,7 +210,7 @@ export default function Blog({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${imagePath}/${logo?.file_name}`}
+                    logo={logo}
                     imagePath={imagePath}
                     about_me={about_me}
                     contact_details={contact_details}
@@ -234,7 +239,7 @@ export default function Blog({
               description: myblog?.value.articleContent,
               datePublished: myblog?.value.published_at,
               author: myblog?.value.author,
-              image: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`,
+              image: `${imagePath}/${myblog?.file_name}`,
               publisher: "Site Manager",
             },
             {
@@ -255,7 +260,11 @@ export default function Blog({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}${blog?.article_category?.name}/${blog?.key}`,
+                  url: `http://${domain}/${blog?.article_category?.name
+                    ?.replaceAll(" ", "-")
+                    ?.toLowerCase()}/${blog.title
+                    .replaceAll(" ", "-")
+                    ?.toLowerCase()}`,
                   name: blog.title,
                 },
               })),
@@ -273,7 +282,7 @@ export default function Blog({
               isPartOf: { "@id": `http://${domain}` },
               primaryImageOfPage: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`,
+                url: `${imagePath}/${myblog?.file_name}`,
               },
               datePublished: myblog?.value.published_at,
               dateModified: myblog?.value.published_at,

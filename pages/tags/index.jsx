@@ -123,8 +123,7 @@ export default function Tags({
                 return (
                   <Navbar
                     key={index}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
-
+                    logo={logo}
                     nav_type={nav_type}
                     category={category}
                     imagePath={imagePath}
@@ -164,6 +163,7 @@ export default function Tags({
                 return (
                   <Footer
                     key={index}
+                    logo={logo}
                     imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}

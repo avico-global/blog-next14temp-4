@@ -1,7 +1,7 @@
 import { getDomain } from "@/lib/myFun";
 import fs from "fs";
 
-const e = () => <></>
+const e = () => <></>;
 export default e;
 
 export const getServerSideProps = async ({ req, res }) => {

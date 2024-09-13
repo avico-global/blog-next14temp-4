@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
+import React from "react";
 import FullContainer from "../common/FullContainer";
 import Container from "../common/Container";
 import { cn } from "@/lib/utils";
@@ -14,35 +13,23 @@ import {
   VoicemailIcon,
   Youtube,
 } from "lucide-react";
+import Logo from "./Navbar/Logo";
 
 export default function Footer({
   blog_list,
   categories,
-  project_id,
   copyright,
   footer_text,
   logo,
+  imagePath,
 }) {
-  const [hostName, setHostName] = useState("");
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setHostName(window.location.hostname);
-    }
-  }, []);
-
   return (
     <div className="flex items-center flex-col mt-16">
       <FullContainer className="bg-purple-50 py-16">
         <Container>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <div>
-              <Image
-                title={`Logo - ${hostName}`}
-                height={70}
-                width={100}
-                src={logo}
-                alt="logo"
-              />
+              <Logo logo={logo} imagePath={imagePath} />
               <p className="mt-6 text-sm">{footer_text}</p>
             </div>
             <div>
@@ -52,37 +39,49 @@ export default function Footer({
                   Icon={Facebook}
                   title="Facebook"
                   className="bg-blue-700"
+                  href="https://www.facebook.com/yourPage"
                 />
                 <Social
                   Icon={Twitter}
                   title="Twitter"
                   className="bg-blue-500"
+                  href="https://www.twitter.com/yourHandle" // Update this link with your Twitter URL
                 />
                 <Social
                   Icon={MessageCircleIcon}
                   title="Pinterest"
                   className="bg-rose-600"
+                  href="https://www.pinterest.com/yourPage" // Update this link with your Pinterest URL
                 />
-                <Social Icon={Youtube} title="Youtube" className="bg-red-600" />
+                <Social
+                  Icon={Youtube}
+                  title="Youtube"
+                  className="bg-red-600"
+                  href="https://www.youtube.com/yourChannel" // Update this link with your YouTube URL
+                />
                 <Social
                   Icon={VoicemailIcon}
                   title="Vimeo"
                   className="bg-sky-500"
+                  href="https://www.vimeo.com/yourPage" // Update this link with your Vimeo URL
                 />
                 <Social
                   Icon={Linkedin}
                   title="LinkedIn"
                   className="bg-sky-800"
+                  href="https://www.linkedin.com/in/yourProfile" // Update this link with your LinkedIn URL
                 />
                 <Social
                   Icon={Cloud}
                   title="Soundcloud"
                   className="bg-orange-500"
+                  href="https://www.soundcloud.com/yourProfile" // Update this link with your Soundcloud URL
                 />
                 <Social
                   Icon={Instagram}
                   title="Instagram"
                   className="bg-pink-600"
+                  href="https://www.instagram.com/yourProfile" // Update this link with your Instagram URL
                 />
               </div>
             </div>
@@ -113,11 +112,11 @@ export default function Footer({
       <FullContainer className="py-10 bg-purple-200">
         <Container>
           <div className="flex items-center flex-col md:flex-row justify-between gap-2 md:gap-5 uppercase font-semibold">
-            {categories?.map((item, index) => (
+            {categories?.slice(0, 3).map((item, index) => (
               <Link
                 title="Categories"
                 key={index}
-                href={project_id ? `${item}?${project_id}` : `${item}`}
+                href={`/${item?.toLowerCase()?.replaceAll(" ", "-")}`}
                 className="text-sm"
               >
                 {item}
@@ -143,8 +142,8 @@ export default function Footer({
 function Social({ title, className, Icon, href }) {
   return (
     <Link
-      title="Social"
-      href={href || ""}
+      title={title}
+      href={href || "#"}
       className={cn(
         "py-2 px-4 text-sm font-semibold rounded-sm flex items-center gap-2",
         className

@@ -81,7 +81,6 @@ export default function Categories({
         <link rel="author" href={`https://www.${domain}`} />
         <link rel="publisher" href={`https://www.${domain}`} />
         <link rel="canonical" href={`https://www.${domain}/tags/${tag}`} />
-        {/* <meta name="robots" content="noindex" /> */}
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -118,8 +117,7 @@ export default function Categories({
                 return (
                   <Navbar
                     key={index}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
-
+                    logo={logo}
                     nav_type={nav_type}
                     imagePath={imagePath}
                     blog_list={blog_list}
@@ -166,7 +164,7 @@ export default function Categories({
                                       title={item?.title || item.imageTitle}
                                       src={
                                         item.image
-                                          ? `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${item.image}`
+                                          ? `${imagePath}/${item.image}`
                                           : "/no-image.png"
                                       }
                                       fill={true}
@@ -226,7 +224,7 @@ export default function Categories({
                 return (
                   <Footer
                     key={index}
-                    logo={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+                    logo={logo}
                     imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
@@ -269,7 +267,7 @@ export default function Categories({
               url: `http://${domain}/`,
               logo: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+                url: `${imagePath}/${logo.file_name}`,
               },
               sameAs: [
                 "http://www.facebook.com",

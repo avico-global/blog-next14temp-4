@@ -114,7 +114,8 @@ export default function Categories({
                     category={category}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${imagePath}/${logo.file_name}`}
+                    logo={logo}
+                    imagePath={imagePath}
                     contact_details={contact_details}
                   />
                 );
@@ -122,9 +123,9 @@ export default function Categories({
               case "breadcrumbs":
                 return (
                   <FullContainer className="w-full py-8 bg-gray-100">
-                    <p className="text-2xl font-semibold capitalize px-4 py-1">
+                    <h1 className="text-2xl font-semibold capitalize px-4 py-1">
                       {category?.replace("-", " ")}
-                    </p>
+                    </h1>
                     <div className="w-24 mt-2 h-1 bg-gray-500"></div>
                     <Breadcrumbs
                       breadcrumbs={breadcrumbs}
@@ -151,7 +152,16 @@ export default function Categories({
                               >
                                 <div className="overflow-hidden relative min-h-40 rounded lg:min-h-72 w-full bg-black flex-1">
                                   <Image
-                                    title={item?.title || item.imageTitle}
+                                    title={
+                                      item.imageTitle ||
+                                      item.title ||
+                                      "Article Thumbnail"
+                                    }
+                                    alt={
+                                      item.altImage ||
+                                      item.tagline ||
+                                      "No Thumbnail Found"
+                                    }
                                     src={
                                       item.image
                                         ? `${imagePath}/${item.image}`
@@ -159,7 +169,6 @@ export default function Categories({
                                     }
                                     fill={true}
                                     loading="lazy"
-                                    alt="blog"
                                     className="w-full h-full object-cover absolute top-0 hover:scale-125 transition-all"
                                   />
                                 </div>
@@ -173,9 +182,9 @@ export default function Categories({
                                   ?.replaceAll(" ", "-")
                                   ?.toLowerCase()}`}
                               >
-                                <h1 className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight">
+                                <h2 className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight">
                                   {item.title}
-                                </h1>
+                                </h2>
                               </Link>
                               <div className="flex items-center gap-2 mt-1">
                                 <p className="text-sm font-semibold">
@@ -191,7 +200,7 @@ export default function Categories({
                                   )}
                                 </p>
                               </div>
-                              <h2
+                              <p
                                 className="mt-1 markdown-content"
                                 style={{ fontSize: 12 }}
                                 dangerouslySetInnerHTML={{
@@ -222,7 +231,7 @@ export default function Categories({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${imagePath}/${logo?.file_name}`}
+                    logo={logo}
                     imagePath={imagePath}
                     about_me={about_me}
                     contact_details={contact_details}
@@ -266,7 +275,7 @@ export default function Categories({
               url: `http://${domain}/`,
               logo: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+                url: `${imagePath}/${logo.file_name}`,
               },
               sameAs: [
                 "http://www.facebook.com",
@@ -283,7 +292,11 @@ export default function Categories({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category?.name}/${blog.key}`,
+                  url: `http://${domain}/${blog?.article_category?.name
+                    ?.replaceAll(" ", "-")
+                    ?.toLowerCase()}/${blog.title
+                    .replaceAll(" ", "-")
+                    ?.toLowerCase()}`,
                   name: blog.title,
                 },
               })),

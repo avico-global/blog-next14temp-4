@@ -28,11 +28,20 @@ export default function MostPopular({ articles, project_id }) {
               }`}
             >
               <Image
-                title={item.imageTitle || "Article Thumbnail"}
+                   title={
+                    item.imageTitle ||
+                    item.title ||
+                    "Article Thumbnail"
+                  }
+                  alt={
+                    item.altImage ||
+                    item.tagline ||
+                    "No Thumbnail Found"
+                  }
                 src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
                 fill={true}
                 loading="lazy"
-                alt="blog"
+                
                 className="w-full h-full object-cover absolute top-0 scale-125"
               />
             </div>

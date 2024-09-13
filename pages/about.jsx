@@ -90,15 +90,14 @@ export default function About({
                     key={index}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${imagePath}/${logo.file_name}`}
+                    logo={logo}
+                    imagePath={imagePath}
                     contact_details={contact_details}
                   />
                 );
               case "banner":
                 return (
-                  <AboutBanner
-                    image={`${imagePath}/${about_me.file_name}`}
-                  />
+                  <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
                 );
 
               case "text":
@@ -133,7 +132,7 @@ export default function About({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${imagePath}/${logo?.file_name}`}
+                    logo={logo}
                     imagePath={imagePath}
                     contact_details={contact_details}
                     copyright={copyright}
@@ -166,7 +165,7 @@ export default function About({
               url: `http://${domain}/`,
               logo: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+                url: `$${imagePath}/${logo.file_name}`,
               },
               sameAs: [
                 "http://www.facebook.com",
@@ -183,7 +182,11 @@ export default function About({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category?.name}/${blog.key}`,
+                  url: `http://${domain}/${blog?.article_category?.name
+                    ?.replaceAll(" ", "-")
+                    ?.toLowerCase()}/${blog.title
+                    .replaceAll(" ", "-")
+                    ?.toLowerCase()}`,
                   name: blog.title,
                 },
               })),

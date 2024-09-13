@@ -33,7 +33,7 @@ export default function Contact({
     <div className={myFont.className}>
       <Head>
         <meta charSet="UTF-8" />
-        <title>Next 14 Template</title>
+        <title> {meta?.title}</title>
 
         <meta name="description" content={meta?.description} />
         <link rel="author" href={`https://www.${domain}`} />
@@ -77,7 +77,8 @@ export default function Contact({
                 return (
                   <Navbar
                     blog_list={blog_list}
-                    logo={`${imagePath}/${logo.file_name}`}
+                    logo={logo}
+                    imagePath={imagePath}
                     categories={categories}
                     contact_details={contact_details}
                   />
@@ -112,7 +113,7 @@ export default function Contact({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    logo={`${imagePath}/${logo?.file_name}`}
+                    logo={logo}
                     imagePath={imagePath}
                     about_me={about_me}
                     copyright={copyright}

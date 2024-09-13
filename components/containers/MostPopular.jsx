@@ -4,7 +4,7 @@ import Image from "next/image";
 import dayjs from "dayjs";
 import SectionHeading from "../common/SectionHeading";
 
-export default function MostPopular({ articles, project_id }) {
+export default function MostPopular({ articles, imagePath }) {
   const popularArticles = articles?.filter((item) => item.isPopular);
 
   return (
@@ -12,15 +12,15 @@ export default function MostPopular({ articles, project_id }) {
       <SectionHeading title="MOST POPULAR" className="mb-7" />
       <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-3 gap-x-10 gap-y-4 w-full">
         {popularArticles?.map((item, index) => (
-            <Link
+          <Link
             href={`/${item?.article_category?.name
               ?.toLowerCase()
               ?.replaceAll(" ", "-")}/${item.title
               ?.replaceAll(" ", "-")
               ?.toLowerCase()}`}
-            title={item.imageTitle }
+            title={item.imageTitle}
             key={index}
-            className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col   gap-2 first:gap-4 text-lg first:text-xl first:mb-5"
+            className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col gap-2 first:gap-4 text-lg first:text-xl first:mb-5"
           >
             <div
               className={`overflow-hidden relative min-h-40 lg:min-h-52 w-full bg-black rounded-md ${
@@ -28,20 +28,11 @@ export default function MostPopular({ articles, project_id }) {
               }`}
             >
               <Image
-                   title={
-                    item.imageTitle ||
-                    item.title ||
-                    "Article Thumbnail"
-                  }
-                  alt={
-                    item.altImage ||
-                    item.tagline ||
-                    "No Thumbnail Found"
-                  }
-                src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
+                title={item.imageTitle || item.title || "Article Thumbnail"}
+                alt={item.altImage || item.tagline || "No Thumbnail Found"}
+                src={`${imagePath}/${item.image}`}
                 fill={true}
                 loading="lazy"
-                
                 className="w-full h-full object-cover absolute top-0 scale-125"
               />
             </div>

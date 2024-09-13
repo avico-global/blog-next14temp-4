@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
 
-export default function LatestBlogs({ articles }) {
+export default function LatestBlogs({ articles, imagePath }) {
   return (
     <div>
       <SectionHeading title="Latest Posts" className="mb-7" />
@@ -31,7 +31,7 @@ export default function LatestBlogs({ articles }) {
                 <Image
                   title={item.imageTitle || item.title || "Article Thumbnail"}
                   alt={item.altImage || item.tagline || "No Thumbnail Found"}
-                  src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
+                  src={`${imagePath}}/${item.image}`}
                   fill={true}
                   loading="lazy"
                   className="w-full h-full object-cover absolute top-0 scale-105"

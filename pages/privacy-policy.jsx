@@ -126,11 +126,12 @@ export default function PriavcyPolicy({
               case "footer":
                 return (
                   <Footer
-                    logo={logo}
                     key={index}
-                    imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
+                    copyright=""
+                    logo={logo}
+                    imagePath={imagePath}
                   />
                 );
               default:

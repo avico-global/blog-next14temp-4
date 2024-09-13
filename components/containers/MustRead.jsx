@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
 
-export default function MustRead({ articles, project_id }) {
+export default function MustRead({ articles, imagePath }) {
   const mustReadArticles = articles?.filter((item) => item.isMustRead);
 
   return (
@@ -18,7 +18,7 @@ export default function MustRead({ articles, project_id }) {
               ?.replaceAll(" ", "-")}/${item.title
               ?.replaceAll(" ", "-")
               ?.toLowerCase()}`}
-            title={item.imageTitle || "image" }
+            title={item.imageTitle || "image"}
             key={index}
             className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col   gap-2 first:gap-4 text-lg first:text-xl first:mb-5"
           >
@@ -28,17 +28,9 @@ export default function MustRead({ articles, project_id }) {
               }`}
             >
               <Image
-                   title={
-                    item.imageTitle ||
-                    item.title ||
-                    "Article Thumbnail"
-                  }
-                  alt={
-                    item.altImage ||
-                    item.tagline ||
-                    "No Thumbnail Found"
-                  }
-                src={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/industry_template_images/${process.env.NEXT_PUBLIC_TEMPLATE_ID}/${item.image}`}
+                title={item.imageTitle || item.title || "Article Thumbnail"}
+                alt={item.altImage || item.tagline || "No Thumbnail Found"}
+                src={`${imagePath}/${item.image}`}
                 fill={true}
                 loading="lazy"
                 className="w-full h-full object-cover absolute top-0 scale-125"

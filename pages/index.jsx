@@ -138,11 +138,26 @@ export default function Home({
                           {page?.sections?.map((item, index) => {
                             switch (item.section?.toLowerCase()) {
                               case "latest posts":
-                                return <LatestBlogs articles={blog_list} />;
+                                return (
+                                  <LatestBlogs
+                                    articles={blog_list}
+                                    imagePath={imagePath}
+                                  />
+                                );
                               case "most popular":
-                                return <MostPopular articles={blog_list} />;
+                                return (
+                                  <MostPopular
+                                    articles={blog_list}
+                                    imagePath={imagePath}
+                                  />
+                                );
                               case "must read":
-                                return <MustRead articles={blog_list} />;
+                                return (
+                                  <MustRead
+                                    articles={blog_list}
+                                    imagePath={imagePath}
+                                  />
+                                );
                               case "articles with categories":
                                 return (
                                   <div>
@@ -226,12 +241,11 @@ export default function Home({
                           })}
                         </div>
                         <Rightbar
-                          about_me={about_me}
                           imagePath={imagePath}
-                          categories={categories}
-                          contact_details={contact_details}
-                          tag_list={tag_list}
                           widgets={page?.widgets}
+                          about_me={about_me}
+                          tag_list={tag_list}
+                          categories={categories}
                           blog_list={blog_list}
                         />
                       </div>
@@ -244,7 +258,7 @@ export default function Home({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
-                    contact_details={contact_details}
+                    footer_text=""
                     logo={logo}
                     imagePath={imagePath}
                   />

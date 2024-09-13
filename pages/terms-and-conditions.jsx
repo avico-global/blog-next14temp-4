@@ -60,7 +60,6 @@ export default function Terms({
           rel="canonical"
           href={`https://www.${domain}/terms-and-conditions`}
         />
-        {/* <meta name="robots" content="noindex" /> */}
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -127,11 +126,11 @@ export default function Terms({
               case "footer":
                 return (
                   <Footer
-                    logo={logo}
                     key={index}
-                    imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
+                    logo={logo}
+                    imagePath={imagePath}
                   />
                 );
               default:

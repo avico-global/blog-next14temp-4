@@ -18,7 +18,6 @@ export default function Contact({
   logo,
   imagePath,
   blog_list,
-  about_me,
   layout,
   meta,
   domain,
@@ -113,11 +112,10 @@ export default function Contact({
                   <Footer
                     blog_list={blog_list}
                     categories={categories}
+                    copyright={copyright}
+                    footer_text=""
                     logo={logo}
                     imagePath={imagePath}
-                    about_me={about_me}
-                    copyright={copyright}
-                    contact_details={contact_details}
                   />
                 );
             }

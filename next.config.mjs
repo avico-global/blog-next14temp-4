@@ -1,16 +1,18 @@
-import "dotenv/config";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "api.sitebuilderz.com",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
+        hostname: "**",
       },
     ],
   },
   reactStrictMode: true,
 };
 
-export default nextConfig;
+module.exports = nextConfig;

@@ -35,6 +35,7 @@ export default function Categories({
   layout,
   contact_details,
   copyright,
+  nav_type,
 }) {
   const router = useRouter();
   const { category } = router.query;
@@ -115,6 +116,7 @@ export default function Categories({
                     blog_list={blog_list}
                     categories={categories}
                     logo={logo}
+                    nav_type={nav_type}
                     imagePath={imagePath}
                     contact_details={contact_details}
                   />

@@ -31,6 +31,7 @@ export default function About({
   meta,
   contact_details,
   copyright,
+  nav_type,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me.value || "");
@@ -209,6 +210,7 @@ export async function getServerSideProps({ req, query }) {
 
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
+  const nav_type = await callBackendApi({ domain, type: "nav_type" });
   const contact_details = await callBackendApi({
     domain,
     query,
@@ -232,6 +234,7 @@ export async function getServerSideProps({ req, query }) {
       meta: meta?.data[0]?.value || null,
       contact_details: contact_details.data[0].value,
       copyright: copyright?.data[0]?.value || null,
+      nav_type: nav_type?.data[0]?.value || {},
     },
   };
 }

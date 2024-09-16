@@ -40,7 +40,7 @@ export default function Home({
   domain,
   meta,
   about_me,
-  contact_details,
+  nav_type,
   banner,
   favicon,
   layout,
@@ -117,6 +117,7 @@ export default function Home({
                     imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
+                    nav_type={nav_type}
                   />
                 );
 

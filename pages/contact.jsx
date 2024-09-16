@@ -25,6 +25,7 @@ export default function Contact({
   categories,
   copyright,
   contact_details,
+  nav_type,
 }) {
   const page = layout?.find((item) => item.page === "contact");
 
@@ -77,6 +78,7 @@ export default function Contact({
                   <Navbar
                     blog_list={blog_list}
                     logo={logo}
+                    nav_type={nav_type}
                     imagePath={imagePath}
                     categories={categories}
                     contact_details={contact_details}

@@ -8,12 +8,7 @@ import { cn } from "@/lib/utils";
 import Rightbar from "@/components/containers/Rightbar";
 import Head from "next/head";
 import MarkdownIt from "markdown-it";
-import {
-  callBackendApi,
-  getDomain,
-  getImagePath,
-  // getProjectId,
-} from "@/lib/myFun";
+import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 
 import { Roboto } from "next/font/google";
 import GoogleTagManager from "@/lib/GoogleTagManager";
@@ -36,6 +31,7 @@ export default function About({
   meta,
   contact_details,
   copyright,
+  nav_type,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me.value || "");
@@ -47,10 +43,9 @@ export default function About({
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>
         <meta name="description" content={meta?.description} />
-        <link rel="author" href={`http://${domain}`} />
-        <link rel="publisher" href={`http://${domain}`} />
-        <link rel="canonical" href={`http://${domain}`} />
-        <meta name="robots" content="noindex" />
+        <link rel="author" href={`https://${domain}`} />
+        <link rel="publisher" href={`https://${domain}`} />
+        <link rel="canonical" href={`https://${domain}`} />
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -63,19 +58,19 @@ export default function About({
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${imagePath}/${logo.file_name}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${imagePath}/${logo.file_name}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`}
+          href={`${imagePath}/${logo.file_name}`}
         />
       </Head>
 
@@ -215,6 +210,7 @@ export async function getServerSideProps({ req, query }) {
 
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
   const meta = await callBackendApi({ domain, query, type: "meta_home" });
+  const nav_type = await callBackendApi({ domain, type: "nav_type" });
   const contact_details = await callBackendApi({
     domain,
     query,
@@ -238,6 +234,7 @@ export async function getServerSideProps({ req, query }) {
       meta: meta?.data[0]?.value || null,
       contact_details: contact_details.data[0].value,
       copyright: copyright?.data[0]?.value || null,
+      nav_type: nav_type?.data[0]?.value || {},
     },
   };
 }

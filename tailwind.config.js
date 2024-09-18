@@ -77,6 +77,7 @@ module.exports = {
         contact: "1fr 0.5fr",
         about: "1fr 0.4fr",
         widget: "0.5fr 1fr",
+        nav: "1fr 310px 1fr",
       },
     },
   },

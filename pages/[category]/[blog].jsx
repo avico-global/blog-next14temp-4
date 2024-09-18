@@ -37,6 +37,7 @@ export default function Blog({
   contact_details,
   copyright,
   tag_list,
+  nav_type,
 }) {
   const router = useRouter();
   const { category, blog } = router.query;
@@ -95,6 +96,7 @@ export default function Blog({
                     category={category}
                     categories={categories}
                     logo={logo}
+                    nav_type={nav_type}
                     imagePath={imagePath}
                     contact_details={contact_details}
                   />

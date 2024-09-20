@@ -34,3 +34,23 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+public/json
+public/robots
+/package-lock.json
+
+# Ignore all image files inside the public/images directory
+public/images/*.png
+public/images/*.jpg
+public/images/*.jpeg
+public/images/*.gif
+public/images/*.svg
+public/images/*.webp
+
+# Ensure imageMappings.js is not ignored
+!public/images/imageMappings.js
+
+# Allow the directory itself to be pushed
+!public/images/
+public/img/*

@@ -6,7 +6,7 @@ const Sitemap = () => {};
 
 export const getServerSideProps = async ({ req, res, query }) => {
   const baseUrl = getDomain(req?.headers?.host);
-  const xslContent = checkOrCreateSitemap({ DOMAIN: baseUrl }) || "";
+  const xslContent = checkOrCreateSitemap({ DOMAIN: baseUrl });
   const sitemaps = await getSitemaps({ domain: baseUrl, query });
   // const sitemaps = [1, 2, 3, 4, 5, 6, 6];
   // sitemap.xml
@@ -25,7 +25,7 @@ export const getServerSideProps = async ({ req, res, query }) => {
 
   const sitemapindex = `<?xml version="1.0" encoding="UTF-8"?>
   
-  <?xml-stylesheet type="text/xsl" href="data:text/xml;charset=utf-8;base64,${Buffer?.from(
+  <?xml-stylesheet type="text/xsl" href="data:text/xml;charset=utf-8;base64,${Buffer.from(
     modifiedXslContent
   ).toString("base64")}" ?>
   

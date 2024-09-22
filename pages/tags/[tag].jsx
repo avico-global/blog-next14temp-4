@@ -43,7 +43,7 @@ export default function Categories({
 
   const filteredBlogList = blog_list.filter((item) => {
     const searchContent = tag?.replaceAll("-", " ")?.toLowerCase();
-    return item.tags?.some((tag) => tag.toLowerCase().includes(searchContent));
+    return item.tags?.some((tag) => tag?.toLowerCase() === searchContent);
   });
 
   useEffect(() => {
@@ -362,8 +362,6 @@ export async function getServerSideProps({ req, query }) {
       t?.tag?.toLowerCase()?.replaceAll(" ", "-") ===
       tag?.toLowerCase()?.replaceAll(" ", "-")
   );
-
-  console.log("Tag", tag?.toLowerCase()?.replaceAll(" ", "-"));
 
   if (!tagExists) {
     return {

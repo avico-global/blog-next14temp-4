@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
-import useBreadcrumbs from "@/lib/useBreadcrumbs";
-import JsonLd from "@/components/json/JsonLd";
 import { useRouter } from "next/router";
+import JsonLd from "@/components/json/JsonLd";
+import useBreadcrumbs from "@/lib/useBreadcrumbs";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 // Components
-import Container from "@/components/common/Container";
-import FullContainer from "@/components/common/FullContainer";
+import MarkdownIt from "markdown-it";
 import Navbar from "@/components/containers/Navbar";
 import Footer from "@/components/containers/Footer";
 import GoogleTagManager from "@/lib/GoogleTagManager";
-import MarkdownIt from "markdown-it";
+import Container from "@/components/common/Container";
+import FullContainer from "@/components/common/FullContainer";
 import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 
 import Head from "next/head";
@@ -96,12 +96,11 @@ export default function PriavcyPolicy({
                 return (
                   <Navbar
                     key={index}
+                    logo={logo}
+                    nav_type={nav_type}
                     imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={logo}
-                    contact_details={contact_details}
-                    nav_type={nav_type}
                   />
                 );
               case "breadcrumbs":

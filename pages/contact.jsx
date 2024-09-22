@@ -1,31 +1,32 @@
-import Container from "@/components/common/Container";
-import FullContainer from "@/components/common/FullContainer";
-import Footer from "@/components/containers/Footer";
-import Head from "next/head";
 import React from "react";
+import Head from "next/head";
 import Map from "@/components/containers/Map";
+import Navbar from "@/components/containers/Navbar";
+import Footer from "@/components/containers/Footer";
+import Container from "@/components/common/Container";
 import GoogleTagManager from "@/lib/GoogleTagManager";
+import FullContainer from "@/components/common/FullContainer";
+
 import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 
 import { Roboto } from "next/font/google";
-import Navbar from "@/components/containers/Navbar";
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],
 });
 
 export default function Contact({
-  logo,
-  imagePath,
-  blog_list,
-  layout,
   meta,
+  logo,
+  layout,
   domain,
   favicon,
-  categories,
-  copyright,
-  contact_details,
   nav_type,
+  blog_list,
+  copyright,
+  imagePath,
+  categories,
+  contact_details,
 }) {
   const page = layout?.find((item) => item.page === "contact");
 
@@ -92,7 +93,6 @@ export default function Contact({
                     </Container>
                   </FullContainer>
                 );
-
               case "contact info":
                 return (
                   <FullContainer>
@@ -108,7 +108,6 @@ export default function Contact({
                     </Container>
                   </FullContainer>
                 );
-
               case "footer":
                 return (
                   <Footer

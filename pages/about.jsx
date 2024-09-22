@@ -1,19 +1,21 @@
+import React from "react";
+import Head from "next/head";
+import { cn } from "@/lib/utils";
+import { Roboto } from "next/font/google";
+import { Cormorant } from "next/font/google";
+
 import Container from "@/components/common/Container";
 import FullContainer from "@/components/common/FullContainer";
 import AboutBanner from "@/components/containers/AboutBanner";
 import Footer from "@/components/containers/Footer";
-import React from "react";
-import { Cormorant } from "next/font/google";
-import { cn } from "@/lib/utils";
+import Navbar from "@/components/containers/Navbar";
 import Rightbar from "@/components/containers/Rightbar";
-import Head from "next/head";
 import MarkdownIt from "markdown-it";
-import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 
-import { Roboto } from "next/font/google";
+import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
-import Navbar from "@/components/containers/Navbar";
+
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],
@@ -22,21 +24,21 @@ const font2 = Cormorant({ subsets: ["cyrillic"] });
 
 export default function About({
   logo,
-  about_me,
-  imagePath,
-  categories,
-  blog_list,
+  meta,
   domain,
   layout,
-  meta,
-  contact_details,
-  copyright,
   nav_type,
+  about_me,
+  copyright,
+  blog_list,
+  imagePath,
+  categories,
+  contact_details,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me.value || "");
-
   const page = layout?.find((page) => page.page === "about");
+
   return (
     <div className={myFont.className}>
       <Head>
@@ -83,18 +85,17 @@ export default function About({
                 return (
                   <Navbar
                     key={index}
+                    logo={logo}
+                    nav_type={nav_type}
+                    imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
-                    logo={logo}
-                    imagePath={imagePath}
-                    contact_details={contact_details}
                   />
                 );
               case "banner":
                 return (
                   <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
                 );
-
               case "text":
                 return (
                   <FullContainer>

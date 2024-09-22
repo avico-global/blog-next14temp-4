@@ -137,6 +137,8 @@ export default function Home({
                       <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full mt-14">
                         <div className="flex flex-col gap-12">
                           {page?.sections?.map((item, index) => {
+                            if (!item.enable) return null;
+
                             switch (item.section?.toLowerCase()) {
                               case "latest posts":
                                 return (

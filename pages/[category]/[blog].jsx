@@ -182,9 +182,9 @@ export default function Blog({
                 );
               case "latest posts":
                 return (
-                  <FullContainer>
+                  <FullContainer className="mt-14">
                     <Container>
-                      <LatestBlogs articles={blog_list} />
+                      <LatestBlogs articles={blog_list} imagePath={imagePath} />
                     </Container>
                   </FullContainer>
                 );
@@ -192,10 +192,7 @@ export default function Blog({
                 return (
                   <FullContainer>
                     <Container>
-                      <MostPopular
-                        articles={blog_list}
-                        project_id={project_id}
-                      />
+                      <MostPopular articles={blog_list} imagePath={imagePath} />
                     </Container>
                   </FullContainer>
                 );
@@ -203,7 +200,7 @@ export default function Blog({
                 return (
                   <FullContainer>
                     <Container>
-                      <MustRead articles={blog_list} project_id={project_id} />
+                      <MustRead articles={blog_list} imagePath={imagePath} />
                     </Container>
                   </FullContainer>
                 );

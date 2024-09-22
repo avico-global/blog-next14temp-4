@@ -45,7 +45,7 @@ export default function Categories({
   const convertMarkdown = (markdownText) => markdownIt?.render(markdownText);
 
   const filteredBlogList = blog_list.filter((item) => {
-    const searchContent = category?.replace("-", " ");
+    const searchContent = category?.replaceAll("-", " ");
     return item.article_category.name.toLowerCase().includes(searchContent);
   });
   const page = layout?.find((page) => page.page === "category");

@@ -7,7 +7,6 @@ import Logo from "./Navbar/Logo";
 // Popular Articles Component
 const PopularArticles = ({ popularArticles }) => {
   if (!popularArticles || popularArticles.length === 0) return null;
-
   return (
     <div>
       <p className="text-lg font-semibold mb-1">Most Popular</p>
@@ -57,29 +56,37 @@ const LatestPosts = ({ latestPosts }) => {
 };
 
 // Footer Links Component
-const FooterLinks = ({ categories }) => (
-  <div className="flex items-center flex-col md:flex-row justify-between gap-2 md:gap-5 uppercase font-semibold">
-    {categories?.slice(0, 3).map((item, index) => (
-      <Link
-        title={item}
-        key={index}
-        href={`/${item?.toLowerCase()?.replaceAll(" ", "-")}`}
-        className="text-sm"
-      >
-        {item}
+const FooterLinks = ({ categories }) => {
+  const handleClick = (e) => {
+    e.preventDefault();
+    window.location.href = "/sitemap.xml";
+  };
+  return (
+    <div className="flex items-center flex-col md:flex-row justify-between gap-2 md:gap-5 uppercase font-semibold">
+      {categories?.slice(0, 3).map((item, index) => (
+        <Link
+          title={item}
+          key={index}
+          href={`/${item?.toLowerCase()?.replaceAll(" ", "-")}`}
+          className="text-sm"
+        >
+          {item}
+        </Link>
+      ))}
+      <Link title="About" href="/about" className="text-sm">
+        About Us
       </Link>
-    ))}
-    <Link title="About" href="/about" className="text-sm">
-      About Us
-    </Link>
-    <Link title="Contact Us" href="/contact" className="text-sm">
-      Contact Us
-    </Link>
-    <Link title="Sitemap" href="/sitemap.xml" className="text-sm">
-      Sitemap
-    </Link>
-  </div>
-);
+      <Link title="Contact Us" href="/contact" className="text-sm">
+        Contact Us
+      </Link>
+      <Link title="Sitemap" href="/sitemap.xml" legacyBehavior>
+        <a title="Sitemap" onClick={handleClick} className="text-sm">
+          Sitemap
+        </a>
+      </Link>
+    </div>
+  );
+};
 
 export default function Footer({
   blog_list = [],

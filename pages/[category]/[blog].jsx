@@ -120,7 +120,7 @@ export default function Blog({
                       />
                       <div className="flex flex-col w-full gap-7">
                         <Badge className="w-fit">
-                          {myblog?.value?.article_category}
+                          {myblog?.value?.article_category?.name}
                         </Badge>
                         <h1 className="font-bold text-6xl capitalize max-w-screen-md">
                           {myblog?.value.title}

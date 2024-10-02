@@ -294,7 +294,7 @@ export default function Categories({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category?.name
+                  url: `http://${domain}/${blog?.article_category
                     ?.replaceAll(" ", "-")
                     ?.toLowerCase()}/${blog.title
                     .replaceAll(" ", "-")

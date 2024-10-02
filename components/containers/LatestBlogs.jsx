@@ -38,7 +38,7 @@ export default function LatestBlogs({ articles, imagePath }) {
                   className="w-full h-full object-cover absolute top-0 scale-105"
                 />
                 <p className="bg-purple-500/80 backdrop-blur-sm uppercase text-xs text-center font-semibold text-white pt-1 pb-[1px] px-4 rounded-t-md absolute bottom-0 mx-auto">
-                  {item?.article_category?.name}
+                  {item?.article_category}
                 </p>
               </div>
               <div>

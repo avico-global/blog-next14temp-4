@@ -120,7 +120,7 @@ export default function Blog({
                       />
                       <div className="flex flex-col w-full gap-7">
                         <Badge className="w-fit">
-                          {myblog?.value?.article_category?.name}
+                          {myblog?.value?.article_category}
                         </Badge>
                         <h1 className="font-bold text-6xl capitalize max-w-screen-md">
                           {myblog?.value.title}
@@ -161,7 +161,7 @@ export default function Blog({
                               Share this article:
                             </h3>
                             <SocialShare
-                              url={`http://${domain}${myblog?.article_category?.name}/${myblog?.key}`}
+                              url={`http://${domain}${myblog?.article_category}/${myblog?.key}`}
                               title={myblog?.value.title}
                             />
                           </div>
@@ -231,7 +231,7 @@ export default function Blog({
               mainEntityOfPage: {
                 "@type": "WebPage",
                 "@id": myblog
-                  ? `http://${domain}${myblog?.article_category?.name}/${myblog?.key}`
+                  ? `http://${domain}${myblog?.article_category}/${myblog?.key}`
                   : "",
               },
               headline: myblog?.value.title,
@@ -252,14 +252,14 @@ export default function Blog({
             },
             {
               "@type": "ItemList",
-              url: `http://${domain}${myblog?.article_category?.name}/${myblog?.key}`,
+              url: `http://${domain}${myblog?.article_category}/${myblog?.key}`,
               name: "blog",
               itemListElement: blog_list?.map((blog, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category?.name
+                  url: `http://${domain}/${blog?.article_category
                     ?.replaceAll(" ", "-")
                     ?.toLowerCase()}/${blog.title
                     .replaceAll(" ", "-")
@@ -271,7 +271,7 @@ export default function Blog({
             {
               "@type": "WebPage",
               "@id": `http://${domain}/${myblog?.key}`,
-              url: `http://${domain}/${myblog?.article_category?.name}/${myblog?.key}`,
+              url: `http://${domain}/${myblog?.article_category}/${myblog?.key}`,
               name: myblog?.value?.meta_title,
               description: myblog?.value?.meta_description,
               publisher: {

@@ -191,7 +191,7 @@ export default function Terms({
                 item: {
                   "@type": "Article",
                   url: `http://${domain}/${
-                    blog?.article_category?.name
+                    blog?.article_category
                   }/${blog.title?.replaceAll(" ", "-")?.toLowerCase()}`,
                   name: blog.title,
                 },

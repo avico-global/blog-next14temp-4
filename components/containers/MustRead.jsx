@@ -13,7 +13,7 @@ export default function MustRead({ articles, imagePath }) {
       <div className="grid grid-cols-1 lg:grid-cols-4 grid-rows-2 gap-x-10 gap-y-3">
         {mustReadArticles?.map((item, index) => (
           <Link
-            href={`/${item?.article_category?.name
+            href={`/${item?.article_category
               ?.toLowerCase()
               ?.replaceAll(" ", "-")}/${item.title
               ?.replaceAll(" ", "-")

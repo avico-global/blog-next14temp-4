@@ -153,7 +153,7 @@ export default function Categories({
                               <div key={index}>
                                 <Link
                                   title={item?.title || "Article Link"}
-                                  href={`/${item.article_category.name
+                                  href={`/${item.article_category
                                     ?.toLowerCase()
                                     ?.replaceAll(" ", "-")}/${item.title
                                     ?.replace(/ /g, "-")
@@ -176,7 +176,7 @@ export default function Categories({
                                 </Link>
                                 <Link
                                   title={item?.title || "Article Link"}
-                                  href={`/${item.article_category.name
+                                  href={`/${item.article_category
                                     ?.toLowerCase()
                                     ?.replaceAll(" ", "-")}/${item.title
                                     ?.replace(/ /g, "-")
@@ -302,7 +302,7 @@ export default function Categories({
                 item: {
                   "@type": "Article",
                   url: `http://${domain}/${
-                    blog?.article_category?.name
+                    blog?.article_category
                   }/${blog?.title?.replaceAll(" ", "-")?.toLowerCase()}`,
                   name: blog.title,
                 },

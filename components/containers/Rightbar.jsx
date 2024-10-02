@@ -121,8 +121,8 @@ export default function Rightbar({
       <div className="p-2">
         {lastFiveBlogs?.reverse().map((item, index) => (
           <Link
-            title={item.article_category.name}
-            href={`/${item.article_category.name
+            title={item.article_category}
+            href={`/${item.article_category
               ?.toLowerCase()
               ?.replaceAll(" ", "-")}/${item.title
               .replace(/ /g, "-")

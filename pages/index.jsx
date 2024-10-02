@@ -173,11 +173,11 @@ export default function Home({
                                         <div className="grid grid-cols-3 gap-8">
                                           {blog_list?.map(
                                             (item, index) =>
-                                              item.article_category.name ===
+                                              item.article_category ===
                                                 category?.title && (
                                                 <Link
                                                   title={item.imageTitle}
-                                                  href={`/${item.article_category.name
+                                                  href={`/${item.article_category
                                                     ?.toLowerCase()
                                                     ?.replaceAll(
                                                       " ",
@@ -345,7 +345,7 @@ export default function Home({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category?.name
+                  url: `http://${domain}/${blog?.article_category
                     ?.replaceAll(" ", "-")
                     ?.toLowerCase()}/${blog.title
                     .replaceAll(" ", "-")
@@ -367,7 +367,7 @@ export default function Home({
                   description: blog.description,
                   mainEntityOfPage: {
                     "@type": "WebPage",
-                    "@id": `https://${domain}/${blog?.article_category?.name
+                    "@id": `https://${domain}/${blog?.article_category
                       ?.replaceAll(" ", "-")
                       ?.toLowerCase()}/${blog.title
                       ?.replaceAll(" ", "-")

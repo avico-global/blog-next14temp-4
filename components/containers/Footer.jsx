@@ -12,7 +12,7 @@ const PopularArticles = ({ popularArticles }) => {
       <p className="text-lg font-semibold mb-1">Most Popular</p>
       {popularArticles.map((item, index) => (
         <Link
-          href={`/${item?.article_category?.name
+          href={`/${item?.article_category
             ?.toLowerCase()
             ?.replaceAll(" ", "-")}/${item.title
             ?.replaceAll(" ", "-")
@@ -38,7 +38,7 @@ const LatestPosts = ({ latestPosts }) => {
       <p className="text-lg font-semibold mb-1">Latest Posts</p>
       {latestPosts.map((item, index) => (
         <Link
-          href={`/${item?.article_category?.name
+          href={`/${item?.article_category
             ?.toLowerCase()
             ?.replaceAll(" ", "-")}/${item.title
             ?.replaceAll(" ", "-")

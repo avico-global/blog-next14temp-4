@@ -13,7 +13,7 @@ export default function MostPopular({ articles, imagePath }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-3 gap-x-10 gap-y-4 w-full">
         {popularArticles?.map((item, index) => (
           <Link
-            href={`/${item?.article_category?.name
+            href={`/${item?.article_category
               ?.toLowerCase()
               ?.replaceAll(" ", "-")}/${item.title
               ?.replaceAll(" ", "-")

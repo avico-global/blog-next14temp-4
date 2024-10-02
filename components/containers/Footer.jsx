@@ -65,12 +65,12 @@ const FooterLinks = ({ categories }) => {
     <div className="flex items-center flex-col md:flex-row justify-between gap-2 md:gap-5 uppercase font-semibold">
       {categories?.slice(0, 3).map((item, index) => (
         <Link
-          title={item}
           key={index}
-          href={`/${item?.toLowerCase()?.replaceAll(" ", "-")}`}
+          title={item?.title}
+          href={`/${item?.title?.toLowerCase()?.replaceAll(" ", "-")}`}
           className="text-sm"
         >
-          {item}
+          {item?.title}
         </Link>
       ))}
       <Link title="About" href="/about" className="text-sm">

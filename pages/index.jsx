@@ -167,14 +167,14 @@ export default function Home({
                                     {categories?.map((category, index) => (
                                       <div key={index} className="w-full mb-12">
                                         <SectionHeading
-                                          title={category}
+                                          title={category?.title}
                                           className="mb-7"
                                         />
                                         <div className="grid grid-cols-3 gap-8">
                                           {blog_list?.map(
                                             (item, index) =>
                                               item.article_category.name ===
-                                                category && (
+                                                category?.title && (
                                                 <Link
                                                   title={item.imageTitle}
                                                   href={`/${item.article_category.name

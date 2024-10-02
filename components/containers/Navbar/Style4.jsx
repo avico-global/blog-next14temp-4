@@ -65,9 +65,12 @@ export default function Style4({
                       className="px-4 py-2 hover:bg-gray-200 whitespace-nowrap border-b last:border-none font-semibold hover:text-black transition-all"
                     >
                       <Link
-                        href={`/${item?.toLowerCase()?.replaceAll(" ", "-")}`}
+                        title={item?.title}
+                        href={`/${item?.title
+                          ?.toLowerCase()
+                          ?.replaceAll(" ", "-")}`}
                       >
-                        {item}
+                        {item?.title}
                       </Link>
                     </li>
                   ))}

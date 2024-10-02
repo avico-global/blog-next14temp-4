@@ -142,15 +142,15 @@ const Navbar = ({
           {categories?.map((item, index) => (
             <Link
               key={index}
-              title={item}
-              href={`/${item?.toLowerCase()?.replaceAll(" ", "-")}`}
+              title={item?.title}
+              href={`/${item?.title?.toLowerCase()?.replaceAll(" ", "-")}`}
               className={cn(
                 "font-semibold text-gray-500 capitalize hover:text-black transition-all py-3 px-2 border-b hover:border-black",
-                (category === item || isActive(`/${item}`)) &&
+                (category === item?.title || isActive(`/${item?.title}`)) &&
                   "border-black text-black"
               )}
             >
-              {item}
+              {item?.title}
             </Link>
           ))}
           <Link

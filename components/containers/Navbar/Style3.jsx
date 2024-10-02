@@ -44,15 +44,15 @@ export default function Style3({
             {categories?.map((item, index) => (
               <Link
                 key={index}
-                title={item}
-                href={`/${item?.toLowerCase()?.replaceAll(" ", "-")}`}
+                title={item?.title}
+                href={`/${item?.title?.toLowerCase()?.replaceAll(" ", "-")}`}
                 className={cn(
                   navLink,
-                  (category === item || isActive(`/${item}`)) &&
+                  (category === item?.title || isActive(`/${item?.title}`)) &&
                     "border-black text-black"
                 )}
               >
-                {item}
+                {item?.title}
               </Link>
             ))}
           </div>

@@ -5,6 +5,7 @@ import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
 
 export default function LatestBlogs({ articles, imagePath }) {
+  console.log("articles", articles);
   return (
     <div>
       <SectionHeading title="Latest Posts" className="mb-7" />
@@ -14,7 +15,7 @@ export default function LatestBlogs({ articles, imagePath }) {
           ?.reverse()
           ?.map((item, index) => (
             <Link
-              href={`/${item?.article_category?.name
+              href={`/${item?.article_category
                 ?.toLowerCase()
                 ?.replaceAll(" ", "-")}/${item.title
                 ?.replaceAll(" ", "-")

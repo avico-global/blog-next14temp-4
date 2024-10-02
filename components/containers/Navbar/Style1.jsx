@@ -47,15 +47,15 @@ export default function Style1({
             {categories?.map((item, index) => (
               <Link
                 key={index}
-                title={item}
-                href={`/${item?.toLowerCase()?.replaceAll(" ", "-")}`}
+                title={item?.title}
+                href={`/${item?.title?.toLowerCase()?.replaceAll(" ", "-")}`}
                 className={cn(
                   "font-semibold text-gray-500 capitalize hover:text-black border-transparent transition-all py-4 px-2 border-b-2 hover:border-black w-fit",
-                  (category === item || isActive(`/${item}`)) &&
+                  (category === item?.title || isActive(`/${item?.title}`)) &&
                     "border-black text-black"
                 )}
               >
-                {item}
+                {item?.title}
               </Link>
             ))}
           </div>

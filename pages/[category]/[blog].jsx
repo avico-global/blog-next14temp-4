@@ -307,7 +307,8 @@ export async function getServerSideProps({ req, query }) {
   );
 
   const categoryExists = categories?.data[0]?.value?.some(
-    (cat) => cat?.toLowerCase() === category?.replaceAll("-", " ").toLowerCase()
+    (cat) =>
+      cat?.title?.toLowerCase() === category?.replaceAll("-", " ").toLowerCase()
   );
 
   if (!categoryExists || !isValidBlog) {

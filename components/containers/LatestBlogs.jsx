@@ -5,7 +5,6 @@ import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
 
 export default function LatestBlogs({ articles, imagePath }) {
-  console.log("articles", articles);
   return (
     <div>
       <SectionHeading title="Latest Posts" className="mb-7" />

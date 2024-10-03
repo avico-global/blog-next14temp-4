@@ -1,23 +1,23 @@
 import React from "react";
-import Head from "next/head";
-import Footer from "@/components/containers/Footer";
-import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
-import GoogleTagManager from "@/lib/GoogleTagManager";
-import JsonLd from "@/components/json/JsonLd";
-import Image from "next/image";
-import FullContainer from "@/components/common/FullContainer";
-import Container from "@/components/common/Container";
-import { useRouter } from "next/router";
 import dayjs from "dayjs";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
-import useBreadcrumbs from "@/utils/useBreadcrumbs";
-import MarkdownIt from "markdown-it";
-import Rightbar from "@/components/containers/Rightbar";
-
-import { Roboto } from "next/font/google";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import Navbar from "@/components/containers/Navbar";
+import useBreadcrumbs from "@/utils/useBreadcrumbs";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
+import FullContainer from "@/components/common/FullContainer";
+import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+import Rightbar from "@/components/containers/Rightbar";
+import GoogleTagManager from "@/lib/GoogleTagManager";
+import Container from "@/components/common/Container";
+import Footer from "@/components/containers/Footer";
+import JsonLd from "@/components/json/JsonLd";
+import { Roboto } from "next/font/google";
+import MarkdownIt from "markdown-it";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],
@@ -44,10 +44,11 @@ export default function Categories({
 
   const convertMarkdown = (markdownText) => markdownIt?.render(markdownText);
 
+  const searchContent = category?.replaceAll("-", " ");
   const filteredBlogList = blog_list.filter((item) => {
-    const searchContent = category?.replaceAll("-", " ");
     return item.article_category.toLowerCase() === searchContent;
   });
+
   const page = layout?.find((page) => page.page === "category");
 
   return (

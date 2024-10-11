@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 
 // Components
 import Head from "next/head";
-import Banner from "@/components/containers/Banner";
 import Container from "@/components/common/Container";
 import FullContainer from "@/components/common/FullContainer";
 import GoogleTagManager from "@/lib/GoogleTagManager";
@@ -28,6 +27,7 @@ import Link from "next/link";
 import dayjs from "dayjs";
 import Image from "next/image";
 import Navbar from "@/components/containers/Navbar";
+import Banner from "@/components/containers/Banner";
 const myFont = Raleway({
   subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
 });
@@ -127,6 +127,7 @@ export default function Home({
                     key={index}
                     data={banner.value}
                     image={`${imagePath}/${banner?.file_name}`}
+                    blog_list={blog_list}
                   />
                 );
 

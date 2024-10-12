@@ -10,17 +10,9 @@ import Container from "@/components/common/Container";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Navbar from "@/components/containers/Navbar";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
-
-// Font
-import { Raleway } from "next/font/google";
-import Rightbar from "@/components/containers/Rightbar";
-const myFont = Raleway({
-  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
-});
 
 export default function Categories({
   logo,
@@ -65,12 +57,7 @@ export default function Categories({
   const page = layout?.find((page) => page.page === "Tag Page");
 
   return (
-    <div
-      className={cn(
-        myFont.className,
-        "flex flex-col min-h-screen justify-between"
-      )}
-    >
+    <div>
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title?.replaceAll("##tag##", tag)}</title>
@@ -301,9 +288,9 @@ export default function Categories({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${
-                    blog?.article_category
-                  }/${blog?.title?.replaceAll(" ", "-")?.toLowerCase()}`,
+                  url: `http://${domain}/${blog?.article_category}/${blog?.title
+                    ?.replaceAll(" ", "-")
+                    ?.toLowerCase()}`,
                   name: blog.title,
                 },
               })),

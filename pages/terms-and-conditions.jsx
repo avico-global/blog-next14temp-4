@@ -13,11 +13,6 @@ import GoogleTagManager from "@/lib/GoogleTagManager";
 import Footer from "@/components/containers/Footer";
 import useBreadcrumbs from "@/lib/useBreadcrumbs";
 import JsonLd from "@/components/json/JsonLd";
-import { Raleway } from "next/font/google";
-
-const myFont = Raleway({
-  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
-});
 
 export default function Terms({
   categories,
@@ -47,9 +42,7 @@ export default function Terms({
   const page = layout?.find((page) => page.page === "terms");
 
   return (
-    <div
-      className={`min-h-screen flex flex-col justify-between ${myFont.className}`}
-    >
+    <div>
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>

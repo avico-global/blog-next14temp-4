@@ -1,8 +1,4 @@
 import React from "react";
-import { cn } from "@/lib/utils";
-import { Cormorant } from "next/font/google";
-
-const myFont = Cormorant({ subsets: ["cyrillic"] });
 
 export default function BlogHead({ title, date, author }) {
   return (
@@ -13,7 +9,7 @@ export default function BlogHead({ title, date, author }) {
           Lifestyle
         </span>
       </p>
-      <h2 className={cn("font-bold text-5xl", myFont.className)}>{title}</h2>
+      <h2 className="font-bold text-5xl">{title}</h2>
       <p className="text-xs uppercase">
         By <span className="text-xs underline">{author}</span> -
         <span className="text-gray-500 text-xs"> {date}</span>

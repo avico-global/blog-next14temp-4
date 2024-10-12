@@ -8,17 +8,10 @@ import FullContainer from "@/components/common/FullContainer";
 import Container from "@/components/common/Container";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Navbar from "@/components/containers/Navbar";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
-
-// Font
-import { Raleway } from "next/font/google";
 import Rightbar from "@/components/containers/Rightbar";
-const myFont = Raleway({
-  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
-});
 
 export default function Tags({
   logo,
@@ -62,12 +55,7 @@ export default function Tags({
   const page = layout?.find((page) => page.page === "tags");
 
   return (
-    <div
-      className={cn(
-        myFont.className,
-        "flex flex-col min-h-screen justify-between"
-      )}
-    >
+    <div>
       <Head>
         <meta charSet="UTF-8" />
         <title>
@@ -241,9 +229,9 @@ export default function Tags({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${
-                    blog?.article_category
-                  }/${blog?.title?.replaceAll(" ", "-")?.toLowerCase()}`,
+                  url: `http://${domain}/${blog?.article_category}/${blog?.title
+                    ?.replaceAll(" ", "-")
+                    ?.toLowerCase()}`,
                   name: blog.title,
                 },
               })),

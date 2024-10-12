@@ -17,18 +17,11 @@ import GoogleTagManager from "@/lib/GoogleTagManager";
 import Container from "@/components/common/Container";
 import Footer from "@/components/containers/Footer";
 import JsonLd from "@/components/json/JsonLd";
-import { Roboto } from "next/font/google";
 import MarkdownIt from "markdown-it";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
-const myFont = Roboto({
-  subsets: ["cyrillic"],
-  weight: ["400", "700"],
-});
-
-export default function Categories({
+export default function Category({
   logo,
   blog_list,
   imagePath,
@@ -57,12 +50,7 @@ export default function Categories({
   const page = layout?.find((page) => page.page === "category");
 
   return (
-    <div
-      className={cn(
-        myFont.className,
-        "flex flex-col min-h-screen justify-between"
-      )}
-    >
+    <div className="flex flex-col min-h-screen justify-between">
       <Head>
         <meta charSet="UTF-8" />
         <title>
@@ -130,7 +118,10 @@ export default function Categories({
 
               case "breadcrumbs":
                 return (
-                  <FullContainer className="w-full py-8 bg-gray-100">
+                  <FullContainer
+                    key={index}
+                    className="w-full py-8 bg-gray-100"
+                  >
                     <h1 className="text-2xl font-semibold capitalize px-4 py-1">
                       {category?.replace("-", " ")}
                     </h1>
@@ -144,7 +135,7 @@ export default function Categories({
 
               case "search result":
                 return (
-                  <FullContainer className="py-16">
+                  <FullContainer key={index} className="py-16">
                     <Container>
                       <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full">
                         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -152,11 +143,9 @@ export default function Categories({
                             <div key={index}>
                               <Link
                                 title={item?.title || "Article Link"}
-                                href={`/${category
-                                  ?.replaceAll(" ", "-")
-                                  ?.toLowerCase()}/${item?.title
-                                  ?.replaceAll(" ", "-")
-                                  ?.toLowerCase()}`}
+                                href={`/${sanitizeUrl(
+                                  item.article_category
+                                )}/${sanitizeUrl(item?.title)}`}
                               >
                                 <div className="overflow-hidden relative min-h-40 rounded lg:min-h-72 w-full bg-black flex-1">
                                   <Image
@@ -184,13 +173,11 @@ export default function Categories({
 
                               <Link
                                 title={item?.title || "Article Link"}
-                                href={`/${category
-                                  ?.replaceAll(" ", "-")
-                                  ?.toLowerCase()}/${item?.title
-                                  ?.replaceAll(" ", "-")
-                                  ?.toLowerCase()}`}
+                                href={`/${sanitizeUrl(
+                                  item.article_category
+                                )}/${sanitizeUrl(item?.title)}`}
                               >
-                                <h2 className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight">
+                                <h2 className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight hover:underline transition-all">
                                   {item.title}
                                 </h2>
                               </Link>
@@ -208,15 +195,9 @@ export default function Categories({
                                   )}
                                 </p>
                               </div>
-                              <p
-                                className="mt-1 markdown-content"
-                                style={{ fontSize: 12 }}
-                                dangerouslySetInnerHTML={{
-                                  __html: convertMarkdown(
-                                    item?.articleContent
-                                  ).slice(0, 200),
-                                }}
-                              />
+                              <p className="text-gray-500 mt-2">
+                                {item.tagline}
+                              </p>
                             </div>
                           ))}
                         </div>
@@ -237,6 +218,7 @@ export default function Categories({
               case "footer":
                 return (
                   <Footer
+                    key={index}
                     blog_list={blog_list}
                     categories={categories}
                     logo={logo}

@@ -12,7 +12,6 @@ import MostPopular from "@/components/containers/MostPopular";
 import Rightbar from "@/components/containers/Rightbar";
 import Container from "@/components/common/Container";
 import Navbar from "@/components/containers/Navbar";
-import { Raleway } from "next/font/google";
 import { useRouter } from "next/router";
 
 import {
@@ -29,10 +28,6 @@ import Link from "next/link";
 import Image from "next/image";
 import Banner from "@/components/containers/Banner";
 import LatestBlogs from "@/components/containers/LatestBlogs";
-
-const myFont = Raleway({
-  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
-});
 
 export default function Home({
   logo,
@@ -70,7 +65,7 @@ export default function Home({
   const page = layout?.find((page) => page.page === "home");
 
   return (
-    <div className={`min-h-screen ${myFont.className}`}>
+    <div>
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>
@@ -146,6 +141,7 @@ export default function Home({
                               case "latest posts":
                                 return (
                                   <LatestBlogs
+                                    key={index}
                                     articles={blog_list}
                                     imagePath={imagePath}
                                   />
@@ -153,6 +149,7 @@ export default function Home({
                               case "most popular":
                                 return (
                                   <MostPopular
+                                    key={index}
                                     articles={blog_list}
                                     imagePath={imagePath}
                                   />
@@ -160,13 +157,14 @@ export default function Home({
                               case "must read":
                                 return (
                                   <MustRead
+                                    key={index}
                                     articles={blog_list}
                                     imagePath={imagePath}
                                   />
                                 );
                               case "articles with categories":
                                 return (
-                                  <div>
+                                  <div key={index}>
                                     {categories?.map((category, index) => (
                                       <div key={index} className="w-full mb-12">
                                         <SectionHeading
@@ -259,11 +257,12 @@ export default function Home({
               case "footer":
                 return (
                   <Footer
-                    blog_list={blog_list}
-                    categories={categories}
-                    footer_text=""
+                    key={index}
                     logo={logo}
+                    footer_text=""
+                    categories={categories}
                     imagePath={imagePath}
+                    blog_list={blog_list}
                   />
                 );
               default:

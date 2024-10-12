@@ -10,15 +10,10 @@ import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 // Font
-import { cn } from "@/lib/utils";
-import { Raleway } from "next/font/google";
 import JsonLd from "@/components/json/JsonLd";
 import useBreadcrumbs from "@/lib/useBreadcrumbs";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
-const myFont = Raleway({
-  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
-});
 
 export default function Contact({
   categories,
@@ -37,7 +32,7 @@ export default function Contact({
   const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div className={cn(myFont.className, "flex flex-col justify-between")}>
+    <div className="flex flex-col justify-between">
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>

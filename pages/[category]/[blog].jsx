@@ -14,22 +14,15 @@ import {
   sanitizeUrl,
 } from "@/lib/myFun";
 
-import { Roboto } from "next/font/google";
 import JsonLd from "@/components/json/JsonLd";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import SocialShare from "@/components/containers/SocialShare";
-import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 import MostPopular from "@/components/containers/MostPopular";
 import MustRead from "@/components/containers/MustRead";
 import Navbar from "@/components/containers/Navbar";
 import BlogBanner from "@/components/containers/BlogBanner";
-const myFont = Roboto({
-  subsets: ["cyrillic"],
-  weight: ["400", "700"],
-});
 
 export default function Blog({
   contact_details,
@@ -76,7 +69,7 @@ export default function Blog({
   const page = layout?.find((page) => page.page?.toLowerCase() === "blog page");
 
   return (
-    <div className={myFont.className}>
+    <div>
       <Head>
         <meta charSet="UTF-8" />
         <title>{myblog?.value?.meta_title}</title>
@@ -151,7 +144,7 @@ export default function Blog({
                 );
               case "blog text":
                 return (
-                  <FullContainer>
+                  <FullContainer key={index}>
                     <Container>
                       <div className="grid grid-cols-1 md:grid-cols-article gap-14 w-full">
                         <div>
@@ -186,7 +179,7 @@ export default function Blog({
                 );
               case "latest posts":
                 return (
-                  <FullContainer className="mt-14">
+                  <FullContainer className="mt-14" key={index}>
                     <Container>
                       <LatestBlogs articles={blog_list} imagePath={imagePath} />
                     </Container>
@@ -194,7 +187,7 @@ export default function Blog({
                 );
               case "popular posts":
                 return (
-                  <FullContainer>
+                  <FullContainer key={index}>
                     <Container>
                       <MostPopular articles={blog_list} imagePath={imagePath} />
                     </Container>
@@ -202,7 +195,7 @@ export default function Blog({
                 );
               case "must read":
                 return (
-                  <FullContainer>
+                  <FullContainer key={index}>
                     <Container>
                       <MustRead articles={blog_list} imagePath={imagePath} />
                     </Container>
@@ -211,13 +204,14 @@ export default function Blog({
               case "footer":
                 return (
                   <Footer
-                    blog_list={blog_list}
-                    categories={categories}
+                    key={index}
                     logo={logo}
-                    imagePath={imagePath}
                     about_me={about_me}
-                    contact_details={contact_details}
+                    blog_list={blog_list}
+                    imagePath={imagePath}
                     copyright={copyright}
+                    categories={categories}
+                    contact_details={contact_details}
                   />
                 );
               default:
@@ -271,14 +265,11 @@ export async function getServerSideProps({ req, query }) {
   const blog_list = await callBackendApi({ domain, type: "blog_list" });
 
   const isValidBlog = blog_list?.data[0]?.value?.find(
-    (item) =>
-      item.title?.replaceAll(" ", "-")?.toLowerCase() ===
-      blog?.replaceAll(" ", "-")
+    (item) => sanitizeUrl(item.title) === sanitizeUrl(blog)
   );
 
   const categoryExists = categories?.data[0]?.value?.some(
-    (cat) =>
-      cat?.title?.toLowerCase() === category?.replaceAll("-", " ").toLowerCase()
+    (cat) => sanitizeUrl(cat?.title) === sanitizeUrl(category)
   );
 
   if (!categoryExists || !isValidBlog) {
@@ -296,10 +287,10 @@ export async function getServerSideProps({ req, query }) {
     domain,
     type: "contact_details",
   });
-  const copyright = await callBackendApi({ domain, type: "copyright" });
   const layout = await callBackendApi({ domain, type: "layout" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
   const blog_type = await callBackendApi({ domain, type: "blog_type" });
+  const footer_type = await callBackendApi({ domain, type: "footer_type" });
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = await getImagePath(project_id, domain);
@@ -316,10 +307,10 @@ export async function getServerSideProps({ req, query }) {
       categories: categories?.data[0]?.value || null,
       about_me: about_me.data[0] || null,
       contact_details: contact_details.data[0].value,
-      copyright: copyright.data[0].value || null,
       favicon: favicon?.data[0]?.file_name || null,
       nav_type: nav_type?.data[0]?.value || {},
       blog_type: blog_type?.data[0]?.value || {},
+      footer_type: footer_type?.data[0]?.value || {},
       project_id,
     },
   };

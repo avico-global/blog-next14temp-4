@@ -12,13 +12,8 @@ import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
 
-// Font
-import { Raleway } from "next/font/google";
 import useBreadcrumbs from "@/lib/useBreadcrumbs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
-const myFont = Raleway({
-  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
-});
 
 export default function About({
   logo,
@@ -47,7 +42,7 @@ export default function About({
   const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div className={myFont.className}>
+    <div>
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>

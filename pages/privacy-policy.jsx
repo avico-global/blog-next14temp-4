@@ -15,12 +15,6 @@ import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 
 import Head from "next/head";
 
-// Font
-import { Raleway } from "next/font/google";
-const myFont = Raleway({
-  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
-});
-
 export default function PriavcyPolicy({
   domain,
   imagePath,

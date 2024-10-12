@@ -13,6 +13,7 @@ import Link from "next/link";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Navbar from "@/components/containers/Navbar";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
+import Rightbar from "@/components/containers/Rightbar";
 
 export default function Categories({
   logo,

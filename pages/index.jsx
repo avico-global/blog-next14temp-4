@@ -67,6 +67,8 @@ export default function Home({
 
   const page = layout?.find((page) => page.page === "home");
 
+  console.log("banner", banner);
+
   return (
     <div className={`min-h-screen ${myFont.className}`}>
       <Head>

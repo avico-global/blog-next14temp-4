@@ -1,19 +1,18 @@
 import React from "react";
-import FullContainer from "../../common/FullContainer";
-import Container from "../../common/Container";
+import Link from "next/link";
 import Image from "next/image";
 import { Search } from "lucide-react";
-import Link from "next/link";
+import Container from "../../common/Container";
+import FullContainer from "../../common/FullContainer";
+import { sanitizeUrl } from "@/lib/myFun";
 
 export default function Style3({
-  openSearch,
   searchQuery,
   searchContainerRef,
   handleSearchChange,
   filteredBlogs,
   image,
   data,
-  f,
 }) {
   return (
     <FullContainer
@@ -60,7 +59,7 @@ export default function Style3({
         )}
         <div
           ref={searchContainerRef}
-          className="relative w-6/12 flex items-center gap-5 py-2 px-5 bg-white rounded-full mt-4"
+          className="relative w-6/12 flex items-center gap-4 py-3 px-5 bg-white rounded-full mt-4"
         >
           <Search className="text-gray-400 w-5 h-5" />
           <input
@@ -72,17 +71,15 @@ export default function Style3({
             autoFocus
           />
           {searchQuery && (
-            <div className="absolute top-full p-1 text-start  lg:p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 mx-auto w-11/12 lg:w-[500px]">
+            <div className="absolute top-full w-full p-1 left-0 text-start lg:p-3 bg-white shadow-2xl rounded-md mt-1 z-10 mx-auto">
               {filteredBlogs?.length > 0 ? (
                 filteredBlogs.map((item, index) => (
                   <Link
                     key={index}
                     title={item.title}
-                    href={`/${item.article_category
-                      ?.toLowerCase()
-                      ?.replaceAll(" ", "-")}/${item?.title
-                      ?.replaceAll(" ", "-")
-                      ?.toLowerCase()}`}
+                    href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
+                      item?.title
+                    )}`}
                   >
                     <div className="p-2 hover:bg-gray-200 border-b text-gray-600">
                       {item.title}
@@ -90,7 +87,9 @@ export default function Style3({
                   </Link>
                 ))
               ) : (
-                <div className="p-2 text-gray-600">No articles found.</div>
+                <div className="p-2 text-gray-600 text-center">
+                  No articles found.
+                </div>
               )}
             </div>
           )}

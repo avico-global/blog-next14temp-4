@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import Image from "next/image";
 import SectionHeading from "../common/SectionHeading";
+import { sanitizeUrl } from "@/lib/myFun";
 
 export default function LatestBlogs({ articles, imagePath }) {
   return (
@@ -14,11 +15,9 @@ export default function LatestBlogs({ articles, imagePath }) {
           ?.reverse()
           ?.map((item, index) => (
             <Link
-              href={`/${item?.article_category
-                ?.toLowerCase()
-                ?.replaceAll(" ", "-")}/${item.title
-                ?.replaceAll(" ", "-")
-                ?.toLowerCase()}`}
+              href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
+                item?.title
+              )}`}
               title={item.imageTitle || "IMAGE"}
               key={index}
               className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col gap-2 first:gap-4 text-lg first:text-xl first:mb-5"

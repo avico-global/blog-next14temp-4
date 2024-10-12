@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FullContainer from "@/components/common/FullContainer";
 import Rightbar from "@/components/containers/Rightbar";
 import Container from "@/components/common/Container";
@@ -7,7 +7,12 @@ import { useRouter } from "next/router";
 import MarkdownIt from "markdown-it";
 import LatestBlogs from "@/components/containers/LatestBlogs";
 import Head from "next/head";
-import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+import {
+  callBackendApi,
+  getDomain,
+  getImagePath,
+  sanitizeUrl,
+} from "@/lib/myFun";
 
 import { Roboto } from "next/font/google";
 import JsonLd from "@/components/json/JsonLd";
@@ -20,31 +25,54 @@ import { Badge } from "@/components/ui/badge";
 import MostPopular from "@/components/containers/MostPopular";
 import MustRead from "@/components/containers/MustRead";
 import Navbar from "@/components/containers/Navbar";
+import BlogBanner from "@/components/containers/BlogBanner";
 const myFont = Roboto({
   subsets: ["cyrillic"],
   weight: ["400", "700"],
 });
 
 export default function Blog({
-  logo,
-  myblog,
-  blog_list,
-  imagePath,
-  categories,
-  domain,
-  layout,
-  about_me,
   contact_details,
+  categories,
+  blog_list,
   copyright,
   tag_list,
+  domain,
+  logo,
+  layout,
+  myblog,
+  about_me,
   nav_type,
+  blog_type,
+  imagePath,
+  project_id,
 }) {
   const router = useRouter();
   const { category, blog } = router.query;
+
   const markdownIt = new MarkdownIt();
-  const content = markdownIt.render(myblog?.value.articleContent);
+  const content = markdownIt.render(
+    myblog?.value?.articleContent?.replaceAll(
+      `https://api.sitebuilderz.com/images/project_images/${project_id}/`,
+      imagePath
+    ) || ""
+  );
+
   const breadcrumbs = useBreadcrumbs();
-  const lastFiveBlogs = blog_list.slice(-6);
+
+  useEffect(() => {
+    if (
+      category.includes("%20") ||
+      category.includes(" ") ||
+      blog.includes("%20") ||
+      blog.includes(" ", "-")
+    ) {
+      const newCategory = sanitizeUrl(category);
+      const newBlog = sanitizeUrl(blog);
+      router.replace(`/${newCategory}/${newBlog}`);
+    }
+  }, [category, router, blog]);
+
   const page = layout?.find((page) => page.page?.toLowerCase() === "blog page");
 
   return (
@@ -103,36 +131,12 @@ export default function Blog({
                 );
               case "banner":
                 return (
-                  <FullContainer key={index}>
-                    <Container className="h-[62vh] bg-gradient-to-t from-black/50 overflow-hidden rounded-lg relative p-10 text-white md:justify-end">
-                      <Image
-                        title={
-                          item.imageTitle || item.title || "Article Thumbnail"
-                        }
-                        alt={
-                          item.altImage || item.tagline || "No Thumbnail Found"
-                        }
-                        src={`${imagePath}/${myblog?.file_name}`}
-                        fill={true}
-                        priority={true}
-                        loading="eager"
-                        className="-z-10 w-full h-full object-cover absolute top-0"
-                      />
-                      <div className="flex flex-col w-full gap-7">
-                        <Badge className="w-fit">
-                          {myblog?.value?.article_category?.name}
-                        </Badge>
-                        <h1 className="font-bold text-6xl capitalize max-w-screen-md">
-                          {myblog?.value.title}
-                        </h1>
-                        <p>{myblog?.value.tagline}</p>
-                        <div className="flex items-center gap-3">
-                          <p>{myblog?.value.author}</p> -
-                          <p>{myblog?.value.published_at}</p>
-                        </div>
-                      </div>
-                    </Container>
-                  </FullContainer>
+                  <BlogBanner
+                    key={index}
+                    myblog={myblog}
+                    imagePath={imagePath}
+                    blog_type={blog_type}
+                  />
                 );
               case "breadcrumbs":
                 return (
@@ -231,14 +235,16 @@ export default function Blog({
               mainEntityOfPage: {
                 "@type": "WebPage",
                 "@id": myblog
-                  ? `http://${domain}${myblog?.article_category}/${myblog?.key}`
+                  ? `http://${domain}${sanitizeUrl(
+                      myblog?.article_category
+                    )}/${sanitizeUrl(myblog?.value?.title)}`
                   : "",
               },
-              headline: myblog?.value.title,
-              description: myblog?.value.articleContent,
-              datePublished: myblog?.value.published_at,
-              author: myblog?.value.author,
-              image: `${imagePath}/${myblog?.file_name}`,
+              headline: myblog?.value?.title,
+              description: myblog?.value?.articleContent,
+              datePublished: myblog?.value?.published_at,
+              author: myblog?.value?.author,
+              image: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`,
               publisher: "Site Manager",
             },
             {
@@ -249,42 +255,6 @@ export default function Blog({
                 name: breadcrumb.label,
                 item: `http://${domain}${breadcrumb.url}`,
               })),
-            },
-            {
-              "@type": "ItemList",
-              url: `http://${domain}${myblog?.article_category}/${myblog?.key}`,
-              name: "blog",
-              itemListElement: blog_list?.map((blog, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                item: {
-                  "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category
-                    ?.replaceAll(" ", "-")
-                    ?.toLowerCase()}/${blog.title
-                    .replaceAll(" ", "-")
-                    ?.toLowerCase()}`,
-                  name: blog.title,
-                },
-              })),
-            },
-            {
-              "@type": "WebPage",
-              "@id": `http://${domain}/${myblog?.key}`,
-              url: `http://${domain}/${myblog?.article_category}/${myblog?.key}`,
-              name: myblog?.value?.meta_title,
-              description: myblog?.value?.meta_description,
-              publisher: {
-                "@id": `http://${domain}`,
-              },
-              inLanguage: "en-US",
-              isPartOf: { "@id": `http://${domain}` },
-              primaryImageOfPage: {
-                "@type": "ImageObject",
-                url: `${imagePath}/${myblog?.file_name}`,
-              },
-              datePublished: myblog?.value.published_at,
-              dateModified: myblog?.value.published_at,
             },
           ],
         }}
@@ -329,6 +299,7 @@ export async function getServerSideProps({ req, query }) {
   const copyright = await callBackendApi({ domain, type: "copyright" });
   const layout = await callBackendApi({ domain, type: "layout" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
+  const blog_type = await callBackendApi({ domain, type: "blog_type" });
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = await getImagePath(project_id, domain);
@@ -348,6 +319,8 @@ export async function getServerSideProps({ req, query }) {
       copyright: copyright.data[0].value || null,
       favicon: favicon?.data[0]?.file_name || null,
       nav_type: nav_type?.data[0]?.value || {},
+      blog_type: blog_type?.data[0]?.value || {},
+      project_id,
     },
   };
 }

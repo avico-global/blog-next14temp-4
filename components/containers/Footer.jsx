@@ -3,6 +3,7 @@ import FullContainer from "../common/FullContainer";
 import Container from "../common/Container";
 import Link from "next/link";
 import Logo from "./Navbar/Logo";
+import { sanitizeUrl } from "@/lib/myFun";
 
 // Popular Articles Component
 const PopularArticles = ({ popularArticles }) => {
@@ -12,11 +13,9 @@ const PopularArticles = ({ popularArticles }) => {
       <p className="text-lg font-semibold mb-1">Most Popular</p>
       {popularArticles.map((item, index) => (
         <Link
-          href={`/${item?.article_category
-            ?.toLowerCase()
-            ?.replaceAll(" ", "-")}/${item.title
-            ?.replaceAll(" ", "-")
-            ?.toLowerCase()}`}
+          href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
+            item?.title
+          )}`}
           title={item.imageTitle || "Title"}
           key={index}
         >
@@ -38,11 +37,9 @@ const LatestPosts = ({ latestPosts }) => {
       <p className="text-lg font-semibold mb-1">Latest Posts</p>
       {latestPosts.map((item, index) => (
         <Link
-          href={`/${item?.article_category
-            ?.toLowerCase()
-            ?.replaceAll(" ", "-")}/${item.title
-            ?.replaceAll(" ", "-")
-            ?.toLowerCase()}`}
+          href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
+            item?.title
+          )}`}
           title={item.imageTitle || "Title"}
           key={index}
         >
@@ -67,7 +64,7 @@ const FooterLinks = ({ categories }) => {
         <Link
           key={index}
           title={item?.title}
-          href={`/${item?.title?.toLowerCase()?.replaceAll(" ", "-")}`}
+          href={`/${sanitizeUrl(item.title)}`}
           className="text-sm"
         >
           {item?.title}

@@ -1,36 +1,36 @@
 import React, { useEffect } from "react";
 
 // Components
+import Head from "next/head";
+import MarkdownIt from "markdown-it";
+import { useRouter } from "next/router";
+import Navbar from "@/components/containers/Navbar";
 import Container from "@/components/common/Container";
 import FullContainer from "@/components/common/FullContainer";
-import Navbar from "@/components/containers/Navbar";
-import Footer from "@/components/containers/Footer";
-import GoogleTagManager from "@/lib/GoogleTagManager";
-import MarkdownIt from "markdown-it";
-import useBreadcrumbs from "@/lib/useBreadcrumbs";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
 import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
-
-import Head from "next/head";
-import { Raleway } from "next/font/google";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
+import GoogleTagManager from "@/lib/GoogleTagManager";
+import Footer from "@/components/containers/Footer";
+import useBreadcrumbs from "@/lib/useBreadcrumbs";
 import JsonLd from "@/components/json/JsonLd";
-import { useRouter } from "next/router";
+import { Raleway } from "next/font/google";
+
 const myFont = Raleway({
   subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
 });
 
 export default function Terms({
-  domain,
-  imagePath,
-  logo,
-  favicon,
-  blog_list,
   categories,
-  meta,
-  contact_details,
-  terms,
-  layout,
+  blog_list,
   nav_type,
+  favicon,
+  domain,
+  terms,
+  logo,
+  meta,
+  layout,
+  imagePath,
+  contact_details,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(terms || "");
@@ -144,32 +144,6 @@ export default function Terms({
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "WebPage",
-              "@id": `http://${domain}/`,
-              url: `http://${domain}/`,
-              name: meta?.title,
-              isPartOf: {
-                "@id": `http://${domain}`,
-              },
-              description: meta?.description,
-              inLanguage: "en-US",
-            },
-            {
-              "@type": "Organization",
-              "@id": `http://${domain}`,
-              name: domain,
-              url: `http://${domain}/`,
-              logo: {
-                "@type": "ImageObject",
-                url: `${imagePath}/${logo.file_name}`,
-              },
-              sameAs: [
-                "http://www.facebook.com",
-                "http://www.twitter.com",
-                "http://instagram.com",
-              ],
-            },
-            {
               "@type": "WebSite",
               "@id": `http://${domain}/#website`,
               url: `http://${domain}/`,
@@ -180,22 +154,6 @@ export default function Terms({
                 "@type": "Organization",
                 "@id": `http://${domain}`,
               },
-            },
-            {
-              "@type": "ItemList",
-              url: `http://${domain}`,
-              name: "blog",
-              itemListElement: blog_list?.map((blog, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                item: {
-                  "@type": "Article",
-                  url: `http://${domain}/${
-                    blog?.article_category
-                  }/${blog.title?.replaceAll(" ", "-")?.toLowerCase()}`,
-                  name: blog.title,
-                },
-              })),
             },
             {
               "@type": "BreadcrumbList",

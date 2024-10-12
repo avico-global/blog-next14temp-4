@@ -4,9 +4,7 @@ import Image from "next/image";
 
 const Logo = ({ logo, imagePath }) => {
   const [hostName, setHostName] = useState("");
-  const [windowWidth, setWindowWidth] = useState(
-    typeof window !== "undefined" ? window.innerWidth : 1200
-  );
+  const [windowWidth, setWindowWidth] = useState(1200);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -15,6 +13,9 @@ const Logo = ({ logo, imagePath }) => {
       const handleResize = () => {
         setWindowWidth(window.innerWidth);
       };
+
+      handleResize();
+
       window.addEventListener("resize", handleResize);
 
       return () => {
@@ -39,7 +40,6 @@ const Logo = ({ logo, imagePath }) => {
 
   const imageSrc = `${imagePath}/${logo.file_name}`;
 
-  // Calculate dynamic height for different screen sizes
   const dynamicLogoHeight =
     windowWidth < 768
       ? 30
@@ -47,29 +47,27 @@ const Logo = ({ logo, imagePath }) => {
       ? Math.floor(logoHeight / 2)
       : logoHeight;
 
-  // Default width for small and medium screens (you can adjust the ratio here)
   const dynamicLogoWidth =
     windowWidth >= 1200
       ? logoWidth
       : Math.floor((logoWidth / logoHeight) * dynamicLogoHeight);
 
-  // Inline style to apply auto width using CSS
   const logoStyle = {
     height: `${dynamicLogoHeight}px`,
     width: windowWidth >= 1200 ? `${logoWidth}px` : "auto",
-    maxWidth: "100%", // Ensure it doesn't overflow its container
+    maxWidth: "100%",
   };
 
   return (
     <Link
-      title={`Logo - ${hostName}`}
       href="/"
+      title={`Logo - ${hostName}`}
       className="flex items-center justify-center mr-10"
     >
       {logoType === "image" ? (
         <Image
           height={dynamicLogoHeight}
-          width={dynamicLogoWidth} // Always pass a numeric width
+          width={dynamicLogoWidth}
           src={imageSrc}
           title={`Logo - ${hostName}`}
           alt={`${logoText || "logo"} - ${hostName}`}

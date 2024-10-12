@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Menu, Search } from "lucide-react";
 import { sanitizeUrl } from "@/lib/myFun";
 
-export default function Style4({
+export default function Style9({
   staticPages,
   filteredBlogs,
   logo,
@@ -31,7 +31,7 @@ export default function Style4({
 
   return (
     <div className="border-b text-gray-500 sticky top-0 z-20 bg-white py-2">
-      <div className="w-11/12 max-w-screen-lg flex items-center justify-between mx-auto">
+      <div className=" flex items-center justify-between mx-auto px-5">
         <div className="flex items-center">
           <Logo logo={logo} imagePath={imagePath} />
         </div>
@@ -61,14 +61,14 @@ export default function Style4({
               <div className="absolute right-0 w-auto bg-white border rounded shadow-lg">
                 <ul>
                   {categories?.map((item, index) => (
-                    <li
+                    <Link
                       key={index}
+                      title={item?.title}
+                      href={`/${sanitizeUrl(item?.title)}`}
                       className="px-4 py-2 hover:bg-gray-200 whitespace-nowrap border-b last:border-none font-semibold hover:text-black transition-all"
                     >
-                      <Link href={`/${sanitizeUrl(item?.title)}`}>
-                        {item?.title}
-                      </Link>
-                    </li>
+                      {item.title}
+                    </Link>
                   ))}
                 </ul>
               </div>

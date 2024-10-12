@@ -1,43 +1,50 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Head from "next/head";
-import { cn } from "@/lib/utils";
-import { Roboto } from "next/font/google";
-import { Cormorant } from "next/font/google";
-
+import MarkdownIt from "markdown-it";
 import Container from "@/components/common/Container";
 import FullContainer from "@/components/common/FullContainer";
 import AboutBanner from "@/components/containers/AboutBanner";
 import Footer from "@/components/containers/Footer";
 import Navbar from "@/components/containers/Navbar";
 import Rightbar from "@/components/containers/Rightbar";
-import MarkdownIt from "markdown-it";
-
 import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
 
-const myFont = Roboto({
-  subsets: ["cyrillic"],
-  weight: ["400", "700"],
+// Font
+import { Raleway } from "next/font/google";
+import useBreadcrumbs from "@/lib/useBreadcrumbs";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
+const myFont = Raleway({
+  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
 });
-const font2 = Cormorant({ subsets: ["cyrillic"] });
 
 export default function About({
   logo,
-  meta,
-  domain,
-  layout,
-  nav_type,
   about_me,
-  copyright,
-  blog_list,
   imagePath,
   categories,
+  blog_list,
+  domain,
+  meta,
   contact_details,
+  favicon,
+  layout,
+  nav_type,
+  footer_type,
 }) {
   const markdownIt = new MarkdownIt();
-  const content = markdownIt?.render(about_me.value || "");
+  const content = markdownIt?.render(about_me?.value);
+
   const page = layout?.find((page) => page.page === "about");
+
+  const reversedLastFiveBlogs = useMemo(() => {
+    const lastFiveBlogs = blog_list?.slice(-5);
+    return lastFiveBlogs ? [...lastFiveBlogs].reverse() : [];
+  }, [blog_list]);
+
+  const breadcrumbs = useBreadcrumbs();
 
   return (
     <div className={myFont.className}>
@@ -45,9 +52,10 @@ export default function About({
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>
         <meta name="description" content={meta?.description} />
-        <link rel="author" href={`https://${domain}`} />
-        <link rel="publisher" href={`https://${domain}`} />
-        <link rel="canonical" href={`https://${domain}`} />
+        <link rel="author" href={`https://www.${domain}`} />
+        <link rel="publisher" href={`https://www.${domain}`} />
+        <link rel="canonical" href={`https://www.${domain}/about`} />
+        {/* <meta name="robots" content="noindex" /> */}
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -60,26 +68,25 @@ export default function About({
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${imagePath}/${logo.file_name}`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${imagePath}/${logo.file_name}`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${imagePath}/${logo.file_name}`}
+          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
         />
       </Head>
 
       {page?.enable
         ? page?.sections?.map((item, index) => {
             if (!item.enable) return null;
-
             switch (item.section?.toLowerCase()) {
               case "navbar":
                 return (
@@ -90,34 +97,38 @@ export default function About({
                     imagePath={imagePath}
                     blog_list={blog_list}
                     categories={categories}
+                    contact_details={contact_details}
                   />
                 );
               case "banner":
                 return (
                   <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
                 );
+              case "breadcrumbs":
+                return (
+                  <FullContainer key={index}>
+                    <Container>
+                      <Breadcrumbs breadcrumbs={breadcrumbs} className="mt-7" />
+                    </Container>
+                  </FullContainer>
+                );
               case "text":
                 return (
                   <FullContainer>
-                    <Container className="py-16">
+                    <Container className="pb-16 pt-8">
                       <div className="grid grid-cols-about gap-16 w-full">
-                        <div className={font2.className}>
-                          <p
-                            className={cn(
-                              "text-xs uppercase text-yellow-600",
-                              myFont.className
-                            )}
-                          >
-                            LIFESTYLE BLOGGER
-                          </p>
-                          <div
-                            className="prose-xl"
-                            dangerouslySetInnerHTML={{ __html: content }}
-                          />
-                        </div>
+                        <div
+                          className="markdown-content about_me prose max-w-full"
+                          dangerouslySetInnerHTML={{ __html: content }}
+                        />
                         <Rightbar
-                          page="about"
+                          about_me={about_me}
+                          imagePath={imagePath}
+                          blog_list={blog_list}
+                          categories={categories}
                           contact_details={contact_details}
+                          lastFiveBlogs={reversedLastFiveBlogs}
+                          widgets={page?.widgets}
                         />
                       </div>
                     </Container>
@@ -131,60 +142,40 @@ export default function About({
                     logo={logo}
                     imagePath={imagePath}
                     contact_details={contact_details}
-                    copyright={copyright}
                     about_me={about_me}
+                    footer_type={footer_type}
                   />
                 );
+
+              default:
+                return null;
             }
           })
-        : "Page Disabled,under maintenance"}
+        : "Page Disabled, under maintenance"}
 
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "WebPage",
-              "@id": `http://${domain}/`,
+              "@type": "WebSite",
+              "@id": `http://${domain}/#website`,
               url: `http://${domain}/`,
-              name: meta?.title,
-              isPartOf: {
-                "@id": `http://${domain}`,
-              },
+              name: domain,
               description: meta?.description,
               inLanguage: "en-US",
-            },
-            {
-              "@type": "Organization",
-              "@id": `http://${domain}`,
-              name: domain,
-              url: `http://${domain}/`,
-              logo: {
-                "@type": "ImageObject",
-                url: `$${imagePath}/${logo.file_name}`,
+              publisher: {
+                "@type": "Organization",
+                "@id": `http://${domain}`,
               },
-              sameAs: [
-                "http://www.facebook.com",
-                "http://www.twitter.com",
-                "http://instagram.com",
-              ],
             },
             {
-              "@type": "ItemList",
-              url: `http://${domain}`,
-              name: "blog",
-              itemListElement: blog_list?.map((blog, index) => ({
+              "@type": "BreadcrumbList",
+              itemListElement: breadcrumbs.map((breadcrumb, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
-                item: {
-                  "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category
-                    ?.replaceAll(" ", "-")
-                    ?.toLowerCase()}/${blog.title
-                    .replaceAll(" ", "-")
-                    ?.toLowerCase()}`,
-                  name: blog.title,
-                },
+                name: breadcrumb.label,
+                item: `http://${domain}${breadcrumb.url}`,
               })),
             },
           ],
@@ -196,22 +187,16 @@ export default function About({
 
 export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
-  const logo = await callBackendApi({ domain, type: "logo" });
-
-  let project_id = logo?.data[0]?.project_id || null;
-  let imagePath = await getImagePath(project_id, domain);
+  const logo = await callBackendApi({ domain, query, type: "logo" });
+  const favicon = await callBackendApi({ domain, query, type: "favicon" });
   const about_me = await callBackendApi({ domain, query, type: "about_me" });
-  const layout = await callBackendApi({ domain, type: "layout" });
-
   const categories = await callBackendApi({
     domain,
     query,
     type: "categories",
   });
-
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const meta = await callBackendApi({ domain, query, type: "meta_home" });
-  const nav_type = await callBackendApi({ domain, type: "nav_type" });
+  const meta = await callBackendApi({ domain, query, type: "meta_about" });
   const contact_details = await callBackendApi({
     domain,
     query,
@@ -222,20 +207,29 @@ export async function getServerSideProps({ req, query }) {
     query,
     type: "copyright",
   });
+  const layout = await callBackendApi({ domain, type: "layout" });
+  const nav_type = await callBackendApi({ domain, type: "nav_type" });
+  const footer_type = await callBackendApi({ domain, type: "footer_type" });
+
+  let project_id = logo?.data[0]?.project_id || null;
+  let imagePath = null;
+  imagePath = await getImagePath(project_id, domain);
 
   return {
     props: {
-      logo: logo.data[0] || null,
-      about_me: about_me.data[0] || null,
+      domain,
       imagePath,
+      meta: meta?.data[0]?.value || null,
+      favicon: favicon?.data[0]?.file_name || null,
+      logo: logo.data[0] || null,
       layout: layout?.data[0]?.value || null,
+      about_me: about_me.data[0] || null,
       blog_list: blog_list.data[0].value,
       categories: categories?.data[0]?.value || null,
-      domain,
-      meta: meta?.data[0]?.value || null,
       contact_details: contact_details.data[0].value,
       copyright: copyright?.data[0]?.value || null,
       nav_type: nav_type?.data[0]?.value || {},
+      footer_type: footer_type?.data[0]?.value || {},
     },
   };
 }

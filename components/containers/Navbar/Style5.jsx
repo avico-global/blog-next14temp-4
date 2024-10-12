@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import Logo from "./Logo";
+import SocialShare from "@/components/common/SocialShare";
 import { sanitizeUrl } from "@/lib/myFun";
 
-export default function Style3({
+export default function Style5({
   staticPages,
   filteredBlogs,
   logo,
@@ -17,18 +18,20 @@ export default function Style3({
   toggleSidebar,
   category,
   searchQuery,
+  domain,
+  myblog,
 }) {
   const navLink =
     "font-semibold capitalize border-t-2 border-transparent hover:text-black hover:border-black transition-all p-3";
 
   return (
     <>
-      <div className="p-10 w-full border-b">
+      <div className="p-10 lg:my-4 w-full border-b">
         <Logo logo={logo} imagePath={imagePath} />
       </div>
-      <div className="border-b text-gray-500 sticky top-0 z-20 bg-white">
-        <div className="w-10/12 max-w-screen-lg flex items-center justify-between mx-auto">
-          <div className="flex items-center">
+      <div className="border-b text-gray-500 sticky top-0 z-20 bg-white ">
+        <div className="lg:w-10/12 max-w-screen-lg flex items-center justify-between mx-auto">
+          <div className=" hidden lg:flex items-center">
             {staticPages.map((item, index) => (
               <Link
                 key={index}
@@ -57,7 +60,7 @@ export default function Style3({
               </Link>
             ))}
           </div>
-          <div className="flex items-center justify-end gap-3 relative">
+          <div className="  flex justify-between items-center gap-28  lg:gap-0 my-2">
             {searchQuery && (
               <div className="absolute top-full p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px]">
                 {filteredBlogs?.map((item, index) => (

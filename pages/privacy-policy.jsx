@@ -161,7 +161,7 @@ export default function PriavcyPolicy({
               url: `http://${domain}/`,
               logo: {
                 "@type": "ImageObject",
-                url: `${imagePath}/${logo.file_name}`,
+                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
               },
               sameAs: [
                 "http://www.facebook.com",
@@ -195,9 +195,9 @@ export default function PriavcyPolicy({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${
-                    blog?.article_category
-                  }/${blog.title?.replaceAll(" ", "-")?.toLowerCase()}`,
+                  url: `http://${domain}/${blog?.article_category}/${blog.title
+                    ?.replaceAll(" ", "-")
+                    ?.toLowerCase()}`,
                   name: blog.title,
                 },
               })),

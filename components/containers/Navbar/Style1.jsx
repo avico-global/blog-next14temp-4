@@ -4,6 +4,7 @@ import { Menu, Search } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Logo from "./Logo";
+import { sanitizeUrl } from "@/lib/myFun";
 
 export default function Style1({
   staticPages,
@@ -21,7 +22,7 @@ export default function Style1({
   searchQuery,
 }) {
   return (
-    <FullContainer className="sticky top-0 z-20 bg-white py-2 lg:py-1">
+    <FullContainer className="sticky top-0 z-20 bg-white shadow py-2 lg:py-0">
       <div className="flex justify-between lg:grid grid-cols-nav w-11/12 md:w-10/12 mx-auto items-center">
         <div className="hidden lg:flex items-center">
           {staticPages.map((item, index) => (
@@ -48,14 +49,14 @@ export default function Style1({
               <Link
                 key={index}
                 title={item?.title}
-                href={`/${item?.title?.toLowerCase()?.replaceAll(" ", "-")}`}
+                href={`/${sanitizeUrl(item?.title)}`}
                 className={cn(
                   "font-semibold text-gray-500 capitalize hover:text-black border-transparent transition-all py-4 px-2 border-b-2 hover:border-black w-fit",
-                  (category === item?.title || isActive(`/${item?.title}`)) &&
+                  (category === item?.title || isActive(`/${item.title}`)) &&
                     "border-black text-black"
                 )}
               >
-                {item?.title}
+                {item.title}
               </Link>
             ))}
           </div>
@@ -87,11 +88,9 @@ export default function Style1({
                         <Link
                           key={index}
                           title={item.title}
-                          href={`/${item.article_category
-                            ?.toLowerCase()
-                            ?.replaceAll(" ", "-")}/${item?.title
-                            ?.replaceAll(" ", "-")
-                            ?.toLowerCase()}`}
+                          href={`/${sanitizeUrl(
+                            item.article_category
+                          )}/${sanitizeUrl(item?.title)}`}
                         >
                           <div className="p-2 hover:bg-gray-200 border-b text-gray-600">
                             {item.title}

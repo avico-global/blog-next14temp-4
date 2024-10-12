@@ -2,32 +2,34 @@ import React, { useEffect } from "react";
 
 // Components
 import Head from "next/head";
-import Container from "@/components/common/Container";
-import FullContainer from "@/components/common/FullContainer";
+import JsonLd from "@/components/json/JsonLd";
+import Footer from "@/components/containers/Footer";
 import GoogleTagManager from "@/lib/GoogleTagManager";
+import MustRead from "@/components/containers/MustRead";
+import FullContainer from "@/components/common/FullContainer";
+import SectionHeading from "@/components/common/SectionHeading";
 import MostPopular from "@/components/containers/MostPopular";
 import Rightbar from "@/components/containers/Rightbar";
-import Footer from "@/components/containers/Footer";
-import JsonLd from "@/components/json/JsonLd";
+import Container from "@/components/common/Container";
+import Navbar from "@/components/containers/Navbar";
+import { Raleway } from "next/font/google";
 import { useRouter } from "next/router";
 
 import {
-  callBackendApi,
   getDomain,
-  getImagePath,
   robotsTxt,
+  sanitizeUrl,
+  getImagePath,
+  callBackendApi,
 } from "@/lib/myFun";
 
 // Font
-import { Raleway } from "next/font/google";
-import LatestBlogs from "@/components/containers/LatestBlogs";
-import MustRead from "@/components/containers/MustRead";
-import SectionHeading from "@/components/common/SectionHeading";
-import Link from "next/link";
 import dayjs from "dayjs";
+import Link from "next/link";
 import Image from "next/image";
-import Navbar from "@/components/containers/Navbar";
 import Banner from "@/components/containers/Banner";
+import LatestBlogs from "@/components/containers/LatestBlogs";
+
 const myFont = Raleway({
   subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
 });
@@ -66,8 +68,6 @@ export default function Home({
   }, [category, router]);
 
   const page = layout?.find((page) => page.page === "home");
-
-  console.log("banner", banner);
 
   return (
     <div className={`min-h-screen ${myFont.className}`}>
@@ -180,14 +180,11 @@ export default function Home({
                                                 category?.title && (
                                                 <Link
                                                   title={item.imageTitle}
-                                                  href={`/${item.article_category
-                                                    ?.toLowerCase()
-                                                    ?.replaceAll(
-                                                      " ",
-                                                      "-"
-                                                    )}/${item.title
-                                                    ?.toLowerCase()
-                                                    ?.replaceAll(" ", "-")}`}
+                                                  href={`/${sanitizeUrl(
+                                                    item.article_category
+                                                  )}/${sanitizeUrl(
+                                                    item?.title
+                                                  )}`}
                                                   key={index}
                                                   className="flex flex-col gap-2 text-lg"
                                                 >
@@ -281,42 +278,32 @@ export default function Home({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": `https://${domain}/`,
-              url: `https://${domain}/`,
+              "@id": `http://${domain}/`,
+              url: `http://${domain}/`,
               name: meta?.title,
               isPartOf: {
-                "@id": `https://${domain}`,
+                "@id": `http://${domain}`,
               },
               description: meta?.description,
               inLanguage: "en-US",
               primaryImageOfPage: {
                 "@type": "ImageObject",
-                url: `${imagePath}/${banner?.file_name}`,
+                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner?.file_name}`,
                 width: 1920,
                 height: 1080,
               },
               mainEntityOfPage: {
                 "@type": "WebPage",
-                "@id": `https://${domain}/`,
+                "@id": `http://${domain}/`,
               },
-              // potentialAction: {
-              //   "@type": "SearchAction",
-              //   target: `http://${domain}/search?q={search_term_string}`,
-              //   "query-input": "required name=search_term_string",
-              // },
             },
             {
               "@type": "WebSite",
-              "@id": `https://${domain}/#website`,
-              url: `https://${domain}/`,
+              "@id": `http://${domain}/#website`,
+              url: `http://${domain}/`,
               name: domain,
               description: meta?.description,
               inLanguage: "en-US",
-              // potentialAction: {
-              //   "@type": "SearchAction",
-              //   target: `http://${domain}/search?q={search_term_string}`,
-              //   "query-input": "required name=search_term_string",
-              // },
               publisher: {
                 "@type": "Organization",
                 "@id": `http://${domain}`,
@@ -329,7 +316,7 @@ export default function Home({
               url: `http://${domain}/`,
               logo: {
                 "@type": "ImageObject",
-                url: `${imagePath}/${logo.file_name}`,
+                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
                 width: logo.width,
                 height: logo.height,
               },
@@ -348,11 +335,7 @@ export default function Home({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category
-                    ?.replaceAll(" ", "-")
-                    ?.toLowerCase()}/${blog.title
-                    .replaceAll(" ", "-")
-                    ?.toLowerCase()}`,
+                  url: `http://${domain}/${blog?.article_category}/${blog.key}`,
                   name: blog.title,
                   author: {
                     "@type": "Person",
@@ -362,7 +345,7 @@ export default function Home({
                   dateModified: blog.dateModified,
                   image: {
                     "@type": "ImageObject",
-                    url: `${imagePath}/${blog.imageFileName}`,
+                    url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${blog.imagePath}/${blog.imageFileName}`,
                     width: blog.imageWidth,
                     height: blog.imageHeight,
                   },
@@ -370,7 +353,7 @@ export default function Home({
                   description: blog.description,
                   mainEntityOfPage: {
                     "@type": "WebPage",
-                    "@id": `https://${domain}/${blog?.article_category
+                    "@id": `http://${domain}/${blog?.article_category
                       ?.replaceAll(" ", "-")
                       ?.toLowerCase()}/${blog.title
                       ?.replaceAll(" ", "-")
@@ -398,14 +381,13 @@ export async function getServerSideProps({ req }) {
     type: "contact_details",
   });
   let project_id = logo?.data[0]?.project_id || null;
-  // const testData=await downloadImages({domain, project_id});
-  // console.log("👊 ~ getServerSideProps ~ testData:", testData)
   const about_me = await callBackendApi({ domain, type: "about_me" });
   const copyright = await callBackendApi({ domain, type: "copyright" });
   const banner = await callBackendApi({ domain, type: "banner" });
   const layout = await callBackendApi({ domain, type: "layout" });
   const tag_list = await callBackendApi({ domain, type: "tag_list" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
+
   let imagePath = null;
   imagePath = await getImagePath(project_id, domain);
 
@@ -415,18 +397,18 @@ export async function getServerSideProps({ req }) {
     props: {
       domain,
       imagePath,
-      meta: meta?.data[0]?.value || null,
-      favicon: favicon?.data[0]?.file_name || null,
-      logo: logo?.data[0] || null,
-      layout: layout?.data[0]?.value || null,
-      blog_list: blog_list?.data[0]?.value || [],
-      categories: categories?.data[0]?.value || null,
-      copyright: copyright?.data[0].value || null,
-      about_me: about_me?.data[0] || null,
       banner: banner?.data[0],
-      contact_details: contact_details?.data[0]?.value,
+      logo: logo?.data[0] || null,
+      meta: meta?.data[0]?.value || null,
+      about_me: about_me?.data[0] || null,
+      layout: layout?.data[0]?.value || null,
       nav_type: nav_type?.data[0]?.value || {},
       tag_list: tag_list?.data[0]?.value || null,
+      blog_list: blog_list?.data[0]?.value || [],
+      copyright: copyright?.data[0].value || null,
+      favicon: favicon?.data[0]?.file_name || null,
+      categories: categories?.data[0]?.value || null,
+      contact_details: contact_details?.data[0]?.value,
     },
   };
 }

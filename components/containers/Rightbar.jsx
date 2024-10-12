@@ -5,6 +5,7 @@ import Link from "next/link";
 import MarkdownIt from "markdown-it";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/router";
+import { sanitizeUrl } from "@/lib/myFun";
 
 const md = new MarkdownIt();
 
@@ -64,7 +65,7 @@ export default function Rightbar({
           <Link
             key={index}
             title={item?.title}
-            href={`/${item?.title?.toLowerCase()?.replaceAll(" ", "-")}`}
+            href={`/${encodeURI(sanitizeUrl(item.title))}`}
             className={cn(
               "text-gray-500 capitalize w-full flex items-center gap-2 hover:text-black transition-all p-2 border-b-2 border-gray-100 hover:border-purple-200",
               (category === item?.title || isActive(`/${item?.title}`)) &&
@@ -90,7 +91,7 @@ export default function Rightbar({
             <Link
               key={index}
               title={item.tag}
-              href={`/tags/${item.tag?.replaceAll(" ", "-").toLowerCase()}`}
+              href={`/tags/${encodeURI(sanitizeUrl(item.tag))}`}
               className="bg-gray-100 hover:bg-gray-200 transition-all cursor-pointer rounded py-1 text-sm px-2"
             >
               {item.tag}
@@ -121,14 +122,12 @@ export default function Rightbar({
       <div className="p-2">
         {lastFiveBlogs?.reverse().map((item, index) => (
           <Link
-            title={item.article_category}
-            href={`/${item.article_category
-              ?.toLowerCase()
-              ?.replaceAll(" ", "-")}/${item.title
-              .replace(/ /g, "-")
-              .toLowerCase()}`}
-            className="grid grid-cols-widget gap-3 p-2 rounded-md hover:shadow-md border border-transparent hover:border-gray-200 transition-all"
             key={index}
+            title={item.article_category}
+            href={`/${encodeURI(
+              sanitizeUrl(item.article_category)
+            )}/${encodeURI(sanitizeUrl(item.title))}`}
+            className="grid grid-cols-widget gap-3 p-2 rounded-md hover:shadow-md border border-transparent hover:border-gray-200 transition-all"
           >
             <div className="overflow-hidden relative min-h-20 rounded-md w-full bg-black flex-1">
               <Image
@@ -160,19 +159,37 @@ export default function Rightbar({
   );
 
   return (
-    <div className="h-fit sticky top-0 flex flex-col gap-10">
+    <div className="h-fit sticky top-0 flex flex-col gap-14">
       {widgets.map((item, index) => {
         if (!item.enable) return null;
 
         switch (item.name?.toLowerCase()) {
           case "about":
-            return renderAbout();
+            return (
+              <React.Fragment key={item.name}>{renderAbout()}</React.Fragment>
+            );
           case "categories":
-            return categories.length > 0 && renderCategories();
-          case "article tags":
-            return tag_list.length > 0 && renderTags();
+            return (
+              categories.length > 0 && (
+                <React.Fragment key={item.name}>
+                  {renderCategories()}
+                </React.Fragment>
+              )
+            );
+          // case "article tags":
+          //   return (
+          //     tag_list.length > 0 && (
+          //       <React.Fragment key={item.name}>{renderTags()}</React.Fragment>
+          //     )
+          //   );
           case "latest posts":
-            return lastFiveBlogs.length > 0 && renderLatestPosts();
+            return (
+              lastFiveBlogs.length > 0 && (
+                <React.Fragment key={item.name}>
+                  {renderLatestPosts()}
+                </React.Fragment>
+              )
+            );
           default:
             return null;
         }

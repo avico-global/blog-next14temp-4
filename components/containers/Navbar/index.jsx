@@ -7,6 +7,12 @@ import Style1 from "./Style1";
 import Style2 from "./Style2";
 import Style3 from "./Style3";
 import Style4 from "./Style4";
+import Style5 from "./Style5";
+import Style6 from "./Style6";
+import Style7 from "./Style7";
+import Style8 from "./Style8";
+import Style9 from "./Style9";
+import { sanitizeUrl } from "@/lib/myFun";
 
 const Navbar = ({
   logo,
@@ -103,6 +109,16 @@ const Navbar = ({
         return <Style3 {...props} />;
       case "style_4":
         return <Style4 {...props} />;
+      case "style_5":
+        return <Style5 {...props} />;
+      case "style_6":
+        return <Style6 {...props} />;
+      case "style_7":
+        return <Style7 {...props} />;
+      case "style_8":
+        return <Style8 {...props} />;
+      case "style_9":
+        return <Style9 {...props} />;
       default:
         return null;
     }
@@ -142,15 +158,15 @@ const Navbar = ({
           {categories?.map((item, index) => (
             <Link
               key={index}
-              title={item?.title}
-              href={`/${item?.title?.toLowerCase()?.replaceAll(" ", "-")}`}
+              title={item}
+              href={`/${sanitizeUrl(item?.title)}`}
               className={cn(
                 "font-semibold text-gray-500 capitalize hover:text-black transition-all py-3 px-2 border-b hover:border-black",
                 (category === item?.title || isActive(`/${item?.title}`)) &&
                   "border-black text-black"
               )}
             >
-              {item?.title}
+              {item.title}
             </Link>
           ))}
           <Link

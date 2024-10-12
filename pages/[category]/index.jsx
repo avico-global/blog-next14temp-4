@@ -6,7 +6,12 @@ import Navbar from "@/components/containers/Navbar";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import FullContainer from "@/components/common/FullContainer";
-import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+import {
+  callBackendApi,
+  getDomain,
+  getImagePath,
+  sanitizeUrl,
+} from "@/lib/myFun";
 import Rightbar from "@/components/containers/Rightbar";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import Container from "@/components/common/Container";
@@ -252,17 +257,6 @@ export default function Categories({
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "WebPage",
-              "@id": `http://${domain}/${category}`,
-              url: `http://${domain}/${category}`,
-              name: meta?.title,
-              isPartOf: {
-                "@id": `http://${domain}`,
-              },
-              description: meta?.description,
-              inLanguage: "en-US",
-            },
-            {
               "@type": "BreadcrumbList",
               itemListElement: breadcrumbs.map((breadcrumb, index) => ({
                 "@type": "ListItem",
@@ -272,19 +266,16 @@ export default function Categories({
               })),
             },
             {
-              "@type": "Organization",
-              "@id": `http://${domain}`,
-              name: domain,
+              "@type": "WebSite",
+              "@id": `http://${domain}/#website`,
               url: `http://${domain}/`,
-              logo: {
-                "@type": "ImageObject",
-                url: `${imagePath}/${logo.file_name}`,
+              name: domain,
+              description: meta?.description,
+              inLanguage: "en-US",
+              publisher: {
+                "@type": "Organization",
+                "@id": `http://${domain}`,
               },
-              sameAs: [
-                "http://www.facebook.com",
-                "http://www.twitter.com",
-                "http://instagram.com",
-              ],
             },
             {
               "@type": "ItemList",
@@ -295,11 +286,9 @@ export default function Categories({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category
-                    ?.replaceAll(" ", "-")
-                    ?.toLowerCase()}/${blog.title
-                    .replaceAll(" ", "-")
-                    ?.toLowerCase()}`,
+                  url: `http://${domain}/${sanitizeUrl(
+                    blog?.article_category.replaceAll(" ", "-")
+                  )}/${sanitizeUrl(blog?.title)}`,
                   name: blog.title,
                 },
               })),

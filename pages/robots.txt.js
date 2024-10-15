@@ -8,9 +8,8 @@ export const getServerSideProps = async ({ req, res }) => {
   const domain = getDomain(req?.headers?.host);
   try {
     const robots = fs.readFileSync(
-      `${process.cwd()}/public/json/${domain}/robots.txt`
+      `${process.cwd()}/public/robots/${domain}/robots.txt`
     );
-
     res.setHeader("Content-Type", "text/plain");
     res.write(robots);
     res.end();

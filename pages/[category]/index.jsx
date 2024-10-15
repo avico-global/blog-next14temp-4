@@ -269,7 +269,7 @@ export default function Category({
                 item: {
                   "@type": "Article",
                   url: `http://${domain}/${sanitizeUrl(
-                    blog?.article_category.replaceAll(" ", "-")
+                    blog?.article_category?.replaceAll(" ", "-")
                   )}/${sanitizeUrl(blog?.title)}`,
                   name: blog.title,
                 },

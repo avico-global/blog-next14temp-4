@@ -20,7 +20,7 @@ export default function LatestBlogs({ articles, imagePath }) {
               )}`}
               title={item.imageTitle || "IMAGE"}
               key={index}
-              className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col gap-2 first:gap-4 text-lg first:text-xl first:mb-5"
+              className="lg:first:col-span-4 lg:first:row-span-4 first:h-[600px] flex flex-col gap-2 text-lg first:text-xl first:mb-5"
             >
               <div
                 className={`overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-gray-300 rounded-lg flex items-center flex-col ${

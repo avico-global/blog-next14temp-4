@@ -18,12 +18,12 @@ export default function MustRead({ articles, imagePath }) {
               href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
                 item?.title
               )}`}
-              title={item.imageTitle || "image"}
+              title={item.imageTitle || "IMAGE"}
               key={index}
-              className="lg:first:col-span-3 lg:first:row-span-3 flex flex-col   gap-2 first:gap-4 text-lg first:text-xl first:mb-5"
+              className="lg:first:col-span-4 lg:first:row-span-4 first:h-[600px] flex flex-col gap-2 text-lg first:text-xl first:mb-5"
             >
               <div
-                className={`overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-black rounded-md ${
+                className={`overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-gray-300 rounded-lg flex items-center flex-col ${
                   index === 0 && "flex-1"
                 }`}
               >
@@ -33,11 +33,14 @@ export default function MustRead({ articles, imagePath }) {
                   src={`${imagePath}/${item.image}`}
                   fill={true}
                   loading="lazy"
-                  className="w-full h-full object-cover absolute top-0 scale-125"
+                  className="w-full h-full object-cover absolute top-0 scale-105"
                 />
+                <p className="bg-purple-500/80 backdrop-blur-sm uppercase text-xs text-center font-semibold text-white pt-1 pb-[1px] px-4 rounded-t-md absolute bottom-0 mx-auto">
+                  {item?.article_category}
+                </p>
               </div>
               <div>
-                <p className="font-bold text-center text-inherit leading-tight">
+                <p className="font-bold text-center text-inherit leading-tight hover:underline">
                   {item.title}
                 </p>
                 <div className="flex items-center justify-center gap-2 mt-1">
@@ -47,7 +50,7 @@ export default function MustRead({ articles, imagePath }) {
                   </p>
                   <span className="text-gray-400">--</span>
                   <p className="text-xs text-gray-400">
-                    {dayjs(item.published_at).format("MMM D, YYYY")}
+                    {dayjs(item?.published_at)?.format("MMM D, YYYY")}
                   </p>
                 </div>
               </div>

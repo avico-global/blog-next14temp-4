@@ -23,8 +23,8 @@ export default function Style1({
 }) {
   return (
     <FullContainer className="sticky top-0 z-20 bg-white shadow lg:py-0">
-      <div className="flex justify-between lg:grid grid-cols-nav w-11/12 md:w-10/12 mx-auto items-center">
-        <div className="hidden lg:flex items-center">
+      <div className="flex justify-between lg:grid grid-cols-nav w-11/12 md:w-10/12 gap-10 mx-auto items-center">
+        <div className="hidden lg:flex items-center justify-end">
           {staticPages.map((item, index) => (
             <Link
               key={index}
@@ -43,7 +43,7 @@ export default function Style1({
           <Logo logo={logo} imagePath={imagePath} />
         </div>
         <div
-          className="flex items-center justify-end gap-3 text-gray-500 relative "
+          className="flex items-center justify-between gap-3 text-gray-500 relative"
           ref={searchContainerRef}
         >
           <div className="hidden lg:flex items-center justify-end">
@@ -66,10 +66,6 @@ export default function Style1({
             <Search
               className="w-5 md:w-4 text-black cursor-pointer"
               onClick={handleSearchToggle}
-            />
-            <Menu
-              onClick={toggleSidebar}
-              className="w-6 h-6 ml-1 text-black lg:hidden"
             />
           </div>
           {openSearch && (

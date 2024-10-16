@@ -13,6 +13,8 @@ import Style7 from "./Style7";
 import Style8 from "./Style8";
 import Style9 from "./Style9";
 import { sanitizeUrl } from "@/lib/myFun";
+import FullContainer from "@/components/common/FullContainer";
+import Logo from "./Logo";
 
 const Navbar = ({
   logo,
@@ -126,7 +128,68 @@ const Navbar = ({
 
   return (
     <>
-      {renderActiveStyle()}
+      <div className="hidden lg:block">{renderActiveStyle()}</div>
+
+      <FullContainer className="lg:hidden sticky top-0 z-20 bg-white shadow lg:py-0">
+        <div className="flex justify-between lg:grid grid-cols-nav w-11/12 md:w-10/12 mx-auto items-center">
+          <div className="py-2">
+            <Logo logo={logo} imagePath={imagePath} />
+          </div>
+          <div
+            className="flex items-center justify-end gap-3 text-gray-500 relative "
+            ref={searchContainerRef}
+          >
+            <div className="flex items-center justify-end gap-2">
+              <Search
+                className="w-5 md:w-4 text-black cursor-pointer"
+                onClick={handleSearchToggle}
+              />
+              <Menu
+                onClick={toggleSidebar}
+                className="w-6 h-6 ml-1 text-black lg:hidden"
+              />
+            </div>
+            {openSearch && (
+              <>
+                <div className="fixed lg:absolute top-16 lg:right-0 lg:ml-auto w-full lg:w-fit flex flex-col items-start justify-center lg:justify-end left-0">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="lg:text-xl border border-gray-300 inputField rounded-md outline-none bg-white shadow-xl p-2 px-3 mx-auto transition-opacity duration-300 ease-in-out opacity-100 w-5/6 lg:w-[650px] focus:ring-2 focus:ring-yellow-500"
+                    placeholder="Search..."
+                    autoFocus
+                  />
+                  {searchQuery && (
+                    <div className="lg:absolute top-full p-1 lg:p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 mx-auto w-5/6 lg:w-[650px]">
+                      {filteredBlogs?.length > 0 ? (
+                        filteredBlogs.map((item, index) => (
+                          <Link
+                            key={index}
+                            title={item.title}
+                            href={`/${sanitizeUrl(
+                              item.article_category
+                            )}/${sanitizeUrl(item?.title)}`}
+                          >
+                            <div className="p-2 hover:bg-gray-200 border-b text-gray-600">
+                              {item.title}
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="p-2 text-gray-600">
+                          No articles found.
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </FullContainer>
+
       <div
         ref={addFromRef}
         className={`h-screen w-7/12 transition-all overflow-y-scroll z-50 fixed right-0 top-0 px-4 bg-white dark:bg-gray-800 capitalize ${

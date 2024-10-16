@@ -62,7 +62,7 @@ const Logo = ({ logo, imagePath }) => {
     <Link
       href="/"
       title={`Logo - ${hostName}`}
-      className="flex items-center justify-center mr-10"
+      className="flex items-center justify-center"
     >
       {logoType === "image" ? (
         <Image

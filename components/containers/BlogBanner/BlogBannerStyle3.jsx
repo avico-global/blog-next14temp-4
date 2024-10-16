@@ -7,7 +7,7 @@ import FullContainer from "@/components/common/FullContainer";
 export default function BlogBannerStyle3({ myblog, imagePath }) {
   return (
     <FullContainer>
-      <Container className="overflow-hidden relative">
+      <Container className="overflow-hidden relative rounded-xl mt-5">
         <Image
           fill={true}
           loading="eager"
@@ -23,8 +23,8 @@ export default function BlogBannerStyle3({ myblog, imagePath }) {
         />
         <FullContainer
           style={{
-            backgroundColor: `rgba(10, 0, 0, ${myblog?.opacity / 100})`,
-            color: myblog?.textColor || "white",
+            backgroundColor: `rgba(0, 0, 0, ${myblog?.value?.opacity / 100})`,
+            color: myblog?.value?.textColor || "white",
           }}
           className="gap-3 flex flex-col items-center justify-center py-28 text-center"
         >

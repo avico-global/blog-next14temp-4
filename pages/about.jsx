@@ -16,23 +16,21 @@ import useBreadcrumbs from "@/lib/useBreadcrumbs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 export default function About({
-  logo,
-  about_me,
-  imagePath,
   categories,
+  imagePath,
   blog_list,
-  domain,
-  meta,
-  contact_details,
   favicon,
-  layout,
+  domain,
+  logo,
+  meta,
+  page,
+  about_me,
   nav_type,
   footer_type,
+  contact_details,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me?.value);
-
-  const page = layout?.find((page) => page.page === "about");
 
   const reversedLastFiveBlogs = useMemo(() => {
     const lastFiveBlogs = blog_list?.slice(-5);
@@ -154,14 +152,14 @@ export default function About({
           "@graph": [
             {
               "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
+              "@id": `https://${domain}/about`,
+              url: `https://${domain}/about`,
+              name: meta?.title,
               description: meta?.description,
               inLanguage: "en-US",
               publisher: {
                 "@type": "Organization",
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
             },
             {
@@ -170,7 +168,7 @@ export default function About({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
           ],
@@ -180,31 +178,45 @@ export default function About({
   );
 }
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req }) {
   const domain = getDomain(req?.headers?.host);
-  const logo = await callBackendApi({ domain, query, type: "logo" });
-  const favicon = await callBackendApi({ domain, query, type: "favicon" });
-  const about_me = await callBackendApi({ domain, query, type: "about_me" });
+
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
+  const about_me = await callBackendApi({ domain, type: "about_me" });
   const categories = await callBackendApi({
     domain,
-    query,
     type: "categories",
   });
-  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const meta = await callBackendApi({ domain, query, type: "meta_about" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
+  const meta = await callBackendApi({ domain, type: "meta_about" });
   const contact_details = await callBackendApi({
     domain,
-    query,
     type: "contact_details",
   });
   const copyright = await callBackendApi({
     domain,
-    query,
     type: "copyright",
   });
-  const layout = await callBackendApi({ domain, type: "layout" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
   const footer_type = await callBackendApi({ domain, type: "footer_type" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "about");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = null;
@@ -212,12 +224,12 @@ export async function getServerSideProps({ req, query }) {
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       meta: meta?.data[0]?.value || null,
       favicon: favicon?.data[0]?.file_name || null,
       logo: logo.data[0] || null,
-      layout: layout?.data[0]?.value || null,
       about_me: about_me.data[0] || null,
       blog_list: blog_list.data[0].value,
       categories: categories?.data[0]?.value || null,

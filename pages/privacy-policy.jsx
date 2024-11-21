@@ -16,17 +16,16 @@ import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
 import Head from "next/head";
 
 export default function PriavcyPolicy({
-  domain,
-  imagePath,
-  logo,
-  favicon,
   blog_list,
-  categories,
+  favicon,
+  domain,
+  logo,
   meta,
-  contact_details,
+  page,
   policy,
-  layout,
   nav_type,
+  imagePath,
+  categories,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt.render(policy || "");
@@ -40,12 +39,8 @@ export default function PriavcyPolicy({
     }
   }, [currentPath, router]);
 
-  const page = layout?.find((page) => page.page === "privacy policy");
-
   return (
-    <div
-      className={`min-h-screen flex flex-col justify-between ${myFont.className}`}
-    >
+    <div className="min-h-screen flex flex-col">
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>
@@ -139,62 +134,14 @@ export default function PriavcyPolicy({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": `http://${domain}/`,
-              url: `http://${domain}/`,
+              "@id": `https://${domain}/privacy-policy`,
+              url: `https://${domain}/privacy-policy`,
               name: meta?.title,
+              description: meta?.description,
               isPartOf: {
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
-              description: meta?.description,
               inLanguage: "en-US",
-            },
-            {
-              "@type": "Organization",
-              "@id": `http://${domain}`,
-              name: domain,
-              url: `http://${domain}/`,
-              logo: {
-                "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
-              },
-              sameAs: [
-                "http://www.facebook.com",
-                "http://www.twitter.com",
-                "http://instagram.com",
-              ],
-            },
-            {
-              "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
-              description: meta?.description,
-              inLanguage: "en-US",
-              // potentialAction: {
-              //   "@type": "SearchAction",
-              //   target: `http://${domain}/search?q={search_term_string}`,
-              //   "query-input": "required name=search_term_string",
-              // },
-              publisher: {
-                "@type": "Organization",
-                "@id": `http://${domain}`,
-              },
-            },
-            {
-              "@type": "ItemList",
-              url: `http://${domain}`,
-              name: "blog",
-              itemListElement: blog_list?.map((blog, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                item: {
-                  "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category}/${blog.title
-                    ?.replaceAll(" ", "-")
-                    ?.toLowerCase()}`,
-                  name: blog.title,
-                },
-              })),
             },
             {
               "@type": "BreadcrumbList",
@@ -202,7 +149,7 @@ export default function PriavcyPolicy({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
           ],
@@ -212,26 +159,41 @@ export default function PriavcyPolicy({
   );
 }
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req }) {
   const domain = getDomain(req?.headers?.host);
-  const meta = await callBackendApi({ domain, query, type: "meta_privacy" });
-  const logo = await callBackendApi({ domain, query, type: "logo" });
-  const favicon = await callBackendApi({ domain, query, type: "favicon" });
-  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
+
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
+  const meta = await callBackendApi({ domain, type: "meta_privacy" });
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
   const categories = await callBackendApi({
     domain,
-    query,
     type: "categories",
   });
   const contact_details = await callBackendApi({
     domain,
-    query,
     type: "contact_details",
   });
-  const terms = await callBackendApi({ domain, query, type: "terms" });
-  const policy = await callBackendApi({ domain, query, type: "policy" });
-  const layout = await callBackendApi({ domain, type: "layout" });
+  const terms = await callBackendApi({ domain, type: "terms" });
+  const policy = await callBackendApi({ domain, type: "policy" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "privacy policy");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = null;
@@ -239,11 +201,11 @@ export async function getServerSideProps({ req, query }) {
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       favicon: favicon?.data[0]?.file_name || null,
       logo: logo?.data[0] || null,
-      layout: layout?.data[0]?.value || null,
       blog_list: blog_list?.data[0]?.value || [],
       categories: categories?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,

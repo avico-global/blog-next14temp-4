@@ -23,7 +23,7 @@ export default function Terms({
   terms,
   logo,
   meta,
-  layout,
+  page,
   imagePath,
   contact_details,
 }) {
@@ -38,8 +38,6 @@ export default function Terms({
       router.replace("/privacy-policy");
     }
   }, [currentPath, router]);
-
-  const page = layout?.find((page) => page.page === "terms");
 
   return (
     <div>
@@ -138,14 +136,14 @@ export default function Terms({
           "@graph": [
             {
               "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
+              "@id": `https://${domain}/terms-and-conditions`,
+              url: `https://${domain}/terms-and-conditions`,
+              name: meta?.title,
               description: meta?.description,
               inLanguage: "en-US",
               publisher: {
                 "@type": "Organization",
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
             },
             {
@@ -154,7 +152,7 @@ export default function Terms({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
           ],
@@ -166,6 +164,11 @@ export default function Terms({
 
 export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
+
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
 
   const meta = await callBackendApi({ domain, query, type: "meta_terms" });
   const logo = await callBackendApi({ domain, query, type: "logo" });
@@ -182,8 +185,19 @@ export async function getServerSideProps({ req, query }) {
     type: "contact_details",
   });
   const terms = await callBackendApi({ domain, query, type: "terms" });
-  const layout = await callBackendApi({ domain, type: "layout" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "terms");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = null;
@@ -195,13 +209,13 @@ export async function getServerSideProps({ req, query }) {
       imagePath,
       logo: logo?.data[0] || null,
       favicon: favicon?.data[0]?.file_name || null,
-      layout: layout?.data[0]?.value || null,
       blog_list: blog_list?.data[0]?.value || [],
       categories: categories?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,
       contact_details: contact_details?.data[0]?.value || null,
       terms: terms?.data[0]?.value || "",
       nav_type: nav_type?.data[0]?.value || {},
+      page,
     },
   };
 }

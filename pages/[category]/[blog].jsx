@@ -1,28 +1,29 @@
 import React, { useEffect } from "react";
+import Footer from "@/components/containers/Footer";
+import LatestBlogs from "@/components/containers/LatestBlogs";
 import FullContainer from "@/components/common/FullContainer";
 import Rightbar from "@/components/containers/Rightbar";
 import Container from "@/components/common/Container";
-import Footer from "@/components/containers/Footer";
+import Navbar from "@/components/containers/Navbar";
+import useBreadcrumbs from "@/utils/useBreadcrumbs";
+import JsonLd from "@/components/json/JsonLd";
 import { useRouter } from "next/router";
 import MarkdownIt from "markdown-it";
-import LatestBlogs from "@/components/containers/LatestBlogs";
 import Head from "next/head";
+
 import {
-  callBackendApi,
   getDomain,
-  getImagePath,
   sanitizeUrl,
+  getImagePath,
+  callBackendApi,
 } from "@/lib/myFun";
 
-import JsonLd from "@/components/json/JsonLd";
 import GoogleTagManager from "@/lib/GoogleTagManager";
-import useBreadcrumbs from "@/utils/useBreadcrumbs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import SocialShare from "@/components/containers/SocialShare";
 import MostPopular from "@/components/containers/MostPopular";
-import MustRead from "@/components/containers/MustRead";
-import Navbar from "@/components/containers/Navbar";
 import BlogBanner from "@/components/containers/BlogBanner";
+import MustRead from "@/components/containers/MustRead";
 
 export default function Blog({
   contact_details,
@@ -32,7 +33,7 @@ export default function Blog({
   tag_list,
   domain,
   logo,
-  layout,
+  page,
   myblog,
   about_me,
   nav_type,
@@ -65,8 +66,6 @@ export default function Blog({
       router.replace(`/${newCategory}/${newBlog}`);
     }
   }, [category, router, blog]);
-
-  const page = layout?.find((page) => page.page?.toLowerCase() === "blog page");
 
   return (
     <div>
@@ -229,25 +228,46 @@ export default function Blog({
               mainEntityOfPage: {
                 "@type": "WebPage",
                 "@id": myblog
-                  ? `http://${domain}${sanitizeUrl(
-                      myblog?.article_category
-                    )}/${sanitizeUrl(myblog?.value?.title)}`
+                  ? `https://${domain}${sanitizeUrl(
+                      myblog.article_category
+                    )}/${sanitizeUrl(myblog.value.title)}`
+                  : "",
+                url: myblog
+                  ? `https://${domain}${sanitizeUrl(
+                      myblog.article_category
+                    )}/${sanitizeUrl(myblog.value.title)}`
                   : "",
               },
-              headline: myblog?.value?.title,
-              description: myblog?.value?.articleContent,
-              datePublished: myblog?.value?.published_at,
-              author: myblog?.value?.author,
-              image: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${myblog?.file_name}`,
-              publisher: "Site Manager",
+              headline: myblog?.value?.title || "Default Title",
+              description:
+                myblog?.value?.articleContent || "Default Description",
+              datePublished:
+                myblog?.value?.published_at || new Date().toISOString(),
+              author: {
+                "@type": "Person",
+                name: myblog?.value?.author || "Unknown Author",
+              },
+              image: myblog?.file_name
+                ? `${imagePath}/${myblog.file_name}`
+                : `${imagePath}/default-image.jpg`,
+              publisher: {
+                "@type": "Organization",
+                name: "Site Manager",
+                logo: {
+                  "@type": "ImageObject",
+                  url: `${imagePath}/${logo?.file_name}`,
+                },
+              },
             },
             {
               "@type": "BreadcrumbList",
               itemListElement: breadcrumbs.map((breadcrumb, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
-                name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
+                name: breadcrumb.label || `Breadcrumb ${index + 1}`,
+                item: breadcrumb.url
+                  ? `https://${domain}${breadcrumb.url}`
+                  : `https://${domain}`,
               })),
             },
           ],
@@ -261,15 +281,21 @@ export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
   const { category, blog } = query;
 
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
   const categories = await callBackendApi({ domain, type: "categories" });
   const blog_list = await callBackendApi({ domain, type: "blog_list" });
 
-  const isValidBlog = blog_list?.data[0]?.value?.find(
-    (item) => sanitizeUrl(item.title) === sanitizeUrl(blog)
-  );
+  const isValidBlog = blog_list?.data[0]?.value?.find((item) => {
+    const sanitizedTitle = sanitizeUrl(item.title);
+    return sanitizedTitle === blog;
+  });
 
   const categoryExists = categories?.data[0]?.value?.some(
-    (cat) => sanitizeUrl(cat?.title) === sanitizeUrl(category)
+    (cat) => sanitizeUrl(cat?.title) === category
   );
 
   if (!categoryExists || !isValidBlog) {
@@ -287,21 +313,32 @@ export async function getServerSideProps({ req, query }) {
     domain,
     type: "contact_details",
   });
-  const layout = await callBackendApi({ domain, type: "layout" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
   const blog_type = await callBackendApi({ domain, type: "blog_type" });
   const footer_type = await callBackendApi({ domain, type: "footer_type" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page?.toLowerCase() === "blog page");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = await getImagePath(project_id, domain);
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       logo: logo?.data[0] || null,
       myblog: myblog?.data[0] || {},
-      layout: layout?.data[0]?.value || null,
       blog_list: blog_list.data[0]?.value || null,
       tag_list: tag_list?.data[0]?.value || null,
       categories: categories?.data[0]?.value || null,

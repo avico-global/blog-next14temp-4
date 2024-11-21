@@ -30,18 +30,18 @@ import Banner from "@/components/containers/Banner";
 import LatestBlogs from "@/components/containers/LatestBlogs";
 
 export default function Home({
-  logo,
-  blog_list,
   imagePath,
-  categories,
+  blog_list,
   domain,
+  logo,
   meta,
-  about_me,
-  nav_type,
+  page,
   banner,
   favicon,
-  layout,
+  about_me,
   tag_list,
+  nav_type,
+  categories,
 }) {
   const router = useRouter();
   const { category } = router.query;
@@ -61,8 +61,6 @@ export default function Home({
       router.replace("/about");
     }
   }, [category, router]);
-
-  const page = layout?.find((page) => page.page === "home");
 
   return (
     <div>
@@ -277,64 +275,64 @@ export default function Home({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": `http://${domain}/`,
-              url: `http://${domain}/`,
+              "@id": `https://${domain}/`,
+              url: `https://${domain}/`,
               name: meta?.title,
               isPartOf: {
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
               description: meta?.description,
               inLanguage: "en-US",
               primaryImageOfPage: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${banner?.file_name}`,
+                url: `${imagePath}/${banner?.file_name}`,
                 width: 1920,
                 height: 1080,
               },
               mainEntityOfPage: {
                 "@type": "WebPage",
-                "@id": `http://${domain}/`,
+                "@id": `https://${domain}`,
               },
             },
             {
               "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
+              "@id": `https://${domain}`,
+              url: `https://${domain}`,
               name: domain,
               description: meta?.description,
               inLanguage: "en-US",
               publisher: {
                 "@type": "Organization",
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
             },
             {
               "@type": "Organization",
-              "@id": `http://${domain}`,
+              "@id": `https://${domain}`,
               name: domain,
-              url: `http://${domain}/`,
+              url: `https://${domain}`,
               logo: {
                 "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
+                url: `${imagePath}/${logo.file_name}`,
                 width: logo.width,
                 height: logo.height,
               },
               sameAs: [
-                "http://www.facebook.com",
-                "http://www.twitter.com",
-                "http://instagram.com",
+                "https://www.facebook.com",
+                "https://www.twitter.com",
+                "https://instagram.com",
               ],
             },
             {
               "@type": "ItemList",
-              url: `http://${domain}`,
+              url: `https://${domain}`,
               name: "blog",
               itemListElement: blog_list?.map((blog, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category}/${blog.key}`,
+                  url: `https://${domain}/${blog?.article_category}/${blog.key}`,
                   name: blog.title,
                   author: {
                     "@type": "Person",
@@ -344,7 +342,7 @@ export default function Home({
                   dateModified: blog.dateModified,
                   image: {
                     "@type": "ImageObject",
-                    url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${blog.imagePath}/${blog.imageFileName}`,
+                    url: `${imagePath}/${blog.image}`,
                     width: blog.imageWidth,
                     height: blog.imageHeight,
                   },
@@ -352,11 +350,9 @@ export default function Home({
                   description: blog.description,
                   mainEntityOfPage: {
                     "@type": "WebPage",
-                    "@id": `http://${domain}/${blog?.article_category
-                      ?.replaceAll(" ", "-")
-                      ?.toLowerCase()}/${blog.title
-                      ?.replaceAll(" ", "-")
-                      ?.toLowerCase()}`,
+                    "@id": `https://${domain}/${sanitizeUrl(
+                      blog?.article_category
+                    )}/${sanitizeUrl(blog.title)}`,
                   },
                 },
               })),
@@ -370,6 +366,12 @@ export default function Home({
 
 export async function getServerSideProps({ req }) {
   const domain = getDomain(req?.headers?.host);
+
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
   const meta = await callBackendApi({ domain, type: "meta_home" });
   const logo = await callBackendApi({ domain, type: "logo" });
   const favicon = await callBackendApi({ domain, type: "favicon" });
@@ -383,24 +385,35 @@ export async function getServerSideProps({ req }) {
   const about_me = await callBackendApi({ domain, type: "about_me" });
   const copyright = await callBackendApi({ domain, type: "copyright" });
   const banner = await callBackendApi({ domain, type: "banner" });
-  const layout = await callBackendApi({ domain, type: "layout" });
   const tag_list = await callBackendApi({ domain, type: "tag_list" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
 
   let imagePath = null;
   imagePath = await getImagePath(project_id, domain);
 
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "home");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
+
   robotsTxt({ domain });
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       banner: banner?.data[0],
       logo: logo?.data[0] || null,
       meta: meta?.data[0]?.value || null,
       about_me: about_me?.data[0] || null,
-      layout: layout?.data[0]?.value || null,
       nav_type: nav_type?.data[0]?.value || {},
       tag_list: tag_list?.data[0]?.value || null,
       blog_list: blog_list?.data[0]?.value || [],

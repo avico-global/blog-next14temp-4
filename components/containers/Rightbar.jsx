@@ -176,12 +176,12 @@ export default function Rightbar({
                 </React.Fragment>
               )
             );
-          // case "article tags":
-          //   return (
-          //     tag_list.length > 0 && (
-          //       <React.Fragment key={item.name}>{renderTags()}</React.Fragment>
-          //     )
-          //   );
+          case "article tags":
+            return (
+              tag_list?.length > 0 && (
+                <React.Fragment key={item.name}>{renderTags()}</React.Fragment>
+              )
+            );
           case "latest posts":
             return (
               lastFiveBlogs.length > 0 && (

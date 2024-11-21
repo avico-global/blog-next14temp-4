@@ -14,18 +14,18 @@ import useBreadcrumbs from "@/utils/useBreadcrumbs";
 import Rightbar from "@/components/containers/Rightbar";
 
 export default function Tags({
-  logo,
-  blog_list,
-  imagePath,
-  meta,
-  domain,
   categories,
+  blog_list,
   about_me,
-  contact_details,
   favicon,
-  layout,
+  domain,
+  logo,
+  meta,
+  page,
   tag_list,
   nav_type,
+  imagePath,
+  contact_details,
 }) {
   const router = useRouter();
   const { category } = router.query;
@@ -51,8 +51,6 @@ export default function Tags({
       ))}
     </div>
   );
-
-  const page = layout?.find((page) => page.page === "tags");
 
   return (
     <div>
@@ -170,11 +168,11 @@ export default function Tags({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": `http://${domain}/${category}`,
-              url: `http://${domain}/${category}`,
+              "@id": `https://${domain}/tags`,
+              url: `https://${domain}/tags`,
               name: meta?.title,
               isPartOf: {
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
               description: meta?.description,
               inLanguage: "en-US",
@@ -185,55 +183,7 @@ export default function Tags({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
-              })),
-            },
-            {
-              "@type": "Organization",
-              "@id": `http://${domain}`,
-              name: domain,
-              url: `http://${domain}/`,
-              logo: {
-                "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
-              },
-              sameAs: [
-                "http://www.facebook.com",
-                "http://www.twitter.com",
-                "http://instagram.com",
-              ],
-            },
-            {
-              "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
-              description: meta?.description,
-              inLanguage: "en-US",
-              // potentialAction: {
-              //   "@type": "SearchAction",
-              //   target: `http://${domain}/search?q={search_term_string}`,
-              //   "query-input": "required name=search_term_string",
-              // },
-              publisher: {
-                "@type": "Organization",
-                "@id": `http://${domain}`,
-              },
-            },
-            {
-              "@type": "ItemList",
-              url: `http://${domain}`,
-              name: "blog",
-              itemListElement: blog_list?.map((blog, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                item: {
-                  "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category}/${blog?.title
-                    ?.replaceAll(" ", "-")
-                    ?.toLowerCase()}`,
-                  name: blog.title,
-                },
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
           ],
@@ -243,51 +193,53 @@ export default function Tags({
   );
 }
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req }) {
   const domain = getDomain(req?.headers?.host);
-  const logo = await callBackendApi({ domain, type: "logo" });
 
-  const favicon = await callBackendApi({ domain, query, type: "favicon" });
-  const banner = await callBackendApi({ domain, query, type: "banner" });
-  const footer_text = await callBackendApi({
+  let layoutPages = await callBackendApi({
     domain,
-    query,
-    type: "footer_text",
+    type: "layout",
   });
+
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const banner = await callBackendApi({ domain, type: "banner" });
+  const meta = await callBackendApi({ domain, type: "meta_tags" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
   const contact_details = await callBackendApi({
     domain,
-    query,
     type: "contact_details",
   });
-  const copyright = await callBackendApi({
-    domain,
-    query,
-    type: "copyright",
-  });
-  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const categories = await callBackendApi({
-    domain,
-    query,
-    type: "categories",
-  });
-  const meta = await callBackendApi({ domain, query, type: "meta_tags" });
-  const about_me = await callBackendApi({ domain, query, type: "about_me" });
-  const layout = await callBackendApi({ domain, type: "layout" });
+  const about_me = await callBackendApi({ domain, type: "about_me" });
   const tag_list = await callBackendApi({ domain, type: "tag_list" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
+  const copyright = await callBackendApi({ domain, type: "copyright" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
+  const categories = await callBackendApi({ domain, type: "categories" });
+  const footer_text = await callBackendApi({ domain, type: "footer_text" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "tags");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = await getImagePath(project_id, domain);
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       meta: meta?.data[0]?.value || null,
       favicon: favicon?.data[0]?.file_name || null,
       logo: logo.data[0] || null,
-
-      layout: layout?.data[0]?.value || null,
       banner: banner.data[0] || null,
       blog_list: blog_list.data[0].value,
       categories: categories?.data[0]?.value || null,

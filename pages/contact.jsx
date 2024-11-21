@@ -17,18 +17,17 @@ import Breadcrumbs from "@/components/common/Breadcrumbs";
 
 export default function Contact({
   categories,
+  blog_list,
   imagePath,
-  nav_type,
   favicon,
   domain,
   logo,
   meta,
-  layout,
-  blog_list,
+  page,
+  nav_type,
   footer_type,
   contact_details,
 }) {
-  const page = layout?.find((item) => item.page === "contact");
   const breadcrumbs = useBreadcrumbs();
 
   return (
@@ -157,14 +156,14 @@ export default function Contact({
           "@graph": [
             {
               "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
+              "@id": `https://${domain}/contact`,
+              url: `https://${domain}/contact`,
+              name: meta?.title,
               description: meta?.description,
               inLanguage: "en-US",
               publisher: {
                 "@type": "Organization",
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
             },
             {
@@ -173,7 +172,7 @@ export default function Contact({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
           ],
@@ -185,6 +184,12 @@ export default function Contact({
 
 export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
+
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
   const logo = await callBackendApi({ domain, query, type: "logo" });
   const favicon = await callBackendApi({ domain, query, type: "favicon" });
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
@@ -199,9 +204,20 @@ export async function getServerSideProps({ req, query }) {
     type: "categories",
   });
   const meta = await callBackendApi({ domain, query, type: "meta_contact" });
-  const layout = await callBackendApi({ domain, type: "layout" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
   const footer_type = await callBackendApi({ domain, type: "footer_type" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "contact");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = null;
@@ -209,11 +225,11 @@ export async function getServerSideProps({ req, query }) {
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       logo: logo?.data[0],
       blog_list: blog_list.data[0].value,
-      layout: layout?.data[0]?.value || null,
       contact_details: contact_details.data[0].value,
       categories: categories?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,

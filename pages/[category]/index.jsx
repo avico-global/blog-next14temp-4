@@ -6,48 +6,43 @@ import Navbar from "@/components/containers/Navbar";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
 import FullContainer from "@/components/common/FullContainer";
+import Rightbar from "@/components/containers/Rightbar";
+import GoogleTagManager from "@/lib/GoogleTagManager";
+import Container from "@/components/common/Container";
+import Footer from "@/components/containers/Footer";
+import JsonLd from "@/components/json/JsonLd";
+import Image from "next/image";
+import Link from "next/link";
+
 import {
   callBackendApi,
   getDomain,
   getImagePath,
   sanitizeUrl,
 } from "@/lib/myFun";
-import Rightbar from "@/components/containers/Rightbar";
-import GoogleTagManager from "@/lib/GoogleTagManager";
-import Container from "@/components/common/Container";
-import Footer from "@/components/containers/Footer";
-import JsonLd from "@/components/json/JsonLd";
-import MarkdownIt from "markdown-it";
-import Image from "next/image";
-import Link from "next/link";
 
 export default function Category({
-  logo,
-  blog_list,
-  imagePath,
-  meta,
-  domain,
-  categories,
-  about_me,
-  tag_list,
-  layout,
-  contact_details,
   copyright,
+  blog_list,
+  tag_list,
+  about_me,
+  domain,
+  logo,
+  meta,
+  page,
   nav_type,
+  imagePath,
+  categories,
+  contact_details,
 }) {
   const router = useRouter();
   const { category } = router.query;
   const breadcrumbs = useBreadcrumbs();
-  const markdownIt = new MarkdownIt();
-
-  const convertMarkdown = (markdownText) => markdownIt?.render(markdownText);
 
   const searchContent = category?.replaceAll("-", " ");
   const filteredBlogList = blog_list.filter((item) => {
     return item.article_category.toLowerCase() === searchContent;
   });
-
-  const page = layout?.find((page) => page.page === "category");
 
   return (
     <div className="flex flex-col min-h-screen justify-between">
@@ -244,32 +239,32 @@ export default function Category({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
             {
               "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
+              "@id": `https://${domain}/${category}`,
+              url: `https://${domain}/${category}`,
+              name: meta?.title,
               description: meta?.description,
               inLanguage: "en-US",
               publisher: {
                 "@type": "Organization",
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
             },
             {
               "@type": "ItemList",
-              url: `http://${domain}`,
+              url: `https://${domain}/${category}`,
               name: "blog",
               itemListElement: blog_list?.map((blog, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${sanitizeUrl(
-                    blog?.article_category?.replaceAll(" ", "-")
+                  url: `https://${domain}/${sanitizeUrl(
+                    blog?.article_category.replaceAll(" ", "-")
                   )}/${sanitizeUrl(blog?.title)}`,
                   name: blog.title,
                 },
@@ -286,39 +281,38 @@ export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
   const { category } = query;
 
-  const logo = await callBackendApi({
+  let layoutPages = await callBackendApi({
     domain,
-    query,
-    type: "logo",
+    type: "layout",
   });
-  const favicon = await callBackendApi({ domain, query, type: "favicon" });
-  const banner = await callBackendApi({ domain, query, type: "banner" });
-  const footer_text = await callBackendApi({
-    domain,
-    query,
-    type: "footer_text",
-  });
+
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
+  const banner = await callBackendApi({ domain, type: "banner" });
+  const footer_text = await callBackendApi({ domain, type: "footer_text" });
   const contact_details = await callBackendApi({
     domain,
-    query,
     type: "contact_details",
   });
-  const copyright = await callBackendApi({
-    domain,
-    query,
-    type: "copyright",
-  });
-  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const categories = await callBackendApi({
-    domain,
-    query,
-    type: "categories",
-  });
-  const meta = await callBackendApi({ domain, query, type: "meta_category" });
-  const about_me = await callBackendApi({ domain, query, type: "about_me" });
-  const layout = await callBackendApi({ domain, type: "layout" });
+  const copyright = await callBackendApi({ domain, type: "copyright" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
+  const categories = await callBackendApi({ domain, type: "categories" });
+  const meta = await callBackendApi({ domain, type: "meta_category" });
+  const about_me = await callBackendApi({ domain, type: "about_me" });
   const tag_list = await callBackendApi({ domain, type: "tag_list" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "category");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = await getImagePath(project_id, domain);
@@ -336,12 +330,12 @@ export async function getServerSideProps({ req, query }) {
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       meta: meta?.data[0]?.value || null,
       favicon: favicon?.data[0]?.file_name || null,
       logo: logo?.data[0],
-      layout: layout?.data[0]?.value || null,
       banner: banner.data[0] || null,
       blog_list: blog_list.data[0].value,
       categories: categories?.data[0]?.value || null,

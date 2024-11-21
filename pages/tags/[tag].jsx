@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from "react";
 import Head from "next/head";
-import Footer from "@/components/containers/Footer";
-import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
-import GoogleTagManager from "@/lib/GoogleTagManager";
-import JsonLd from "@/components/json/JsonLd";
 import Image from "next/image";
-import FullContainer from "@/components/common/FullContainer";
-import Container from "@/components/common/Container";
-import { useRouter } from "next/router";
-import dayjs from "dayjs";
-import Link from "next/link";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
-import Navbar from "@/components/containers/Navbar";
+import React, { useEffect } from "react";
+import JsonLd from "@/components/json/JsonLd";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
+import Footer from "@/components/containers/Footer";
+import GoogleTagManager from "@/lib/GoogleTagManager";
+import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+import FullContainer from "@/components/common/FullContainer";
+import Breadcrumbs from "@/components/common/Breadcrumbs";
 import Rightbar from "@/components/containers/Rightbar";
+import Container from "@/components/common/Container";
+import Navbar from "@/components/containers/Navbar";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import dayjs from "dayjs";
 
 export default function Categories({
-  logo,
-  blog_list,
-  imagePath,
-  meta,
-  domain,
   categories,
+  blog_list,
   about_me,
-  contact_details,
-  favicon,
-  layout,
   tag_list,
+  domain,
+  logo,
+  meta,
+  page,
+  favicon,
   nav_type,
+  imagePath,
+  contact_details,
 }) {
   const router = useRouter();
   const { tag } = router.query;
@@ -54,8 +54,6 @@ export default function Categories({
       router.replace("/about");
     }
   }, [tag, router]);
-
-  const page = layout?.find((page) => page.page === "Tag Page");
 
   return (
     <div>
@@ -230,11 +228,11 @@ export default function Categories({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": `http://${domain}/${tag}`,
-              url: `http://${domain}/${tag}`,
+              "@id": `https://${domain}/tags/${tag}`,
+              url: `https://${domain}/tags/${tag}`,
               name: meta?.title,
               isPartOf: {
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
               description: meta?.description,
               inLanguage: "en-US",
@@ -245,55 +243,7 @@ export default function Categories({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
-              })),
-            },
-            {
-              "@type": "Organization",
-              "@id": `http://${domain}`,
-              name: domain,
-              url: `http://${domain}/`,
-              logo: {
-                "@type": "ImageObject",
-                url: `${imagePath}/${logo.file_name}`,
-              },
-              sameAs: [
-                "http://www.facebook.com",
-                "http://www.twitter.com",
-                "http://instagram.com",
-              ],
-            },
-            {
-              "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
-              description: meta?.description,
-              inLanguage: "en-US",
-              // potentialAction: {
-              //   "@type": "SearchAction",
-              //   target: `http://${domain}/search?q={search_term_string}`,
-              //   "query-input": "required name=search_term_string",
-              // },
-              publisher: {
-                "@type": "Organization",
-                "@id": `http://${domain}`,
-              },
-            },
-            {
-              "@type": "ItemList",
-              url: `http://${domain}`,
-              name: "blog",
-              itemListElement: blog_list?.map((blog, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                item: {
-                  "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category}/${blog?.title
-                    ?.replaceAll(" ", "-")
-                    ?.toLowerCase()}`,
-                  name: blog.title,
-                },
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
           ],
@@ -307,38 +257,24 @@ export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
   const { tag } = query;
 
-  const logo = await callBackendApi({
+  let layoutPages = await callBackendApi({
     domain,
-    query,
-    type: "logo",
+    type: "layout",
   });
 
-  const favicon = await callBackendApi({ domain, query, type: "favicon" });
-  const banner = await callBackendApi({ domain, query, type: "banner" });
-  const footer_text = await callBackendApi({
-    domain,
-    query,
-    type: "footer_text",
-  });
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
+  const banner = await callBackendApi({ domain, type: "banner" });
+  const footer_text = await callBackendApi({ domain, type: "footer_text" });
   const contact_details = await callBackendApi({
     domain,
-    query,
     type: "contact_details",
   });
-  const copyright = await callBackendApi({
-    domain,
-    query,
-    type: "copyright",
-  });
-  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
-  const categories = await callBackendApi({
-    domain,
-    query,
-    type: "categories",
-  });
-  const meta = await callBackendApi({ domain, query, type: "meta_tag" });
-  const about_me = await callBackendApi({ domain, query, type: "about_me" });
-  const layout = await callBackendApi({ domain, type: "layout" });
+  const copyright = await callBackendApi({ domain, type: "copyright" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
+  const categories = await callBackendApi({ domain, type: "categories" });
+  const meta = await callBackendApi({ domain, type: "meta_tag" });
+  const about_me = await callBackendApi({ domain, type: "about_me" });
   const tag_list = await callBackendApi({ domain, type: "tag_list" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
 
@@ -357,14 +293,26 @@ export async function getServerSideProps({ req, query }) {
     };
   }
 
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "Tag Page");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
+      page,
       domain,
       imagePath,
       meta: meta?.data[0]?.value || null,
       favicon: favicon?.data[0]?.file_name || null,
       logo: logo.data[0] || null,
-      layout: layout?.data[0]?.value || null,
       banner: banner.data[0] || null,
       blog_list: blog_list.data[0].value,
       categories: categories?.data[0]?.value || null,

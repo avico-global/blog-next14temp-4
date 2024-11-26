@@ -243,7 +243,7 @@ export default function Category({
               })),
             },
             {
-              "@type": "WebSite",
+              "@type": "WebPage",
               "@id": `https://${domain}/${category}`,
               url: `https://${domain}/${category}`,
               name: meta?.title,

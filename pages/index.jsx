@@ -295,7 +295,7 @@ export default function Home({
               },
             },
             {
-              "@type": "WebSite",
+              "@type": "WebPage",
               "@id": `https://${domain}`,
               url: `https://${domain}`,
               name: domain,

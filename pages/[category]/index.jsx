@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import dayjs from "dayjs";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -37,12 +37,30 @@ export default function Category({
 }) {
   const router = useRouter();
   const { category } = router.query;
+
   const breadcrumbs = useBreadcrumbs();
 
-  const searchContent = category?.replaceAll("-", " ");
   const filteredBlogList = blog_list.filter((item) => {
-    return item.article_category.toLowerCase() === searchContent;
+    const searchContent = sanitizeUrl(category);
+    const articleCategory = sanitizeUrl(item.article_category);
+    return articleCategory === searchContent;
   });
+
+  useEffect(() => {
+    const currentPath = router.asPath;
+
+    if (category && (category.includes("%20") || category.includes(" "))) {
+      const newCategory = category.replace(/%20/g, "-").replace(/ /g, "-");
+      router.replace(`/${newCategory}`);
+    }
+
+    if (currentPath.includes("contact-us")) {
+      router.replace("/contact");
+    }
+    if (currentPath.includes("about-us")) {
+      router.replace("/about");
+    }
+  }, [category, router]);
 
   return (
     <div className="flex flex-col min-h-screen justify-between">
@@ -133,68 +151,71 @@ export default function Category({
                   <FullContainer key={index} className="py-16">
                     <Container>
                       <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full">
-                        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
-                          {filteredBlogList.map((item, index) => (
-                            <div key={index}>
-                              <Link
-                                title={item?.title || "Article Link"}
-                                href={`/${sanitizeUrl(
-                                  item.article_category
-                                )}/${sanitizeUrl(item?.title)}`}
-                              >
-                                <div className="overflow-hidden relative min-h-40 rounded lg:min-h-72 w-full bg-black flex-1">
-                                  <Image
-                                    title={
-                                      item.imageTitle ||
-                                      item.title ||
-                                      "Article Thumbnail"
-                                    }
-                                    alt={
-                                      item.altImage ||
-                                      item.tagline ||
-                                      "No Thumbnail Found"
-                                    }
-                                    src={
-                                      item.image
-                                        ? `${imagePath}/${item.image}`
-                                        : "/no-image.png"
-                                    }
-                                    fill={true}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover absolute top-0 hover:scale-125 transition-all"
-                                  />
+                        <div>
+                          <h1 className="text-2xl font-semibold border-l-4 border-primary capitalize px-4 py-1 mb-7 w-full">
+                            Browsing: {category?.replaceAll("-", " ")}
+                          </h1>
+                          {filteredBlogList?.length > 0 ? (
+                            ""
+                          ) : (
+                            <div className="flex items-center justify-center border px-10 py-40 text-lg bg-gray-200">
+                              No articles found related to {category}
+                            </div>
+                          )}
+                          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {filteredBlogList.map((item, index) => (
+                              <div key={index}>
+                                <Link
+                                  title={item?.title || "Article Link"}
+                                  href={`/${sanitizeUrl(
+                                    item.article_category
+                                  )}/${sanitizeUrl(item?.title)}`}
+                                >
+                                  <div className="overflow-hidden relative min-h-40 rounded lg:min-h-52 w-full bg-black flex-1">
+                                    <Image
+                                      title={item?.title || item.imageTitle}
+                                      src={
+                                        item.image
+                                          ? `${imagePath}/${item.image}`
+                                          : "/no-image.png"
+                                      }
+                                      fill={true}
+                                      loading="lazy"
+                                      alt="blog"
+                                      className="w-full h-full object-cover absolute top-0 hover:scale-125 transition-all"
+                                    />
+                                  </div>
+                                </Link>
+                                <Link
+                                  title={item?.title || "Article Link"}
+                                  href={`/${sanitizeUrl(
+                                    item.article_category
+                                  )}/${sanitizeUrl(item?.title)}`}
+                                >
+                                  <p className="mt-2 lg:mt-4 font-bold text-lg text-inherit leading-tight hover:underline">
+                                    {item.title}
+                                  </p>
+                                </Link>
+                                <div className="flex items-center gap-2 mt-2">
+                                  <p className="text-sm font-semibold">
+                                    <span className="text-gray-400 text-sm">
+                                      By
+                                    </span>
+                                    : {item.author}
+                                  </p>
+                                  <span className="text-gray-400">--</span>
+                                  <p className="text-sm text-gray-400 font-semibold">
+                                    {dayjs(item?.published_at)?.format(
+                                      "MMM D, YYYY"
+                                    )}
+                                  </p>
                                 </div>
-                              </Link>
-
-                              <Link
-                                title={item?.title || "Article Link"}
-                                href={`/${sanitizeUrl(
-                                  item.article_category
-                                )}/${sanitizeUrl(item?.title)}`}
-                              >
-                                <h2 className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight hover:underline transition-all">
-                                  {item.title}
-                                </h2>
-                              </Link>
-                              <div className="flex items-center gap-2 mt-1">
-                                <p className="text-sm font-semibold">
-                                  <span className="text-gray-400 text-sm">
-                                    By
-                                  </span>
-                                  : {item.author}
-                                </p>
-                                <span className="text-gray-400">--</span>
-                                <p className="text-sm text-gray-400 font-semibold">
-                                  {dayjs(item?.published_at)?.format(
-                                    "MMM D, YYYY"
-                                  )}
+                                <p className="text-gray-500 mt-4">
+                                  {item.tagline}
                                 </p>
                               </div>
-                              <p className="text-gray-500 mt-2">
-                                {item.tagline}
-                              </p>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
                         <Rightbar
                           about_me={about_me}

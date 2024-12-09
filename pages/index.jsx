@@ -290,18 +290,6 @@ export default function Home({
                 height: 1080,
               },
             },
-            // {
-            //   "@type": "WebPage",
-            //   "@id": `https://${domain}`,
-            //   url: `https://${domain}`,
-            //   name: domain,
-            //   description: meta?.description,
-            //   inLanguage: "en-US",
-            //   publisher: {
-            //     "@type": "Organization",
-            //     "@id": `https://${domain}`,
-            //   },
-            // },
             {
               "@type": "Organization",
               "@id": `https://${domain}`,
@@ -328,28 +316,10 @@ export default function Home({
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `https://${domain}/${blog?.article_category}/${blog.key}`,
-                  name: blog.title,
-                  author: {
-                    "@type": "Person",
-                    name: blog.author,
-                  },
-                  datePublished: blog.datePublished,
-                  dateModified: blog.dateModified,
-                  image: {
-                    "@type": "ImageObject",
-                    url: `${imagePath}/${blog.image}`,
-                    width: blog.imageWidth,
-                    height: blog.imageHeight,
-                  },
-                  headline: blog.title,
-                  description: blog.description,
-                  mainEntityOfPage: {
-                    "@type": "WebPage",
-                    "@id": `https://${domain}/${sanitizeUrl(
-                      blog?.article_category
-                    )}/${sanitizeUrl(blog.title)}`,
-                  },
+                  url: `https://${domain}/${sanitizeUrl(
+                    blog?.article_category
+                  )}/${sanitizeUrl(blog?.title)}`,
+                  name: blog?.title,
                 },
               })),
             },

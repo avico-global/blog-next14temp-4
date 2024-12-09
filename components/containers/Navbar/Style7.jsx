@@ -1,119 +1,65 @@
 import { cn } from "@/lib/utils";
-import { Menu, Search } from "lucide-react";
-import Image from "next/image";
+import { Menu } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import Logo from "./Logo";
-import SocialShare from "@/components/common/SocialShare";
 import { sanitizeUrl } from "@/lib/myFun";
 
 export default function Style7({
-  staticPages,
-  filteredBlogs,
   logo,
-  categories,
   isActive,
-  searchContainerRef,
-  imagePath,
-  handleSearchToggle,
-  handleSearchChange,
-  toggleSidebar,
-  openSearch,
   category,
-  searchQuery,
-  myblog,
-  domain,
+  imagePath,
+  categories,
+  staticPages,
+  toggleSidebar,
 }) {
-  const navLink =
-    "font-semibold capitalize border-b-2 border-transparent hover:text-gray-400 hover:border-black transition-all p-3";
+  const STYLES = {
+    nav: "font-semibold capitalize border-b-4 border-transparent hover:border-purple-400 transition-all px-4 pb-4 pt-5",
+    logoContainer: "p-5 bg-white",
+    navContainer:
+      "flex justify-between items-center mx-auto shadow-sm w-full bg-purple-100 text-purple-600 sticky top-0 z-20",
+    linksWrapper: "container flex justify-center items-center",
+    desktopLinks: "hidden lg:flex justify-center items-center",
+    menuButton: "w-6 h-6 ml-1 text-black lg:hidden",
+  };
+
+  const renderNavLink = (item, href, isCurrentPage) => (
+    <Link
+      key={href}
+      title={item.page || item.title}
+      href={href}
+      className={cn(STYLES.nav, isCurrentPage && "border-white text-white")}
+    >
+      {item.page || item.title}
+    </Link>
+  );
 
   return (
     <>
-      <div className="p-14 border-b">
+      <div className={STYLES.logoContainer}>
         <Logo logo={logo} imagePath={imagePath} />
       </div>
-      <div className=" bg-white lg:bg-black   sticky top-0 z-20  ">
-        <div className="flex justify-between items-center mx-auto max-w-[1500px] shadow-sm  w-full py-2 text-white">
-          <div className=" hidden lg:flex ">
-            {staticPages.map((item, index) => (
-              <Link
-                key={index}
-                title={item.page}
-                href={item.href}
-                className={cn(
-                  navLink,
-                  isActive(item.href) && "border-white text-white"
-                )}
-              >
-                {item.page}
-              </Link>
-            ))}
+      <nav className={STYLES.navContainer}>
+        <div className={STYLES.linksWrapper}>
+          <div className={STYLES.desktopLinks}>
+            {categories?.length < 3 &&
+              staticPages.map((item) =>
+                renderNavLink(item, item.href, isActive(item.href))
+              )}
 
-            {categories?.map((item, index) => (
-              <Link
-                key={index}
-                title={item?.title}
-                href={`/${sanitizeUrl(item?.title)}`}
-                className={cn(
-                  navLink,
-                  (category === item?.title || isActive(`/${item?.title}`)) &&
-                    "border-black text-white"
-                )}
-              >
-                {item?.title}
-              </Link>
-            ))}
-          </div>
-
-          <div
-            className="flex  items-center justify-end  gap-14  lg:gap-3  relative"
-            ref={searchContainerRef}
-          >
-            <div></div>
-
-            {openSearch ? (
-              <>
-                {searchQuery && (
-                  <div className="absolute top-full p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px]">
-                    {filteredBlogs?.map((item, index) => (
-                      <Link
-                        key={index}
-                        title={item.title}
-                        href={`/${sanitizeUrl(
-                          item.article_category
-                        )}/${sanitizeUrl(item?.title)}`}
-                      >
-                        <div className="p-2 hover:bg-gray-200 border-b text-gray-600">
-                          {item.title}
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className="border border-gray-300 rounded-md p-1 transition-opacity duration-300 ease-in-out opacity-100"
-                  placeholder="Search..."
-                />
-              </>
-            ) : (
-              <button
-                className="flex items-center gap-1 hover:bg-black text-black lg:text-white hover:text-white transition-all rounded-md font-semibold p-2"
-                onClick={handleSearchToggle}
-              >
-                <Search className="w-5 md:w-4 cursor-pointer" />
-                Search
-              </button>
+            {categories?.map((item) =>
+              renderNavLink(
+                item,
+                `/${sanitizeUrl(item.title)}`,
+                category === item.title || isActive(`/${item.title}`)
+              )
             )}
-            <Menu
-              onClick={toggleSidebar}
-              className="w-6 h-6 ml-1 text-black lg:hidden"
-            />
           </div>
+
+          <Menu onClick={toggleSidebar} className={STYLES.menuButton} />
         </div>
-      </div>
+      </nav>
     </>
   );
 }

@@ -274,7 +274,7 @@ export default function Home({
           "@context": "https://www.schema.org",
           "@graph": [
             {
-              "@type": "WebPage",
+              "@type": "WebSite",
               "@id": `https://${domain}/`,
               url: `https://${domain}/`,
               name: meta?.title,
@@ -294,18 +294,18 @@ export default function Home({
                 "@id": `https://${domain}`,
               },
             },
-            {
-              "@type": "WebSite",
-              "@id": `https://${domain}`,
-              url: `https://${domain}`,
-              name: domain,
-              description: meta?.description,
-              inLanguage: "en-US",
-              publisher: {
-                "@type": "Organization",
-                "@id": `https://${domain}`,
-              },
-            },
+            // {
+            //   "@type": "WebPage",
+            //   "@id": `https://${domain}`,
+            //   url: `https://${domain}`,
+            //   name: domain,
+            //   description: meta?.description,
+            //   inLanguage: "en-US",
+            //   publisher: {
+            //     "@type": "Organization",
+            //     "@id": `https://${domain}`,
+            //   },
+            // },
             {
               "@type": "Organization",
               "@id": `https://${domain}`,

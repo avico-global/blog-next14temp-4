@@ -82,7 +82,7 @@ const Navbar = ({
   const staticPages = [
     { page: "Home", href: "/" },
     { page: "About Us", href: "/about" },
-    { page: "Contact Us", href: "/contact" },
+    // { page: "Contact Us", href: "/contact" },
   ];
 
   const renderActiveStyle = () => {

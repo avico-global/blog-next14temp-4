@@ -70,6 +70,9 @@ export default function Category({
           {meta?.title?.replaceAll(
             "##category##",
             category?.replaceAll("-", " ")
+              .split(" ")
+              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .join(" ")
           )}
         </title>
         <meta
@@ -270,6 +273,9 @@ export default function Category({
               name: meta?.title?.replaceAll(
                 "##category##",
                 category?.replaceAll("-", " ")
+                  .split(" ")
+                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .join(" ")
               ),
               description: meta?.description.replaceAll(
                 "##category##",

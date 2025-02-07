@@ -22,7 +22,7 @@ export default function Style1({
   searchQuery,
 }) {
   return (
-    <FullContainer className="sticky top-0 z-20 bg-white shadow lg:py-0">
+    <FullContainer className="sticky top-0 z-20 bg-white shadow ">
       <div className="flex justify-between lg:grid grid-cols-nav w-11/12 md:w-10/12 gap-10 mx-auto items-center">
         <div className="hidden lg:flex items-center justify-end">
           {staticPages.map((item, index) => (
@@ -39,7 +39,7 @@ export default function Style1({
             </Link>
           ))}
         </div>
-        <div className="py-2">
+        <div className="py-0">
           <Logo logo={logo} imagePath={imagePath} />
         </div>
         <div

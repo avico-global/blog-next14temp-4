@@ -14,6 +14,7 @@ import JsonLd from "@/components/json/JsonLd";
 import useBreadcrumbs from "@/lib/useBreadcrumbs";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
+import { MailOpen, MapIcon, Phone } from "lucide-react";
 
 export default function Contact({
   categories,
@@ -88,52 +89,115 @@ export default function Contact({
                 return (
                   <FullContainer key={index}>
                     <Container>
-                      <Breadcrumbs breadcrumbs={breadcrumbs} className="py-7" />
-                      <h1 className="w-full text-3xl font-bold border-b mb-10">
+                     
+                    </Container>
+                  </FullContainer>
+                );
+             
+                case "contact info":
+                return (
+               
+                  <div className=" pt-6 pb-10 px-4 sm:px-6 lg:px-8 bg-gray-50">
+                  <div className="max-w-5xl mx-auto">
+                    {/* Form Section */}
+                    <div className="text-center mb-12">
+                    <h1 className="w-full text-3xl font-bold  mb-4">
                         Contact Us
                       </h1>
-                    </Container>
-                  </FullContainer>
-                );
-              case "map":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      {contact_details?.mapDetails?.mapUrl ? (
-                        <LoadScript
-                          // googleMapsApiKey={process.env.NEXT_MAP_API_KEY}
-                          googleMapsApiKey="AIzaSyAPeJFoV41Bq2QOImPkf3Dai8hP6aZ7MFg"
-                        >
-                          <GoogleMap
-                            mapContainerClassName="h-[500px] w-full rouded-md"
-                            center={contact_details?.mapDetails?.center}
-                            zoom={12}
-                          >
-                            <Marker
-                              position={contact_details?.mapDetails?.center}
+                      <div >
+
+                      <Breadcrumbs breadcrumbs={breadcrumbs} className="py-2 justify-center" />
+                      </div>
+
+                    </div>
+        
+                    <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12">
+                      <form className="space-y-8 max-w-5xl mx-auto">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label htmlFor="firstName" className="text-sm font-medium text-gray-700">
+                              First Name
+                            </label>
+                            <input
+                              type="text"
+                              id="firstName"
+                              name="firstName"
+                              className="w-full px-4 py-3.5 rounded-xl text-gray-900 border border-gray-200 hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 bg-gray-50/50"
+                              placeholder="John"
+                              required
                             />
-                          </GoogleMap>
-                        </LoadScript>
-                      ) : (
-                        <Map location="united states" />
-                      )}
-                    </Container>
-                  </FullContainer>
+                          </div>
+                          <div className="space-y-2">
+                            <label htmlFor="lastName" className="text-sm font-medium text-gray-700">
+                              Last Name
+                            </label>
+                            <input
+                              type="text"
+                              id="lastName"
+                              name="lastName"
+                              className="w-full px-4 py-3.5 rounded-xl text-gray-900 border border-gray-200 hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 bg-gray-50/50"
+                              placeholder="Doe"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                            <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                              Email Address
+                            </label>
+                            <input
+                              type="email"
+                              id="email"
+                              name="email"
+                              className="w-full px-4 py-3.5 rounded-xl text-gray-900 border border-gray-200 hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 bg-gray-50/50"
+                              placeholder="john@example.com"
+                              required
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label htmlFor="phone" className="text-sm font-medium text-gray-700">
+                              Phone Number
+                            </label>
+                            <input
+                              type="tel"
+                              id="phone"
+                              name="phone"
+                              className="w-full px-4 py-3.5 rounded-xl text-gray-900 border border-gray-200 hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 bg-gray-50/50"
+                              placeholder="+1 (555) 000-0000"
+                              required
+                            />
+                          </div>
+                        </div>
+        
+                        <div className="space-y-2">
+                          <label htmlFor="message" className="text-sm font-medium text-gray-700">
+                            Your Message
+                          </label>
+                          <textarea
+                            id="message"
+                            name="message"
+                            rows={5}
+                            className="w-full px-4 py-3.5 rounded-xl text-gray-900 border border-gray-200 hover:border-primary focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-200 bg-gray-50/50 resize-none"
+                            placeholder="How can we help you?"
+                            required
+                          />
+                        </div>
+        
+                        <button
+                          type="submit"
+                          className="w-full bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-200 transform hover:-translate-y-1 focus:outline-none focus:ring-4 focus:ring-primary/20 active:translate-y-0"
+                        >
+                          Send Message
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
                 );
-              case "contact info":
-                return (
-                  <FullContainer key={index}>
-                    <Container className="mt-10 text-center text-gray-500 text-xs gap-3">
-                      <p className="text-xl mt-3 font-bold text-black">
-                        {contact_details?.name}
-                      </p>
-                      <p>{contact_details?.email}</p>
-                      <p>{contact_details?.address}</p>
-                      <p>{contact_details?.phone}</p>
-                    </Container>
-                  </FullContainer>
-                );
-              case "footer":
+              
+                case "footer":
                 return (
                   <Footer
                     key={index}

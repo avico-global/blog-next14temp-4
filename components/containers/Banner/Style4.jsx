@@ -24,7 +24,6 @@ export default function Style4({ image, data }) {
                 {data.tagline}
               </h2>
             )}
-            <Button className="w-fit">Explore</Button>
           </div>
           <div className="relative rounded-xl overflow-hidden">
             <Image

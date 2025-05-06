@@ -75,7 +75,7 @@ export default function Blog({
         <meta name="description" content={myblog?.value?.meta_description} />
         <link rel="author" href={`https://${domain}`} />
         <link rel="publisher" href={`https://${domain}`} />
-        <link rel="canonical" href={`https://${domain}`} />
+        <link rel="canonical" href={`https://${domain}/${category}/${blog}`} />
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />

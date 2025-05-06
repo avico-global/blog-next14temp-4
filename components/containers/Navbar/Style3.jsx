@@ -27,7 +27,7 @@ export default function Style3({
         <Logo logo={logo} imagePath={imagePath} />
         <div className="flex items-center justify-end gap-3 relative">
             {searchQuery && (
-              <div className="absolute top-full p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px]">
+              <div className="absolute top-full p-3 right-0 z-50 bg-white shadow-2xl rounded-md mt-1  w-[calc(100vw-40px)] lg:w-[650px]">
                 {filteredBlogs?.map((item, index) => (
                   <Link
                     key={index}

@@ -71,7 +71,7 @@ export default function Style3({
             autoFocus
           />
           {searchQuery && (
-            <div className="absolute top-full w-full p-1 left-0 text-start lg:p-3 bg-white shadow-2xl rounded-md mt-1 z-10 mx-auto">
+            <div className="absolute top-full w-full p-1 left-0 text-start lg:p-3 bg-white shadow-2xl rounded-md mt-1 z-50 mx-auto">
               {filteredBlogs?.length > 0 ? (
                 filteredBlogs.map((item, index) => (
                   <Link

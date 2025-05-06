@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search } from "lucide-react";
@@ -14,6 +14,21 @@ export default function Style3({
   image,
   data,
 }) {
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [searchContainerRef]);
+
   return (
     <FullContainer
       className="h-auto min-h-[50vh]"
@@ -60,6 +75,7 @@ export default function Style3({
         <div
           ref={searchContainerRef}
           className="relative w-6/12 flex items-center gap-4 py-3 px-5 bg-white rounded-full mt-4"
+          onClick={() => setIsDropdownOpen(true)}
         >
           <Search className="text-gray-400 w-5 h-5" />
           <input
@@ -70,7 +86,7 @@ export default function Style3({
             placeholder="Search..."
             autoFocus
           />
-          {searchQuery && (
+          {searchQuery && isDropdownOpen && (
             <div className="absolute top-full w-full p-1 left-0 text-start lg:p-3 bg-white shadow-2xl rounded-md mt-1 z-50 mx-auto">
               {filteredBlogs?.length > 0 ? (
                 filteredBlogs.map((item, index) => (

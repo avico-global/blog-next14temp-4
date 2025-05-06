@@ -18,6 +18,8 @@ export default function Style4({
   searchQuery,
 }) {
   const [hoveredCategory, setHoveredCategory] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchContainerRef = useRef(null);
   const navLink =
     "font-semibold capitalize border-b-2 border-transparent hover:text-black hover:border-black transition-all p-2 whitespace-nowrap";
 
@@ -28,6 +30,19 @@ export default function Style4({
       searchInputRef.current.focus();
     }
   }, [openSearch]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="border-b text-gray-500 sticky top-0 z-20 bg-white py-2">
@@ -75,9 +90,9 @@ export default function Style4({
             )}
           </div>
         </div>
-
+  
         <div className="flex items-center justify-end gap-3 relative">
-          {searchQuery && (
+          {searchQuery && isSearchOpen && (
             <div className="absolute top-full p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px]">
               {filteredBlogs?.map((item, index) => (
                 <Link
@@ -93,10 +108,15 @@ export default function Style4({
                 </Link>
               ))}
             </div>
-          )}
-          <div className="hidden lg:flex items-center border border-gray-300 rounded-md px-2 gap-1">
+          )} 
+          <div 
+            ref={searchContainerRef}
+            className="hidden lg:flex items-center border border-gray-300 rounded-md px-2 gap-1"
+            onClick={() => setIsSearchOpen(true)}
+          >
             <Search className="w-4 h-4" />
             <input
+              ref={searchInputRef}
               type="text"
               value={searchQuery}
               onChange={handleSearchChange}

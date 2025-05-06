@@ -16,7 +16,7 @@ export default function Style3({
 }) {
   return (
     <FullContainer
-      className="h-auto min-h-[50vh] overflow-hidden"
+      className="h-auto min-h-[50vh]"
       style={{
         backgroundColor: `rgba(0, 0, 0, ${data?.opacity / 100})`,
         color: data.textColor || "white",

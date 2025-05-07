@@ -76,6 +76,13 @@ const FooterLinks = ({ categories }) => {
       <Link title="Contact Us" href="/contact" className="text-sm">
         Contact Us
       </Link>
+      <Link title="Privacy Policy" href="/privacy-policy" className="text-sm">
+        Privacy & Policy
+      </Link>
+
+      <Link title="Terms & Conditions " href="/terms-and-conditions" className="text-sm">
+        Terms & Conditions
+      </Link>
       <Link title="Sitemap" href="/sitemap.xml" legacyBehavior>
         <a title="Sitemap" onClick={handleClick} className="text-sm">
           Sitemap

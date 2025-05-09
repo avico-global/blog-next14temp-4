@@ -8,7 +8,7 @@ export default function BlogBannerStyle4({ myblog, imagePath }) {
   return (
     <FullContainer>
       <Container>
-        <div className="grid lg:grid-cols-2 gap-10 w-full py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-full py-10">
           <div className="flex flex-col gap-4 py-28">
             <Badge className="w-fit">{myblog?.value?.article_category}</Badge>
             <h1

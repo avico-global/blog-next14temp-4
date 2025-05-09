@@ -131,7 +131,7 @@ export default function Home({
                   <FullContainer key={index}>
                     <Container>
                       <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full mt-14">
-                        <div className="flex flex-col gap-12">
+                        <div className="flex flex-col gap-12 ">
                           {page?.sections?.map((item, index) => {
                             if (!item.enable) return null;
 
@@ -169,7 +169,7 @@ export default function Home({
                                           title={category?.title}
                                           className="mb-7"
                                         />
-                                        <div className="grid grid-cols-3 gap-8">
+                                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                           {blog_list?.map(
                                             (item, index) =>
                                               item.article_category ===

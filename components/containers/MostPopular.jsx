@@ -12,7 +12,7 @@ export default function MostPopular({ articles, imagePath }) {
     popularArticles?.length > 0 && (
       <div>
         <SectionHeading title="MOST POPULAR" className="mb-7" />
-        <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-3 gap-x-10 gap-y-4 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 grid-rows-3 gap-x-10 gap-y-4 w-full ">
           {popularArticles?.map((item, index) => (
             <Link
               href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(

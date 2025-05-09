@@ -8,8 +8,8 @@ export default function Style4({ image, data }) {
   return (
     <FullContainer>
       <Container>
-        <div className="grid grid-cols-2 gap-10 w-full py-10">
-          <div className="flex flex-col gap-4 py-28">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-10 w-full py-10">
+          <div className="flex flex-col gap-4 py-10 lg:py-28">
             <h1
               style={{ fontSize: data.titleFontSize || 48 }}
               className="font-bold capitalize text-4xl lg:text-5xl"

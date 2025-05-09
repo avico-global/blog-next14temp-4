@@ -44,6 +44,7 @@ export default function Banner({ image, data, blog_list }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openSearch]);
+  
 
   const renderActiveStyle = () => {
     const props = {
@@ -56,6 +57,7 @@ export default function Banner({ image, data, blog_list }) {
       image,
       data,
     };
+    console.log("active style", data?.active)
 
     switch (data?.active) {
       case "style_1":

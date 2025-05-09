@@ -43,7 +43,9 @@ const Navbar = ({
   const handleClickOutside = (event) => {
     if (
       searchContainerRef.current &&
-      !searchContainerRef.current.contains(event.target)
+      !searchContainerRef.current.contains(event.target) &&
+      !event.target.closest('input[type="text"]') &&
+      !event.target.closest('a')
     ) {
       setOpenSearch(false);
       setSearchQuery("");
@@ -60,6 +62,19 @@ const Navbar = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [openSearch]);
+
+  // Add router event listener to close search on navigation
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setOpenSearch(false);
+      setSearchQuery("");
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router]);
 
   const toggleSidebar = () => setSidebar(!sidebar);
 

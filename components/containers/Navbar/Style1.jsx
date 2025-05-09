@@ -70,7 +70,7 @@ export default function Style1({
           </div>
           {openSearch && (
             <>
-              <div className="fixed lg:absolute top-16 lg:right-0 lg:ml-auto w-full lg:w-fit flex flex-col items-start justify-center lg:justify-end left-0">
+              <div className="fixed lg:absolute top-20 lg:right-0 lg:ml-auto w-full lg:w-fit flex flex-col items-start justify-center lg:justify-end left-0">
                 <input
                   type="text"
                   value={searchQuery}

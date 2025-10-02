@@ -33,7 +33,10 @@ export default function Style4({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target)
+      ) {
         setIsSearchOpen(false);
       }
     };
@@ -46,8 +49,8 @@ export default function Style4({
 
   return (
     <div className="border-b text-gray-500 sticky top-0 z-20 bg-white py-2">
-      <div className="w-11/12 max-w-screen-lg flex items-center justify-between mx-auto">
-        <div className="flex items-center">
+      <div className=" w-11/12 max-w-screen-xl 3xl:max-w-screen-2xl  flex items-center justify-between mx-auto">
+        <div className="flex items-start ">
           <Logo logo={logo} imagePath={imagePath} />
         </div>
 
@@ -90,7 +93,7 @@ export default function Style4({
             )}
           </div>
         </div>
-  
+
         <div className="flex items-center justify-end gap-3 relative">
           {searchQuery && isSearchOpen && (
             <div className="absolute top-full p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px]">
@@ -108,8 +111,8 @@ export default function Style4({
                 </Link>
               ))}
             </div>
-          )} 
-          <div 
+          )}
+          <div
             ref={searchContainerRef}
             className="hidden lg:flex items-center border border-gray-300 rounded-md px-2 gap-1"
             onClick={() => setIsSearchOpen(true)}

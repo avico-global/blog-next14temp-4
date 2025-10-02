@@ -10,7 +10,7 @@ const PopularArticles = ({ popularArticles }) => {
   if (!popularArticles || popularArticles.length === 0) return null;
   return (
     <div>
-      <p className="text-lg font-semibold mb-1">Most Popular</p>
+      <p className="text-lg  font-semibold mb-1">Most Popular</p>
       {popularArticles.map((item, index) => (
         <Link
           href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
@@ -80,7 +80,11 @@ const FooterLinks = ({ categories }) => {
         Privacy & Policy
       </Link>
 
-      <Link title="Terms & Conditions " href="/terms-and-conditions" className="text-sm">
+      <Link
+        title="Terms & Conditions "
+        href="/terms-and-conditions"
+        className="text-sm"
+      >
         Terms & Conditions
       </Link>
       <Link title="Sitemap" href="/sitemap.xml" legacyBehavior>
@@ -115,7 +119,7 @@ export default function Footer({
       <FullContainer className="bg-purple-50 py-16">
         <Container>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-            <div>
+            <div className="flex items-start">
               <Logo logo={logo} imagePath={imagePath} />
               <p className="mt-6 text-sm">{footer_text}</p>
             </div>

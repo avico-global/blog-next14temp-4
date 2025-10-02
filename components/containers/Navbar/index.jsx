@@ -45,7 +45,7 @@ const Navbar = ({
       searchContainerRef.current &&
       !searchContainerRef.current.contains(event.target) &&
       !event.target.closest('input[type="text"]') &&
-      !event.target.closest('a')
+      !event.target.closest("a")
     ) {
       setOpenSearch(false);
       setSearchQuery("");
@@ -70,9 +70,9 @@ const Navbar = ({
       setSearchQuery("");
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router]);
 

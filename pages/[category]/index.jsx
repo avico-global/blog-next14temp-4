@@ -69,9 +69,10 @@ export default function Category({
         <title>
           {meta?.title?.replaceAll(
             "##category##",
-            category?.replaceAll("-", " ")
+            category
+              ?.replaceAll("-", " ")
               .split(" ")
-              .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
               .join(" ")
           )}
         </title>
@@ -272,9 +273,10 @@ export default function Category({
               url: `https://${domain}/${category}`,
               name: meta?.title?.replaceAll(
                 "##category##",
-                category?.replaceAll("-", " ")
+                category
+                  ?.replaceAll("-", " ")
                   .split(" ")
-                  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                   .join(" ")
               ),
               description: meta?.description.replaceAll(

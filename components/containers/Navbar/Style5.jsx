@@ -6,6 +6,7 @@ import React from "react";
 import Logo from "./Logo";
 import SocialShare from "@/components/common/SocialShare";
 import { sanitizeUrl } from "@/lib/myFun";
+import Container from "@/components/common/Container";
 
 export default function Style5({
   staticPages,
@@ -29,8 +30,8 @@ export default function Style5({
       <div className="p-10 lg:my-4 w-full border-b">
         <Logo logo={logo} imagePath={imagePath} />
       </div>
-      <div className="border-b text-gray-500 sticky top-0 z-20 bg-white ">
-        <div className="lg:w-10/12 max-w-screen-lg flex items-center justify-between mx-auto">
+      <div className="border-b text-gray-500 sticky top-0 z-20">
+        <div className="max-w-[1300px] lg:w-10/12 px-3 flex items-center justify-between mx-auto">
           <div className=" hidden lg:flex items-center">
             {staticPages.map((item, index) => (
               <Link

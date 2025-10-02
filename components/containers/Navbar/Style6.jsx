@@ -27,8 +27,8 @@ export default function Style6({
 
   return (
     <>
-      <div className=" bg-white lg:bg-black   sticky top-0 z-20  ">
-        <div className="flex justify-between items-center mx-auto max-w-[1700px] shadow-sm  w-full py-3 text-white">
+      <div className=" bg-white lg:bg-black  sticky top-0 z-20  ">
+        <div className="flex justify-between items-center mx-auto max-w-[1300px] shadow-sm  w-full py-3 text-white">
           <div className=" hidden lg:flex ">
             {staticPages.map((item, index) => (
               <Link

@@ -7,7 +7,7 @@ import { sanitizeUrl } from "@/lib/myFun";
 
 export default function LatestBlogs({ articles, imagePath }) {
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
+    <div className="">
       <SectionHeading title="Latest Posts" className="mb-4 lg:mb-7" />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-x-12 lg:gap-y-6 border  p-4 lg:p-6">
         {articles

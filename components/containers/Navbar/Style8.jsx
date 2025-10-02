@@ -44,7 +44,7 @@ export default function Style8({
         </div>
       </div> */}
       <div className="border-b text-gray-500 sticky top-0 z-20 bg-white py-6">
-        <div className=" flex items-center justify-between mx-auto max-w-[1300px] ">
+        <div className=" flex items-center justify-between mx-auto max-w-[1300px] px-2 ">
           <div className="flex">
             <div className="flex items-center">
               <Logo logo={logo} imagePath={imagePath} />
